@@ -1,0 +1,6 @@
+button.selected {
+  background: #6c5ce7;
+  color: white;
+  transform: scale(1.05);
+}
+

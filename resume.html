@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Magic Resume - CV Builder</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    button.selected {
+      background: #6c5ce7;
+      color: white;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="resume">
+
+    <h1>📄 Сборка резюме</h1>
+
+    <p>Выберите элементы:</p>
+
+    <!-- 🌱 РАСТЕНИЕ -->
+    <div class="block">
+      <h3>🪴 Растение</h3>
+
+      <button data-group="plant" onclick="selectPlant('cactus', this)">🌵 Кактус</button>
+      <button data-group="plant" onclick="selectPlant('flower', this)">🌷 Цветок</button>
+      <button data-group="plant" onclick="selectPlant('fern', this)">🌿 Папоротник</button>
+    </div>
+
+    <!-- 📸 ФОТО -->
+    <div class="block">
+      <h3>📸 Фото</h3>
+
+      <button data-group="photo" onclick="selectPhoto('neutral', this)">😐 Нейтральное</button>
+      <button data-group="photo" onclick="selectPhoto('smile', this)">😀 Улыбка</button>
+      <button data-group="photo" onclick="selectPhoto('serious', this)">🧐 Серьёзное</button>
+    </div>
+
+    <!-- 📅 ДАТА -->
+    <div class="block">
+      <h3>📅 Дата</h3>
+
+      <button data-group="date" onclick="selectDate('correct', this)">✔ Правильная</button>
+      <button data-group="date" onclick="selectDate('wrong', this)">❌ Ошибка</button>
+    </div>
+
+    <br>
+
+    <button class="big-btn" onclick="submitResume()">
+      📨 Отправить резюме
+    </button>
+
+    <button class="small-btn" onclick="goHub()">
+      ⬅ Вернуться
+    </button>
+
+  </div>
+
+  <!-- JS (ВАЖНО: порядок) -->
+
+  <script src="game.js"></script>
+  <script src="storage.js"></script>
+  <script src="data.js"></script>
+  <script src="resume.js"></script>
+  <script src="npc.js"></script>
+
+</body>
+</html>
