@@ -1,0 +1,270 @@
+/* ======================
+   START SCREEN — styles/start.css
+   Fantasy pixel-art career sim aesthetic.
+   Dark parchment tone, warm amber accents, medieval-magical feel.
+   ====================== */
+
+/* --- Background --- */
+
+.start-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(139, 90, 43, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(90, 60, 130, 0.18) 0%, transparent 55%),
+    #0e0b14;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Pixel stars */
+.stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, rgba(255,220,150,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 42% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 68% 35%, rgba(255,220,150,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 70%, rgba(255,220,150,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 60%, rgba(255,220,150,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 75%, rgba(255,220,150,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 50% 50%, rgba(255,220,150,0.3) 0%, transparent 100%);
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* --- Main Layout --- */
+
+.start-screen {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 2rem 1.5rem 3rem;
+}
+
+/* --- Title Block --- */
+
+.start-eyebrow {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--color-accent-dim);
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+
+.start-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 10vw, 6.5rem);
+  color: var(--color-accent);
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+  text-shadow:
+    0 0 30px rgba(212, 160, 60, 0.5),
+    0 0 80px rgba(212, 160, 60, 0.2);
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  0%   { text-shadow: 0 0 20px rgba(212,160,60,0.4), 0 0 60px rgba(212,160,60,0.15); }
+  100% { text-shadow: 0 0 40px rgba(212,160,60,0.7), 0 0 100px rgba(212,160,60,0.3); }
+}
+
+.start-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: 0.6rem 0 0;
+  line-height: 1.7;
+}
+
+/* --- Mode Cards --- */
+
+.start-modes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 480px;
+}
+
+.start-modes-label {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.mode-cards {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.mode-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.4rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 160, 60, 0.2);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  text-align: center;
+}
+
+.mode-card:hover {
+  background: rgba(212, 160, 60, 0.07);
+  border-color: rgba(212, 160, 60, 0.5);
+  transform: translateY(-2px);
+}
+
+.mode-card--main {
+  border-color: rgba(212, 160, 60, 0.45);
+  background: rgba(212, 160, 60, 0.05);
+}
+
+.mode-card--main:hover {
+  background: rgba(212, 160, 60, 0.12);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 20px rgba(212, 160, 60, 0.15);
+}
+
+.mode-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.mode-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.05em;
+}
+
+.mode-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* --- Continue Block --- */
+
+.start-continue {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.continue-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.continue-divider::before,
+.continue-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-continue {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-continue:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.continue-meta {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* --- Footer / Rules --- */
+
+.start-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-rules {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius);
+  transition: color 0.2s ease;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+}
+
+.btn-rules:hover {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
+/* --- Mobile --- */
+
+@media (max-width: 480px) {
+  .mode-cards {
+    flex-direction: column;
+  }
+
+  .start-title {
+    font-size: 3rem;
+  }
+}

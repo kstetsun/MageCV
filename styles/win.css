@@ -1,0 +1,81 @@
+body {
+  background: var(--color-bg, #181825);
+  color: var(--color-text, #f3f3f3);
+  font-family: 'Pixel', 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.win-container {
+  max-width: 480px;
+  margin: 3rem auto 0 auto;
+  padding: 2.5rem 1.5rem 3rem 1.5rem;
+  background: rgba(24,24,37,0.98);
+  border-radius: 16px;
+  box-shadow: 0 4px 32px #0005;
+  text-align: center;
+}
+
+.win-heading {
+  font-size: 2.2rem;
+  color: var(--color-accent, #a6e3a1);
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.win-flavour {
+  font-size: 1.1rem;
+  margin-bottom: 2.2rem;
+  color: var(--color-subtle, #b4befe);
+}
+
+.job-offer-letter {
+  background: #f7f3e7;
+  color: #232347;
+  border: 2px solid #e0cba8;
+  border-radius: 10px;
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  margin: 0 auto 2.2rem auto;
+  box-shadow: 0 2px 12px #0002;
+  max-width: 350px;
+  text-align: left;
+}
+
+.job-offer-letter h2 {
+  font-size: 1.3rem;
+  margin-top: 0;
+  margin-bottom: 0.7rem;
+  color: #b08968;
+  text-align: center;
+}
+
+.job-offer-letter ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.job-offer-letter li {
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+}
+
+.play-again-btn {
+  display: block;
+  margin: 2.5rem auto 0 auto;
+  padding: 0.9rem 2.5rem;
+  font-size: 1.15rem;
+  background: var(--color-accent, #a6e3a1);
+  color: #232347;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0002;
+  transition: background 0.2s, color 0.2s;
+}
+
+.play-again-btn:hover {
+  background: #b4befe;
+  color: #232347;
+}

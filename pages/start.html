@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MageCV — Start</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/start.css">
+</head>
+
+<body>
+
+  <div class="start-bg">
+    <div class="stars" id="stars"></div>
+  </div>
+
+  <main class="start-screen">
+
+    <!-- Title Block -->
+    <div class="start-title-block">
+      <p class="start-eyebrow">✦ A magical career simulator ✦</p>
+      <h1 class="start-title">MageCV</h1>
+      <p class="start-subtitle">You graduated. Now find a job.<br>Good luck. You'll need it.</p>
+    </div>
+
+    <!-- Mode Select -->
+    <div class="start-modes" id="modeSelect">
+
+      <p class="start-modes-label">Choose your path:</p>
+
+      <div class="mode-cards">
+
+        <button class="mode-card" id="btnDemo" onclick="onSelectDemo()">
+          <span class="mode-icon">⚡</span>
+          <span class="mode-name">Demo</span>
+          <span class="mode-desc">Short session.<br>5 resumes/day.<br>Fixed target.</span>
+        </button>
+
+        <button class="mode-card mode-card--main" id="btnLong" onclick="onSelectLong()">
+          <span class="mode-icon">🧙</span>
+          <span class="mode-name">Long Mode</span>
+          <span class="mode-desc">Full experience.<br>10 resumes/day.<br>Unknown target.</span>
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Continue Button — shown only if save exists -->
+    <div class="start-continue" id="continueBlock" style="display:none;">
+      <div class="continue-divider">
+        <span>or</span>
+      </div>
+      <button class="btn-continue" onclick="onContinue()">
+        📂 Continue saved run
+        <span class="continue-meta" id="continueMeta"></span>
+      </button>
+    </div>
+
+    <!-- Rules Link -->
+    <div class="start-footer">
+      <button class="btn-rules" onclick="goRules()">
+        📖 How to play
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Scripts — standard load order -->
+  <script src="../js/data/jobCards.js"></script>
+  <script src="../js/data/npcs.js"></script>
+  <script src="../js/data/messages.js"></script>
+  <script src="../js/core/storage.js"></script>
+  <script src="../js/core/game.js"></script>
+  <script src="../js/core/modifiers.js"></script>
+  <script src="../js/screens/start.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MageCV — You got the job!</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/win.css">
+</head>
+<body>
+  <main class="win-container">
+    <h1 class="win-heading">You got the job!</h1>
+    <p class="win-flavour">After <span id="winDays">?</span> days and <span id="winResumeCount">?</span> resumes, a letter arrived at your door...</p>
+    <section class="job-offer-letter">
+      <h2 id="winJobTitle">[Magical Job Title]</h2>
+      <ul>
+        <li><strong>Days taken:</strong> <span id="winDays">?</span></li>
+        <li><strong>Total resumes sent:</strong> <span id="winResumeCount">?</span></li>
+        <li><strong>Game mode:</strong> <span id="winMode">?</span></li>
+      </ul>
+    </section>
+    <button class="play-again-btn" onclick="startOver()">Play Again</button>
+  </main>
+  <!-- Data -->
+<script src="../js/data/jobCards.js"></script>
+<script src="../js/data/npcs.js"></script>
+<script src="../js/data/messages.js"></script>
+
+<!-- Core -->
+<script src="../js/core/storage.js"></script>
+<script src="../js/core/game.js"></script>
+<script src="../js/core/modifiers.js"></script>
+
+<!-- Screen Logic -->
+<script src="../js/screens/win.js"></script>
+</body>
+</html>

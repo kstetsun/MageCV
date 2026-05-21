@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MageCV — How to Play</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/rules.css">
+</head>
+<body>
+  <button class="back-btn" onclick="goStart()">← Back</button>
+  <h1>How to Play</h1>
+  <p class="intro">You are a recent graduate of a magical academy, seeking your first job in the fantasy world. Send out resumes every day until you land your dream job!</p>
+
+  <section>
+    <h2>The Daily Loop</h2>
+    <p>Each day, you can send a limited number of resumes. When you reach the daily limit, press the "Next Day" button to continue your job search on a new day.</p>
+  </section>
+
+  <section>
+    <h2>Resume Building</h2>
+    <p>Each resume has three elements: a plant, a photo, and a date. Your choices affect your score — experiment to find the best combinations!</p>
+  </section>
+
+  <section>
+    <h2>NPCs</h2>
+    <p>Randomly, magical NPCs may appear: the friendly Elf, the realistic Dwarf, and the unpredictable Wizard. They can give you helpful buffs or tricky debuffs, so be ready!</p>
+  </section>
+
+  <section>
+    <h2>Modes</h2>
+    <ul>
+      <li><strong>Demo:</strong> 5 resumes per day, fixed win target.</li>
+      <li><strong>Long:</strong> 10 resumes per day, random win target.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Win Condition</h2>
+    <p>Keep sending resumes and improving your score. When you reach the hidden win target, you'll know — victory is magical!</p>
+  </section>
+
+  <button class="footer-btn" onclick="goStart()">Ready — Let's Go</button>
+
+  <script src="../js/data/jobCards.js"></script>
+  <script src="../js/data/npcs.js"></script>
+  <script src="../js/data/messages.js"></script>
+  <script src="../js/core/storage.js"></script>
+  <script src="../js/core/game.js"></script>
+  <script src="../js/core/modifiers.js"></script>
+  <script src="../js/screens/rules.js"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Magic Resume - CV Builder</title>
+
+  <link rel="stylesheet" href="../styles/main.css">
+
+  <style>
+    button.selected {
+      background: #6c5ce7;
+      color: white;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="resume">
+
+    <h1>📄 Resume Builder</h1>
+
+    <p>Select elements:</p>
+
+    <!-- 🌱 PLANT -->
+    <div class="block">
+      <h3>🪴 Plant</h3>
+
+      <button data-group="plant" onclick="selectPlant('cactus', this)">🌵 Cactus</button>
+      <button data-group="plant" onclick="selectPlant('flower', this)">🌷 Flower</button>
+      <button data-group="plant" onclick="selectPlant('fern', this)">🌿 Fern</button>
+    </div>
+
+    <!-- 📸 PHOTO -->
+    <div class="block">
+      <h3>📸 Photo</h3>
+
+      <button data-group="photo" onclick="selectPhoto('neutral', this)">😐 Neutral</button>
+      <button data-group="photo" onclick="selectPhoto('smile', this)">😀 Smile</button>
+      <button data-group="photo" onclick="selectPhoto('serious', this)">🧐 Serious</button>
+    </div>
+
+    <!-- 📅 DATE -->
+    <div class="block">
+      <h3>📅 Date</h3>
+
+      <button data-group="date" onclick="selectDate('correct', this)">✔ Correct</button>
+      <button data-group="date" onclick="selectDate('wrong', this)">❌ Incorrect</button>
+    </div>
+
+    <br>
+
+    <button class="big-btn" onclick="submitResume()">
+      📨 Submit Resume
+    </button>
+
+    <button class="small-btn" onclick="goHub()">
+      ⬅ Back
+    </button>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script src="../js/data/jobCards.js"></script>
+  <script src="../js/data/npcs.js"></script>
+  <script src="../js/data/messages.js"></script>
+  <script src="../js/core/storage.js"></script>
+  <script src="../js/core/game.js"></script>
+  <script src="../js/core/modifiers.js"></script>
+  <script src="../js/screens/resume.js"></script>
+
+</body>
+</html>

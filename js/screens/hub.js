@@ -32,5 +32,5 @@ function nextDay() {
   }
 }
 
-// авто-обновление при входе на HUB
+// auto-update when logging into the HUB
 updateHubUI();
