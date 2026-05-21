@@ -32,6 +32,7 @@
 │   │   ├── hub.js
 │   │   ├── resume.js
 │   │   ├── npc.js
+│   │   ├── rules.js
 │   │   └── win.js
 │   │
 │   └── data/                   ← Static content, no logic

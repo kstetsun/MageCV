@@ -1,7 +1,55 @@
-<script src="../js/data/jobCards.js"></script>
-<script src="../js/data/npcs.js"></script>
-<script src="../js/data/messages.js"></script>
-<script src="../js/core/storage.js"></script>
-<script src="../js/core/game.js"></script>
-<script src="../js/core/modifiers.js"></script>
-<script src="../js/screens/npc.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MageCV — Visitor</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/npc.css">
+</head>
+
+<body>
+
+  <main class="npc-screen screen-wrapper">
+
+    <!-- Timer bar -->
+    <div class="npc-timer-bar">
+      <div class="npc-timer-fill" id="timerFill"></div>
+    </div>
+
+    <!-- NPC identity -->
+    <div class="npc-header">
+      <div class="npc-portrait" id="npcPortrait">?</div>
+      <div>
+        <h2 class="screen-title" id="npcName">A visitor arrives...</h2>
+        <p class="screen-subtitle" id="npcDescription"></p>
+      </div>
+    </div>
+
+    <!-- Dialogue -->
+    <div class="panel npc-dialogue">
+      <p id="npcMessage">...</p>
+    </div>
+
+    <!-- Choices -->
+    <div class="npc-choices" id="npcChoices">
+      <!-- Populated by npc.js -->
+    </div>
+
+    <!-- Skip -->
+    <button class="btn-secondary npc-skip" id="npcSkipBtn" onclick="skipNPC()">
+      Ignore and return
+    </button>
+
+  </main>
+
+  <script src="../js/data/jobCards.js"></script>
+  <script src="../js/data/npcs.js"></script>
+  <script src="../js/data/messages.js"></script>
+  <script src="../js/core/storage.js"></script>
+  <script src="../js/core/game.js"></script>
+  <script src="../js/core/modifiers.js"></script>
+  <script src="../js/screens/npc.js"></script>
+
+</body>
+</html>
