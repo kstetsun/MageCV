@@ -162,7 +162,7 @@ function initHubPage() {
   console.log("[Hub] Page ready. Day:", day);
 }
 
-initHubPage();
+document.addEventListener("DOMContentLoaded", initHubPage);
 
 
 // ======================
