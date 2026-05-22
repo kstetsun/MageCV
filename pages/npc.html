@@ -12,12 +12,12 @@
 
   <main class="npc-screen screen-wrapper">
 
-    <!-- Timer bar -->
-    <div class="npc-timer-bar">
+    <!-- Timer bar (hidden for chat) -->
+    <div class="npc-timer-bar" id="npcTimerBar">
       <div class="npc-timer-fill" id="timerFill"></div>
     </div>
 
-    <!-- NPC identity -->
+    <!-- NPC identity (always visible) -->
     <div class="npc-header">
       <div class="npc-portrait" id="npcPortrait">?</div>
       <div>
@@ -26,17 +26,21 @@
       </div>
     </div>
 
-    <!-- Conversation History (for multi-turn dialogue) -->
-    <div class="npc-history-panel" id="npcHistory">
-      <!-- Populated by npc.js -->
+    <!-- STATE 1: Initial Question Window -->
+    <div class="npc-state-initial" id="npcStateInitial">
+      <div class="panel npc-dialogue">
+        <p id="npcMessage">...</p>
+      </div>
     </div>
 
-    <!-- Current Message (for legacy NPCs) -->
-    <div class="panel npc-dialogue">
-      <p id="npcMessage">...</p>
+    <!-- STATE 2: Chat History Window -->
+    <div class="npc-state-chat" id="npcStateChat" style="display: none;">
+      <div class="npc-history-panel" id="npcHistory">
+        <!-- Populated by npc.js -->
+      </div>
     </div>
 
-    <!-- Choices -->
+    <!-- Choices (shared between states) -->
     <div class="npc-choices" id="npcChoices">
       <!-- Populated by npc.js -->
     </div>

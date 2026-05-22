@@ -1,47 +1,62 @@
 // ======================
 // 📜 js/screens/npc.js
-// Handles both:
-//   • Multi-turn dialogue NPCs (Elf) — npc.dialogues exists
-//   • Legacy single-turn NPCs (Dwarf, Wizard) — npc.choices flat array
+// Clear UI state machine for NPC interactions:
+//   STATE_INITIAL: First question window + timer (Elf only)
+//   STATE_CHAT: Chat history window (Elf only)
+//   STATE_LEGACY: Single message window (Dwarf, Wizard)
 // ======================
 
-// ── DOM refs ──────────────────────────────────────────────────────────────────
-let portrait    = null;
-let nameEl      = null;
-let descEl      = null;
-let messageEl   = null;
-let choicesEl   = null;
-let timerFill   = null;
-let skipBtn     = null;
-let historyEl   = null;
+// ── UI States ─────────────────────────────────────────────────────────────────
+const UI_STATE = {
+  INITIAL: "initial",   // First question window
+  CHAT:    "chat",      // Chat history window
+  LEGACY:  "legacy"     // Single message window
+};
 
-// ── Session state (never persisted — lives only for this page load) ──────────
+let currentUIState = null;
+
+// ── DOM refs ──────────────────────────────────────────────────────────────────
+let portrait      = null;
+let nameEl        = null;
+let descEl        = null;
+let messageEl     = null;
+let choicesEl     = null;
+let timerFill     = null;
+let timerBar      = null;
+let skipBtn       = null;
+let historyEl     = null;
+let stateInitial  = null;
+let stateChat     = null;
+
+// ── Session state ──────────────────────────────────────────────────────────────
 let currentNPC        = null;
 let originScreen      = "hub.html";
-
-// Multi-turn state (Elf only)
-let currentDialogue   = null;   // full dialogue tree object
-let currentNode       = null;   // current node object
-let accumulatedScore  = 0;      // running score total across all turns
-let turnCount         = 0;      // track turn number (0 = first turn)
-let conversationHistory = [];   // array of { type: "npc" | "player", text: "..." }
+let currentDialogue   = null;
+let currentNode       = null;
+let accumulatedScore  = 0;
+let turnCount         = 0;
+let conversationHistory = [];
+let lastRenderedIndex = -1;  // Track last rendered message for incremental updates
 
 // Timer state
 let timerInterval     = null;
 let timerSeconds      = 0;
 let timerMax          = 30;
 
-// ── Boot ──────────────────────────────────────────────────────────────────────
+// ── Boot ───────────────────────────────────────────────────────────────────────
 function initNPCPage() {
-  // Initialize DOM refs
-  portrait    = document.getElementById("npcPortrait");
-  nameEl      = document.getElementById("npcName");
-  descEl      = document.getElementById("npcDescription");
-  messageEl   = document.getElementById("npcMessage");
-  choicesEl   = document.getElementById("npcChoices");
-  timerFill   = document.getElementById("timerFill");
-  skipBtn     = document.getElementById("npcSkipBtn");
-  historyEl   = document.getElementById("npcHistory");
+  // Initialize all DOM refs
+  portrait      = document.getElementById("npcPortrait");
+  nameEl        = document.getElementById("npcName");
+  descEl        = document.getElementById("npcDescription");
+  messageEl     = document.getElementById("npcMessage");
+  choicesEl     = document.getElementById("npcChoices");
+  timerFill     = document.getElementById("timerFill");
+  timerBar      = document.getElementById("npcTimerBar");
+  skipBtn       = document.getElementById("npcSkipBtn");
+  historyEl     = document.getElementById("npcHistory");
+  stateInitial  = document.getElementById("npcStateInitial");
+  stateChat     = document.getElementById("npcStateChat");
 
   if (typeof loadGame === "function") loadGame();
 
@@ -60,8 +75,6 @@ function initNPCPage() {
 
   const save    = (typeof loadRaw === "function") ? loadRaw() : {};
   const pending = save.npcPending;
-
-  console.log("[NPC] initNPCPage() — pending:", pending);
 
   if (!pending || !pending.npcId) {
     console.log("[NPC] No npcPending found — returning to origin");
@@ -93,29 +106,57 @@ function initNPCPage() {
 
 document.addEventListener("DOMContentLoaded", initNPCPage);
 
-// ── Identity ─────────────────────────────────────────────────────────────────
+// ── UI STATE MACHINE ──────────────────────────────────────────────────────────
+
+function switchUIState(newState) {
+  currentUIState = newState;
+
+  // Hide all states first
+  if (stateInitial) stateInitial.style.display = "none";
+  if (stateChat) stateChat.style.display = "none";
+
+  if (newState === UI_STATE.INITIAL) {
+    if (stateInitial) stateInitial.style.display = "";
+    if (timerBar) timerBar.style.display = "";
+    console.log("[NPC] UI → INITIAL state");
+  } else if (newState === UI_STATE.CHAT) {
+    if (stateChat) stateChat.style.display = "";
+    if (timerBar) timerBar.style.display = "none";
+    console.log("[NPC] UI → CHAT state");
+  } else if (newState === UI_STATE.LEGACY) {
+    if (stateInitial) stateInitial.style.display = "";
+    console.log("[NPC] UI → LEGACY state");
+  }
+}
+
+// ── Identity ───────────────────────────────────────────────────────────────────
 const PORTRAITS = { elf: "🧝", dwarf: "⛏️", wizard: "🧙" };
 
 function renderNPCIdentity() {
-  portrait.textContent  = PORTRAITS[currentNPC.id] || "?";
-  nameEl.textContent    = currentNPC.name;
-  descEl.textContent    = currentNPC.description;
+  if (portrait) portrait.textContent = PORTRAITS[currentNPC.id] || "?";
+  if (nameEl)   nameEl.textContent = currentNPC.name;
+  if (descEl)   descEl.textContent = currentNPC.description;
 }
 
-// ── MULTI-TURN DIALOGUE (ELF) ─────────────────────────────────────────────────
+// ── MULTI-TURN DIALOGUE (ELF) ──────────────────────────────────────────────────
 
 function startMultiTurnDialogue() {
-  currentDialogue  = getRandomDialogue(currentNPC);
-  accumulatedScore = 0;
-  turnCount        = 0;
+  currentDialogue   = getRandomDialogue(currentNPC);
+  accumulatedScore  = 0;
+  turnCount         = 0;
   conversationHistory = [];
-  
-  // Start in question mode: show messageEl, hide historyEl, show timer
-  if (messageEl) messageEl.style.display = "";
-  if (historyEl) historyEl.style.display = "none";
-  const timerBar = document.getElementById("npcTimerBar");
-  if (timerBar) timerBar.style.display = "";
-  
+  lastRenderedIndex = -1;
+
+  // Start in INITIAL state
+  switchUIState(UI_STATE.INITIAL);
+  // Hide skip/return button while chat is active
+  if (skipBtn) skipBtn.style.display = "none";
+
+  // Re-assert npcPending in storage to avoid premature clearing by other flows
+  if (typeof saveField === 'function') {
+    saveField('npcPending', { npcId: currentNPC.id, originScreen: originScreen });
+  }
+
   showNode(currentDialogue.nodes[0]);
 }
 
@@ -123,38 +164,32 @@ function showNode(node) {
   currentNode = node;
   turnCount++;
 
-  // Add NPC message to history
+  // Add to history
   conversationHistory.push({
     type: "npc",
     text: node.line
   });
 
-  // Turn 1: show in messageEl (question mode)
-  if (turnCount === 1) {
+  // INITIAL state: show only in messageEl
+  if (currentUIState === UI_STATE.INITIAL) {
     if (messageEl) messageEl.textContent = node.line;
-  } else {
-    // Turn 2+: switch to chat mode, show full history
-    if (turnCount === 2) {
-      if (messageEl) messageEl.style.display = "none";
-      if (historyEl) historyEl.style.display = "";
-      const timerBar = document.getElementById("npcTimerBar");
-      if (timerBar) timerBar.style.display = "none";
-    }
+  }
+  // CHAT state: render full history
+  else if (currentUIState === UI_STATE.CHAT) {
     renderHistory();
   }
 
   choicesEl.innerHTML = "";
 
   if (node.terminal) {
-    // Final Elf line — no choices, auto-resolve after a short read pause
     stopTimer();
-    skipBtn.style.display = "none";
+    if (skipBtn) skipBtn.style.display = "none";
     setTimeout(() => resolveMultiTurn(), 2200);
     return;
   }
 
-  // Render this node's choices
-  node.choices.forEach((choice, i) => {
+  // Render choices
+  node.choices.forEach((choice) => {
     const btn = document.createElement("button");
     btn.className    = "btn-secondary npc-choice-btn";
     btn.textContent  = choice.label;
@@ -180,38 +215,49 @@ function onMultiTurnChoice(choice) {
     text: choice.label
   });
 
+  // Switch to CHAT state on first choice
+  if (currentUIState === UI_STATE.INITIAL) {
+    switchUIState(UI_STATE.CHAT);
+  }
+
   const nextNode = getDialogueNode(currentDialogue, choice.next);
   if (!nextNode) {
-    // Safety: no next node found — resolve immediately
     resolveMultiTurn();
     return;
   }
 
-  // Brief pause before showing next node
-  setTimeout(() => showNode(nextNode), 500);
+  // Delay Elf response so player bubble is visible first
+  setTimeout(() => showNode(nextNode), 800);
 }
 
 function renderHistory() {
   if (!historyEl) return;
 
-  const html = conversationHistory.map(entry => {
-    if (entry.type === "npc") {
-      return `<div class="history-entry history-npc">
-        <span class="history-label">${currentNPC.name.split(" ")[0]}:</span>
-        <span class="history-text">${entry.text}</span>
-      </div>`;
-    } else {
-      return `<div class="history-entry history-player">
-        <span class="history-label">You:</span>
-        <span class="history-text">${entry.text}</span>
-      </div>`;
-    }
-  }).join("");
-
-  historyEl.innerHTML = html;
+  // Only render new messages since last render (incremental update)
+  const newMessages = conversationHistory.slice(lastRenderedIndex + 1);
   
-  // Auto-scroll to bottom
-  historyEl.scrollTop = historyEl.scrollHeight;
+  if (newMessages.length === 0) return;
+
+  // Ensure DOM is ready before appending
+  requestAnimationFrame(() => {
+    newMessages.forEach(entry => {
+      const bubble = document.createElement("div");
+      bubble.className = "history-entry " + (entry.type === "npc" ? "history-npc" : "history-player");
+      
+      if (entry.type === "npc") {
+        bubble.innerHTML = `<span class="history-label">${currentNPC.name.split(" ")[0]}:</span>
+          <span class="history-text">${entry.text}</span>`;
+      } else {
+        bubble.innerHTML = `<span class="history-label">You:</span>
+          <span class="history-text">${entry.text}</span>`;
+      }
+      
+      historyEl.appendChild(bubble);
+    });
+
+    lastRenderedIndex = conversationHistory.length - 1;
+    historyEl.scrollTop = historyEl.scrollHeight;
+  });
 }
 
 function resolveMultiTurn() {
@@ -219,10 +265,13 @@ function resolveMultiTurn() {
   finishInteraction(outcome);
 }
 
-// ── LEGACY DIALOGUE (DWARF / WIZARD) ─────────────────────────────────────────
+// ── LEGACY DIALOGUE (DWARF / WIZARD) ───────────────────────────────────────────
 
 function startLegacyDialogue() {
-  messageEl.textContent = getRandomNPCMessage(currentNPC);
+  // Use LEGACY state (shows messageEl without timer switching logic)
+  switchUIState(UI_STATE.LEGACY);
+
+  if (messageEl) messageEl.textContent = getRandomNPCMessage(currentNPC);
 
   choicesEl.innerHTML = "";
   currentNPC.choices.forEach((choice) => {
@@ -240,11 +289,11 @@ function startLegacyDialogue() {
   resetTimer();
 }
 
-// ── SHARED RESOLUTION ────────────────────────────────────────────────────────
+// ── SHARED RESOLUTION ──────────────────────────────────────────────────────────
 
 function finishInteraction(outcome) {
   npcInteractionsToday += 1;
-  
+
   if (typeof saveField === "function") {
     saveField("npcInteractionsToday", npcInteractionsToday);
   }
@@ -255,34 +304,46 @@ function finishInteraction(outcome) {
     saveField("npcPending", null);
   }
 
-  // Fade out then redirect
+  // If this was an Elf multi-turn chat, show Return to Hub button
+  if (currentNPC && currentNPC.id === 'elf') {
+    // Do NOT fade screen — keep conversation visible until player clicks
+    if (skipBtn) {
+      skipBtn.textContent = 'Return to Hub';
+      skipBtn.style.display = '';
+      skipBtn.onclick = function() { returnToOrigin(); };
+    }
+
+    // Do not auto-redirect; player will click the button when ready
+    return;
+  }
+
+  // Legacy behavior for non-elf NPCs: fade out then redirect
   document.querySelector(".npc-screen").classList.add("npc-leaving");
   setTimeout(() => returnToOrigin(), 700);
 }
 
-// ── TIMER ─────────────────────────────────────────────────────────────────────
+// ── TIMER ──────────────────────────────────────────────────────────────────────
 
 function resetTimer() {
   stopTimer();
-  timerMax     = Math.floor(Math.random() * 31) + 15; // 15–45 s
+  timerMax     = Math.floor(Math.random() * 31) + 15;
   timerSeconds = timerMax;
-  timerFill.style.width      = "100%";
-  timerFill.style.background = "";
-  timerFill.classList.remove("timer-urgent");
+  if (timerFill) {
+    timerFill.style.width      = "100%";
+    timerFill.style.background = "";
+    timerFill.classList.remove("timer-urgent");
+  }
 
   timerInterval = setInterval(() => {
     timerSeconds -= 1;
     const pct = (timerSeconds / timerMax) * 100;
-    timerFill.style.width = pct + "%";
-
-    if      (pct > 60) timerFill.style.background = "var(--color-positive)";
-    else if (pct > 25) timerFill.style.background = "var(--color-accent)";
-    else               timerFill.style.background = "var(--color-negative)";
-
-    if (timerSeconds <= 10) {
-      timerFill.classList.add("timer-urgent");
+    if (timerFill) {
+      timerFill.style.width = pct + "%";
+      if      (pct > 60) timerFill.style.background = "var(--color-positive)";
+      else if (pct > 25) timerFill.style.background = "var(--color-accent)";
+      else               timerFill.style.background = "var(--color-negative)";
+      if (timerSeconds <= 10) timerFill.classList.add("timer-urgent");
     }
-
     if (timerSeconds <= 0) {
       stopTimer();
       onTimerExpire();
@@ -299,34 +360,68 @@ function stopTimer() {
 
 function onTimerExpire() {
   document.body.classList.add("screen-pulse");
-  const msgEl = document.getElementById("npcMessage");
-  if (msgEl) msgEl.innerText = "They waited... but you didn't respond. They left.";
-  
+  if (messageEl) messageEl.innerText = "They waited... but you didn't respond. They left.";
+
   if (typeof saveField === "function") {
     saveField("npcPending", null);
   }
-  
+
   disableChoices();
   setTimeout(() => returnToOrigin(), 1800);
 }
 
-// ── UTILS ─────────────────────────────────────────────────────────────────────
+// ── UTILS ──────────────────────────────────────────────────────────────────────
 
 function disableChoices() {
-  choicesEl.querySelectorAll("button").forEach(b => b.disabled = true);
+  if (choicesEl) {
+    choicesEl.querySelectorAll("button").forEach(b => b.disabled = true);
+  }
 }
 
 function returnToOrigin() {
   window.location.href = originScreen;
 }
 
-// Skip button handler (referenced inline in HTML)
 function skipNPC() {
   stopTimer();
   if (typeof saveField === "function") {
     saveField("npcPending", null);
   }
   returnToOrigin();
+}
+
+// ======================
+// APPLY NPC MODIFIER
+// Maps { npcId, outcome } → correct ModifierTemplates entry.
+// Wizard always ignores player choice — purely random.
+// ======================
+
+function applyNPCModifier(npc, outcome) {
+  if (typeof applyModifier !== "function" || typeof ModifierTemplates === "undefined") {
+    console.warn("[NPC] modifiers.js not loaded — cannot apply modifier.");
+    return;
+  }
+
+  let modifier = null;
+
+  if (npc.id === "elf") {
+    if      (outcome === "positive") modifier = ModifierTemplates.elfBonusResume(2);
+    else if (outcome === "neutral")  modifier = ModifierTemplates.elfBonusDay();
+    // negative → no effect
+  } else if (npc.id === "dwarf") {
+    if      (outcome === "positive") modifier = ModifierTemplates.dwarfPenaltyReduction();
+    else if (outcome === "neutral")  modifier = ModifierTemplates.dwarfSmallBonus();
+    else                             modifier = ModifierTemplates.dwarfDebuff();
+  } else if (npc.id === "wizard") {
+    modifier = (typeof getRandomWizardModifier === "function") ? getRandomWizardModifier() : null;
+  }
+
+  if (modifier) {
+    applyModifier(modifier);
+    console.log("[NPC] Modifier applied:", modifier.label);
+  } else {
+    console.log("[NPC] No modifier for outcome:", outcome);
+  }
 }
 
 // ======================
