@@ -109,6 +109,13 @@ function startMultiTurnDialogue() {
   accumulatedScore = 0;
   turnCount        = 0;
   conversationHistory = [];
+  
+  // Start in question mode: show messageEl, hide historyEl, show timer
+  if (messageEl) messageEl.style.display = "";
+  if (historyEl) historyEl.style.display = "none";
+  const timerBar = document.getElementById("npcTimerBar");
+  if (timerBar) timerBar.style.display = "";
+  
   showNode(currentDialogue.nodes[0]);
 }
 
@@ -122,8 +129,19 @@ function showNode(node) {
     text: node.line
   });
 
-  // Update history display
-  renderHistory();
+  // Turn 1: show in messageEl (question mode)
+  if (turnCount === 1) {
+    if (messageEl) messageEl.textContent = node.line;
+  } else {
+    // Turn 2+: switch to chat mode, show full history
+    if (turnCount === 2) {
+      if (messageEl) messageEl.style.display = "none";
+      if (historyEl) historyEl.style.display = "";
+      const timerBar = document.getElementById("npcTimerBar");
+      if (timerBar) timerBar.style.display = "none";
+    }
+    renderHistory();
+  }
 
   choicesEl.innerHTML = "";
 
