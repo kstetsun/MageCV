@@ -1,292 +1,353 @@
 // ======================
-// 🧙 NPC SCREEN — js/screens/npc.js
-// ======================
-// Responsibilities:
-//   — Read pending NPC data from localStorage (set by hub.js / resume.js)
-//   — Display NPC name, portrait emoji, description, dialogue line
-//   — Run countdown timer (15–45s); auto-dismiss on expire
-//   — Render 2–3 choice buttons from npcs.js dialogue data
-//   4.4 — On choice: resolve outcome → call modifiers.js → apply to activeModifiers[]
-//   4.5 — Enforce daily NPC interaction limit before allowing interaction
+// 📜 js/screens/npc.js
+// Clear UI state machine for NPC interactions:
+//   STATE_INITIAL: First question window + timer (Elf only)
+//   STATE_CHAT: Chat history window (Elf only)
+//   STATE_LEGACY: Single message window (Dwarf, Wizard)
 // ======================
 
+// ── UI States ─────────────────────────────────────────────────────────────────
+const UI_STATE = {
+  INITIAL: "initial",   // First question window
+  CHAT:    "chat",      // Chat history window
+  LEGACY:  "legacy"     // Single message window
+};
 
-// ======================
-// STATE
-// ======================
+let currentUIState = null;
 
-let timerInterval  = null;
-let timerSeconds   = 0;
-let currentNPC     = null;
-let originScreen   = "hub.html";
+// ── DOM refs ──────────────────────────────────────────────────────────────────
+let portrait      = null;
+let nameEl        = null;
+let descEl        = null;
+let messageEl     = null;
+let choicesEl     = null;
+let timerFill     = null;
+let timerBar      = null;
+let skipBtn       = null;
+let historyEl     = null;
+let stateInitial  = null;
+let stateChat     = null;
 
+// ── Session state ──────────────────────────────────────────────────────────────
+let currentNPC        = null;
+let originScreen      = "hub.html";
+let currentDialogue   = null;
+let currentNode       = null;
+let accumulatedScore  = 0;
+let turnCount         = 0;
+let conversationHistory = [];
+let lastRenderedIndex = -1;  // Track last rendered message for incremental updates
 
-// ======================
-// PAGE INIT
-// ======================
+// Timer state
+let timerInterval     = null;
+let timerSeconds      = 0;
+let timerMax          = 30;
 
+// ── Boot ───────────────────────────────────────────────────────────────────────
 function initNPCPage() {
+  // Initialize all DOM refs
+  portrait      = document.getElementById("npcPortrait");
+  nameEl        = document.getElementById("npcName");
+  descEl        = document.getElementById("npcDescription");
+  messageEl     = document.getElementById("npcMessage");
+  choicesEl     = document.getElementById("npcChoices");
+  timerFill     = document.getElementById("timerFill");
+  timerBar      = document.getElementById("npcTimerBar");
+  skipBtn       = document.getElementById("npcSkipBtn");
+  historyEl     = document.getElementById("npcHistory");
+  stateInitial  = document.getElementById("npcStateInitial");
+  stateChat     = document.getElementById("npcStateChat");
+
   if (typeof loadGame === "function") loadGame();
 
-  // Guard: no active game
   if (typeof hasSave === "function" && !hasSave()) {
+    console.log("[NPC] No save found — redirecting to start.html");
     window.location.href = "start.html";
     return;
   }
 
-  // 4.5 — Check daily limit BEFORE rendering NPC
-  // If limit already reached, don't allow interaction — just return
-  if (isNPCLimitReached()) {
-    console.log("[NPC] Daily interaction limit already reached. Returning.");
+  if (npcInteractionsToday >= npcInteractionsLimit) {
+    console.log("[NPC] Interaction limit reached — returning to origin");
     if (typeof saveField === "function") saveField("npcPending", null);
     returnToOrigin();
     return;
   }
 
-  // Read pending NPC from save
-  const save = (typeof loadRaw === "function") ? loadRaw() : {};
+  const save    = (typeof loadRaw === "function") ? loadRaw() : {};
   const pending = save.npcPending;
 
   if (!pending || !pending.npcId) {
-    console.warn("[NPC] No pending NPC found. Returning.");
+    console.log("[NPC] No npcPending found — returning to origin");
     returnToOrigin();
     return;
   }
 
   originScreen = pending.originScreen || "hub.html";
-
-  // Find NPC definition from npcs.js
-  currentNPC = (typeof npcData !== "undefined")
+  currentNPC   = (typeof npcData !== "undefined")
     ? npcData.find(n => n.id === pending.npcId) || null
     : null;
 
   if (!currentNPC) {
-    console.warn("[NPC] Unknown NPC id:", pending.npcId);
+    console.log("[NPC] NPC not found:", pending.npcId);
     returnToOrigin();
     return;
   }
 
-  renderNPC(currentNPC);
-  startTimer();
+  console.log("[NPC] Starting dialogue with:", currentNPC.name);
 
-  console.log(`[NPC] ${currentNPC.name} appeared. Origin: ${originScreen}`);
+  renderNPCIdentity();
+
+  if (currentNPC.dialogues && currentNPC.dialogues.length) {
+    startMultiTurnDialogue();
+  } else {
+    startLegacyDialogue();
+  }
 }
 
+document.addEventListener("DOMContentLoaded", initNPCPage);
 
-// ======================
-// RENDER NPC
-// ======================
+// ── UI STATE MACHINE ──────────────────────────────────────────────────────────
 
-const NPC_PORTRAITS = {
-  elf:    "🧝",
-  dwarf:  "⛏️",
-  wizard: "🧙"
-};
+function switchUIState(newState) {
+  currentUIState = newState;
 
-function renderNPC(npc) {
-  const portrait = document.getElementById("npcPortrait");
-  if (portrait) portrait.innerText = NPC_PORTRAITS[npc.id] || "👤";
+  // Hide all states first
+  if (stateInitial) stateInitial.style.display = "none";
+  if (stateChat) stateChat.style.display = "none";
 
-  const nameEl = document.getElementById("npcName");
-  if (nameEl) nameEl.innerText = npc.name;
-
-  const descEl = document.getElementById("npcDescription");
-  if (descEl) descEl.innerText = npc.description;
-
-  // Pick a random dialogue line from the NPC's messages array
-  const msg = npc.messages[Math.floor(Math.random() * npc.messages.length)];
-  const msgEl = document.getElementById("npcMessage");
-  if (msgEl) msgEl.innerText = msg;
-
-  renderChoices(npc);
+  if (newState === UI_STATE.INITIAL) {
+    if (stateInitial) stateInitial.style.display = "";
+    if (timerBar) timerBar.style.display = "";
+    console.log("[NPC] UI → INITIAL state");
+  } else if (newState === UI_STATE.CHAT) {
+    if (stateChat) stateChat.style.display = "";
+    if (timerBar) timerBar.style.display = "none";
+    console.log("[NPC] UI → CHAT state");
+  } else if (newState === UI_STATE.LEGACY) {
+    if (stateInitial) stateInitial.style.display = "";
+    console.log("[NPC] UI → LEGACY state");
+  }
 }
 
+// ── Identity ───────────────────────────────────────────────────────────────────
+const PORTRAITS = { elf: "🧝", dwarf: "⛏️", wizard: "🧙" };
 
-// ======================
-// RENDER CHOICES
-// Uses npc.choices[] from npcs.js if defined.
-// Each choice: { label, outcome }
-// Falls back to 3 generic options if no choices defined.
-// ======================
+function renderNPCIdentity() {
+  if (portrait) portrait.textContent = PORTRAITS[currentNPC.id] || "?";
+  if (nameEl)   nameEl.textContent = currentNPC.name;
+  if (descEl)   descEl.textContent = currentNPC.description;
+}
 
-function renderChoices(npc) {
-  const container = document.getElementById("npcChoices");
-  if (!container) return;
+// ── MULTI-TURN DIALOGUE (ELF) ──────────────────────────────────────────────────
 
-  container.innerHTML = "";
+function startMultiTurnDialogue() {
+  currentDialogue   = getRandomDialogue(currentNPC);
+  accumulatedScore  = 0;
+  turnCount         = 0;
+  conversationHistory = [];
+  lastRenderedIndex = -1;
 
-  const choices = (npc.choices && npc.choices.length > 0)
-    ? npc.choices
-    : [
-        { label: "Respond politely",    outcome: "positive" },
-        { label: "Nod and say nothing", outcome: "neutral"  },
-        { label: "Dismiss them",        outcome: "negative" }
-      ];
+  // Start in INITIAL state
+  switchUIState(UI_STATE.INITIAL);
+  // Hide skip/return button while chat is active
+  if (skipBtn) skipBtn.style.display = "none";
 
-  choices.forEach((choice, index) => {
-    const btn = document.createElement("button");
-    btn.className = "btn-secondary npc-choice-btn";
-    btn.innerText  = choice.label;
-    btn.onclick    = () => resolveChoice(choice, index);
-    container.appendChild(btn);
+  // Re-assert npcPending in storage to avoid premature clearing by other flows
+  if (typeof saveField === 'function') {
+    saveField('npcPending', { npcId: currentNPC.id, originScreen: originScreen });
+  }
+
+  showNode(currentDialogue.nodes[0]);
+}
+
+function showNode(node) {
+  currentNode = node;
+  turnCount++;
+
+  // Add to history
+  conversationHistory.push({
+    type: "npc",
+    text: node.line
   });
+
+  // INITIAL state: show only in messageEl
+  if (currentUIState === UI_STATE.INITIAL) {
+    if (messageEl) messageEl.textContent = node.line;
+  }
+  // CHAT state: render full history
+  else if (currentUIState === UI_STATE.CHAT) {
+    renderHistory();
+  }
+
+  choicesEl.innerHTML = "";
+
+  if (node.terminal) {
+    stopTimer();
+    if (skipBtn) skipBtn.style.display = "none";
+    setTimeout(() => resolveMultiTurn(), 2200);
+    return;
+  }
+
+  // Render choices
+  node.choices.forEach((choice) => {
+    const btn = document.createElement("button");
+    btn.className    = "btn-secondary npc-choice-btn";
+    btn.textContent  = choice.label;
+    btn.addEventListener("click", () => onMultiTurnChoice(choice));
+    choicesEl.appendChild(btn);
+  });
+
+  // Timer only on first turn
+  if (turnCount === 1) {
+    resetTimer();
+  }
 }
 
-
-// ======================
-// 4.5 — DAILY LIMIT CHECK
-// Checks npcInteractionsToday against npcInteractionsLimit.
-// Both vars come from game.js global state, loaded via loadGame().
-// ======================
-
-function isNPCLimitReached() {
-  const today  = (typeof npcInteractionsToday !== "undefined") ? npcInteractionsToday : 0;
-  const limit  = (typeof npcInteractionsLimit !== "undefined") ? npcInteractionsLimit : 2;
-  return today >= limit;
-}
-
-function getRemainingNPCInteractions() {
-  const today = (typeof npcInteractionsToday !== "undefined") ? npcInteractionsToday : 0;
-  const limit = (typeof npcInteractionsLimit !== "undefined") ? npcInteractionsLimit : 2;
-  return Math.max(0, limit - today);
-}
-
-
-// ======================
-// 4.4 — RESOLVE CHOICE
-// Stops timer, increments interaction counter,
-// maps outcome → modifier via applyNPCModifier(),
-// saves state, clears pending, returns to origin.
-// ======================
-
-function resolveChoice(choice, index) {
+function onMultiTurnChoice(choice) {
   stopTimer();
   disableChoices();
 
-  // 4.5 — Final limit check at resolution moment
-  // (edge case: limit could have been reached by another tab/session)
-  if (isNPCLimitReached()) {
-    console.log("[NPC] Limit reached at resolution. No modifier applied.");
-    if (typeof saveField === "function") saveField("npcPending", null);
-    returnToOrigin();
+  accumulatedScore += choice.score;
+
+  // Add player choice to history
+  conversationHistory.push({
+    type: "player",
+    text: choice.label
+  });
+
+  // Switch to CHAT state on first choice
+  if (currentUIState === UI_STATE.INITIAL) {
+    switchUIState(UI_STATE.CHAT);
+  }
+
+  const nextNode = getDialogueNode(currentDialogue, choice.next);
+  if (!nextNode) {
+    resolveMultiTurn();
     return;
   }
 
-  // 4.5 — Increment interaction counter
-  npcInteractionsToday++;
+  // Delay Elf response so player bubble is visible first
+  setTimeout(() => showNode(nextNode), 800);
+}
+
+function renderHistory() {
+  if (!historyEl) return;
+
+  // Only render new messages since last render (incremental update)
+  const newMessages = conversationHistory.slice(lastRenderedIndex + 1);
+  
+  if (newMessages.length === 0) return;
+
+  // Ensure DOM is ready before appending
+  requestAnimationFrame(() => {
+    newMessages.forEach(entry => {
+      const bubble = document.createElement("div");
+      bubble.className = "history-entry " + (entry.type === "npc" ? "history-npc" : "history-player");
+      
+      if (entry.type === "npc") {
+        bubble.innerHTML = `<span class="history-label">${currentNPC.name.split(" ")[0]}:</span>
+          <span class="history-text">${entry.text}</span>`;
+      } else {
+        bubble.innerHTML = `<span class="history-label">You:</span>
+          <span class="history-text">${entry.text}</span>`;
+      }
+      
+      historyEl.appendChild(bubble);
+    });
+
+    lastRenderedIndex = conversationHistory.length - 1;
+    historyEl.scrollTop = historyEl.scrollHeight;
+  });
+}
+
+function resolveMultiTurn() {
+  const outcome = scoreToOutcome(accumulatedScore);
+  finishInteraction(outcome);
+}
+
+// ── LEGACY DIALOGUE (DWARF / WIZARD) ───────────────────────────────────────────
+
+function startLegacyDialogue() {
+  // Use LEGACY state (shows messageEl without timer switching logic)
+  switchUIState(UI_STATE.LEGACY);
+
+  if (messageEl) messageEl.textContent = getRandomNPCMessage(currentNPC);
+
+  choicesEl.innerHTML = "";
+  currentNPC.choices.forEach((choice) => {
+    const btn = document.createElement("button");
+    btn.className   = "btn-secondary npc-choice-btn";
+    btn.textContent = choice.label;
+    btn.addEventListener("click", () => {
+      stopTimer();
+      disableChoices();
+      finishInteraction(choice.outcome);
+    });
+    choicesEl.appendChild(btn);
+  });
+
+  resetTimer();
+}
+
+// ── SHARED RESOLUTION ──────────────────────────────────────────────────────────
+
+function finishInteraction(outcome) {
+  npcInteractionsToday += 1;
+
   if (typeof saveField === "function") {
     saveField("npcInteractionsToday", npcInteractionsToday);
   }
 
-  // 4.4 — Apply modifier based on NPC type + player outcome choice
-  applyNPCModifier(currentNPC, choice.outcome);
+  applyNPCModifier(currentNPC, outcome);
 
-  // Clear pending NPC from save
   if (typeof saveField === "function") {
     saveField("npcPending", null);
   }
 
-  // Show remaining interactions count in UI if element exists
-  updateNPCLimitDisplay();
+  // If this was an Elf multi-turn chat, show Return to Hub button
+  if (currentNPC && currentNPC.id === 'elf') {
+    // Do NOT fade screen — keep conversation visible until player clicks
+    if (skipBtn) {
+      skipBtn.textContent = 'Return to Hub';
+      skipBtn.style.display = '';
+      skipBtn.onclick = function() { returnToOrigin(); };
+    }
 
-  console.log(`[NPC] Choice resolved: "${choice.label}" → outcome: ${choice.outcome}`);
-  console.log(`[NPC] Interactions today: ${npcInteractionsToday} / ${npcInteractionsLimit}`);
-
-  setTimeout(returnToOrigin, 700);
-}
-
-
-// ======================
-// 4.4 — APPLY MODIFIER BY NPC TYPE + OUTCOME
-// Maps { npcId, outcome } → correct ModifierTemplates entry.
-// Wizard always ignores player choice — purely random.
-// Requires modifiers.js to be loaded.
-// ======================
-
-function applyNPCModifier(npc, outcome) {
-  if (typeof applyModifier !== "function" || typeof ModifierTemplates === "undefined") {
-    console.warn("[NPC] modifiers.js not loaded — cannot apply modifier.");
+    // Do not auto-redirect; player will click the button when ready
     return;
   }
 
-  let modifier = null;
-
-  // --- ELF: supportive, rewards politeness ---
-  if (npc.id === "elf") {
-    if      (outcome === "positive") modifier = ModifierTemplates.elfBonusResume(2);
-    else if (outcome === "neutral")  modifier = ModifierTemplates.elfBonusDay();
-    else if (outcome === "negative") modifier = null; // dismissed — no effect
-  }
-
-  // --- DWARF: realistic, slight penalty for rudeness ---
-  else if (npc.id === "dwarf") {
-    if      (outcome === "positive") modifier = ModifierTemplates.dwarfPenaltyReduction();
-    else if (outcome === "neutral")  modifier = ModifierTemplates.dwarfSmallBonus();
-    else if (outcome === "negative") modifier = ModifierTemplates.dwarfDebuff();
-  }
-
-  // --- WIZARD: completely chaotic — outcome is irrelevant ---
-  else if (npc.id === "wizard") {
-    modifier = (typeof getRandomWizardModifier === "function")
-      ? getRandomWizardModifier()
-      : null;
-
-    if (modifier) {
-      console.log(`[NPC] Wizard rolled: ${modifier.label} (chaos — choice ignored)`);
-    }
-  }
-
-  // Apply to activeModifiers[] via modifiers.js
-  if (modifier) {
-    applyModifier(modifier); // modifiers.js — pushes to activeModifiers[], saves
-    console.log(`[NPC] Modifier applied: ${modifier.label} (${modifier.duration})`);
-  } else {
-    console.log("[NPC] No modifier for this outcome.");
-  }
+  // Legacy behavior for non-elf NPCs: fade out then redirect
+  document.querySelector(".npc-screen").classList.add("npc-leaving");
+  setTimeout(() => returnToOrigin(), 700);
 }
 
+// ── TIMER ──────────────────────────────────────────────────────────────────────
 
-// ======================
-// UI — NPC LIMIT DISPLAY
-// Updates an optional element showing remaining interactions.
-// ======================
-
-function updateNPCLimitDisplay() {
-  const el = document.getElementById("npcLimitDisplay");
-  if (!el) return;
-  const remaining = getRemainingNPCInteractions();
-  el.innerText = remaining > 0
-    ? `${remaining} interaction${remaining !== 1 ? "s" : ""} remaining today`
-    : "No more NPC interactions today";
-}
-
-
-// ======================
-// COUNTDOWN TIMER
-// Duration: random 15–45 seconds
-// ======================
-
-function startTimer() {
-  timerSeconds = Math.floor(Math.random() * 31) + 15;
-
-  const fill  = document.getElementById("timerFill");
-  const total = timerSeconds;
-
-  if (fill) fill.style.width = "100%";
+function resetTimer() {
+  stopTimer();
+  timerMax     = Math.floor(Math.random() * 31) + 15;
+  timerSeconds = timerMax;
+  if (timerFill) {
+    timerFill.style.width      = "100%";
+    timerFill.style.background = "";
+    timerFill.classList.remove("timer-urgent");
+  }
 
   timerInterval = setInterval(() => {
-    timerSeconds--;
-
-    if (fill) {
-      const pct = (timerSeconds / total) * 100;
-      fill.style.width = pct + "%";
-
-      if      (pct > 60) fill.style.background = "var(--color-positive)";
-      else if (pct > 25) fill.style.background = "var(--color-accent)";
-      else               fill.style.background = "var(--color-negative)";
+    timerSeconds -= 1;
+    const pct = (timerSeconds / timerMax) * 100;
+    if (timerFill) {
+      timerFill.style.width = pct + "%";
+      if      (pct > 60) timerFill.style.background = "var(--color-positive)";
+      else if (pct > 25) timerFill.style.background = "var(--color-accent)";
+      else               timerFill.style.background = "var(--color-negative)";
+      if (timerSeconds <= 10) timerFill.classList.add("timer-urgent");
     }
-
-    if (timerSeconds <= 0) onTimerExpired();
+    if (timerSeconds <= 0) {
+      stopTimer();
+      onTimerExpire();
+    }
   }, 1000);
 }
 
@@ -297,66 +358,75 @@ function stopTimer() {
   }
 }
 
-function onTimerExpired() {
-  stopTimer();
+function onTimerExpire() {
+  document.body.classList.add("screen-pulse");
+  if (messageEl) messageEl.innerText = "They waited... but you didn't respond. They left.";
+
+  if (typeof saveField === "function") {
+    saveField("npcPending", null);
+  }
+
   disableChoices();
-
-  const msgEl = document.getElementById("npcMessage");
-  if (msgEl) msgEl.innerText = "They waited... but you didn't respond. They left.";
-
-  if (typeof saveField === "function") saveField("npcPending", null);
-
-  console.log("[NPC] Timer expired. NPC left without interaction.");
-  setTimeout(returnToOrigin, 1800);
+  setTimeout(() => returnToOrigin(), 1800);
 }
 
+// ── UTILS ──────────────────────────────────────────────────────────────────────
 
-// ======================
-// SKIP
-// ======================
-
-function skipNPC() {
-  stopTimer();
-  if (typeof saveField === "function") saveField("npcPending", null);
-  console.log("[NPC] Player skipped NPC. No modifier applied.");
-  returnToOrigin();
+function disableChoices() {
+  if (choicesEl) {
+    choicesEl.querySelectorAll("button").forEach(b => b.disabled = true);
+  }
 }
-
-
-// ======================
-// RETURN TO ORIGIN
-// ======================
 
 function returnToOrigin() {
   window.location.href = originScreen;
 }
 
-
-// ======================
-// HELPERS
-// ======================
-
-function disableChoices() {
-  document.querySelectorAll(".npc-choice-btn")
-    .forEach(btn => { btn.disabled = true; });
-
-  const skipBtn = document.getElementById("npcSkipBtn");
-  if (skipBtn) skipBtn.disabled = true;
+function skipNPC() {
+  stopTimer();
+  if (typeof saveField === "function") {
+    saveField("npcPending", null);
+  }
+  returnToOrigin();
 }
 
-
 // ======================
-// LAUNCH
+// APPLY NPC MODIFIER
+// Maps { npcId, outcome } → correct ModifierTemplates entry.
+// Wizard always ignores player choice — purely random.
 // ======================
 
-initNPCPage();
+function applyNPCModifier(npc, outcome) {
+  if (typeof applyModifier !== "function" || typeof ModifierTemplates === "undefined") {
+    console.warn("[NPC] modifiers.js not loaded — cannot apply modifier.");
+    return;
+  }
 
+  let modifier = null;
+
+  if (npc.id === "elf") {
+    if      (outcome === "positive") modifier = ModifierTemplates.elfBonusResume(2);
+    else if (outcome === "neutral")  modifier = ModifierTemplates.elfBonusDay();
+    // negative → no effect
+  } else if (npc.id === "dwarf") {
+    if      (outcome === "positive") modifier = ModifierTemplates.dwarfPenaltyReduction();
+    else if (outcome === "neutral")  modifier = ModifierTemplates.dwarfSmallBonus();
+    else                             modifier = ModifierTemplates.dwarfDebuff();
+  } else if (npc.id === "wizard") {
+    modifier = (typeof getRandomWizardModifier === "function") ? getRandomWizardModifier() : null;
+  }
+
+  if (modifier) {
+    applyModifier(modifier);
+    console.log("[NPC] Modifier applied:", modifier.label);
+  } else {
+    console.log("[NPC] No modifier for outcome:", outcome);
+  }
+}
 
 // ======================
 // EXPORTS
 // ======================
 
-window.skipNPC              = skipNPC;
-window.resolveChoice        = resolveChoice;
-window.isNPCLimitReached    = isNPCLimitReached;
-window.applyNPCModifier     = applyNPCModifier;
+window.skipNPC           = skipNPC;
+window.applyNPCModifier  = applyNPCModifier;
