@@ -95,3 +95,35 @@
   color: var(--color-text);
   border-color: var(--color-border);
 }
+
+/* --- Timers and Effects --- */
+
+.timer-urgent {
+  animation: timerPulse 0.7s infinite alternate;
+}
+
+@keyframes timerPulse {
+  0%   { background: var(--color-negative, #f38ba8); }
+  100% { background: #ff4d4d; }
+}
+
+.screen-pulse::before {
+  content: "";
+  position: fixed;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(255, 0, 0, 0.18);
+  z-index: 9999;
+  pointer-events: none;
+  animation: screenFlash 0.4s linear;
+}
+
+@keyframes screenFlash {
+  0%   { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+.npc-leaving {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
