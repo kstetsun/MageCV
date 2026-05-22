@@ -1,5 +1,6 @@
 # MageCV
 
+```
 /main
 │
 ├── index.html                  ← App entry point (redirects to start)
@@ -45,3 +46,4 @@
     ├── photos/                 ← 3 profile photo PNGs
     ├── plants/                 ← 3 plant PNGs
     └── audio/                  ← Background music track(s)
+```
