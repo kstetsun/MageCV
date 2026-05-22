@@ -6,63 +6,121 @@
   <title>Magic Resume - CV Builder</title>
 
   <link rel="stylesheet" href="../styles/main.css">
-
-  <style>
-    button.selected {
-      background: #6c5ce7;
-      color: white;
-      transform: scale(1.05);
-    }
-  </style>
+  <link rel="stylesheet" href="../styles/resume.css">
 </head>
 
 <body>
 
-  <div class="resume">
+  <!-- ================================================ -->
+  <!-- JOB CARD MODAL OVERLAY                           -->
+  <!-- Opens automatically on page load and after each  -->
+  <!-- submit. Also triggered by the "View card" button -->
+  <!-- ================================================ -->
+  <div id="jobCardModal" class="modal-overlay" onclick="handleModalOverlayClick(event)" aria-modal="true" role="dialog" aria-labelledby="modalJobTitle">
 
-    <h1>📄 Resume Builder</h1>
+    <div class="modal-card">
 
-    <p>Select elements:</p>
+      <div class="modal-header">
+        <span class="modal-label">You are applying for</span>
+        <button class="modal-close-btn" onclick="closeJobCardModal()" aria-label="Close job card">✕</button>
+      </div>
+
+      <h2 id="modalJobTitle" class="modal-title">—</h2>
+
+      <div class="modal-image-wrap">
+        <img id="modalJobImage" src="" alt="" />
+        <!-- Placeholder shown when image is missing -->
+        <div id="modalImagePlaceholder" class="modal-image-placeholder">📜</div>
+      </div>
+
+      <p id="modalJobDescription" class="modal-description">—</p>
+
+      <!-- Debug hints — remove once real assets are in place -->
+      <div id="jobCardHints" class="modal-hints"></div>
+
+      <button class="modal-confirm-btn" onclick="closeJobCardModal()">
+        Got it — build my resume
+      </button>
+
+    </div>
+  </div>
+
+
+  <!-- ================================================ -->
+  <!-- MAIN RESUME SCREEN                               -->
+  <!-- ================================================ -->
+  <div class="resume-screen">
+
+    <div class="resume-topbar">
+      <h1 class="resume-heading">📄 Resume Builder</h1>
+      <span id="resumesTodayDisplay" class="resume-counter">0 / 5</span>
+    </div>
+
+    <!-- Job card strip — persistent banner, "View" reopens modal -->
+    <div class="job-card-strip">
+      <div class="job-card-strip-thumb">
+        <img id="jobCardImage" src="" alt="" />
+        <span id="jobCardImageFallback" class="strip-thumb-fallback">📜</span>
+      </div>
+      <div class="job-card-strip-info">
+        <p id="jobCardTitle" class="strip-title">Loading…</p>
+        <p id="jobCardDescription" class="strip-desc"></p>
+      </div>
+      <button class="strip-view-btn" onclick="openJobCardModal()" aria-label="View full job card">
+        👁 View card
+      </button>
+    </div>
+
+    <!-- Active modifier tags (populated by updateModifierDisplay) -->
+    <div id="activeModifiersResume" class="modifier-display"></div>
+
+    <p class="resume-instruction">Choose your resume elements:</p>
 
     <!-- 🌱 PLANT -->
-    <div class="block">
+    <div class="resume-block">
       <h3>🪴 Plant</h3>
-
-      <button data-group="plant" onclick="selectPlant('cactus', this)">🌵 Cactus</button>
-      <button data-group="plant" onclick="selectPlant('flower', this)">🌷 Flower</button>
-      <button data-group="plant" onclick="selectPlant('fern', this)">🌿 Fern</button>
+      <div class="btn-group">
+        <button data-group="plant" onclick="selectPlant('cactus', this)">🌵 Cactus</button>
+        <button data-group="plant" onclick="selectPlant('flower', this)">🌷 Flower</button>
+        <button data-group="plant" onclick="selectPlant('fern',   this)">🌿 Fern</button>
+      </div>
     </div>
 
     <!-- 📸 PHOTO -->
-    <div class="block">
+    <div class="resume-block">
       <h3>📸 Photo</h3>
-
-      <button data-group="photo" onclick="selectPhoto('neutral', this)">😐 Neutral</button>
-      <button data-group="photo" onclick="selectPhoto('smile', this)">😀 Smile</button>
-      <button data-group="photo" onclick="selectPhoto('serious', this)">🧐 Serious</button>
+      <div class="btn-group">
+        <button data-group="photo" onclick="selectPhoto('neutral',  this)">😐 Neutral</button>
+        <button data-group="photo" onclick="selectPhoto('smile',    this)">😀 Smile</button>
+        <button data-group="photo" onclick="selectPhoto('serious',  this)">🧐 Serious</button>
+      </div>
     </div>
 
     <!-- 📅 DATE -->
-    <div class="block">
+    <div class="resume-block">
       <h3>📅 Date</h3>
-
-      <button data-group="date" onclick="selectDate('correct', this)">✔ Correct</button>
-      <button data-group="date" onclick="selectDate('wrong', this)">❌ Incorrect</button>
+      <div class="btn-group">
+        <button data-group="date" onclick="selectDate('correct', this)">✔ Correct</button>
+        <button data-group="date" onclick="selectDate('wrong',   this)">❌ Incorrect</button>
+      </div>
     </div>
 
-    <br>
+    <!-- Feedback message (shown/hidden by showResumeMessage) -->
+    <div id="resumeMessage" class="resume-message" style="display:none;"></div>
 
-    <button class="big-btn" onclick="submitResume()">
-      📨 Submit Resume
-    </button>
-
-    <button class="small-btn" onclick="goHub()">
-      ⬅ Back
-    </button>
+    <div class="resume-actions">
+      <button id="submitResumeBtn" class="big-btn" onclick="submitResume()">
+        📨 Submit Resume
+      </button>
+      <button class="small-btn" onclick="goHub()">
+        ⬅ Back
+      </button>
+    </div>
 
   </div>
 
-  <!-- JavaScript -->
+
+  <!-- JavaScript — load order must not change -->
   <script src="../js/data/jobCards.js"></script>
   <script src="../js/data/npcs.js"></script>
   <script src="../js/data/messages.js"></script>

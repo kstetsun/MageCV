@@ -10,6 +10,8 @@
 //   4.2 — write npcPending to localStorage before redirecting to npc.html
 //   5.2 — applyModifiersToScore() called inside calculateResumeScore()
 //   5.3 — tickResumeModifiers() called after every successful submitResume()
+//   6.1 — job card modal opens automatically on page load and after each submit
+//   6.2 — "View card" button in banner re-opens modal at any time
 // ======================
 
 
@@ -18,6 +20,67 @@
 // ======================
 
 let activeJobCard = null;
+
+
+// ======================
+// 6.1 / 6.2 — JOB CARD MODAL
+// Opens automatically when a new card is loaded (page load + after each submit).
+// Can also be re-opened manually via the "View card" banner button.
+// Closes on: confirm button, ✕ button, or clicking the overlay backdrop.
+// ======================
+
+function openJobCardModal() {
+  const modal = document.getElementById("jobCardModal");
+  if (!modal) return;
+  modal.classList.add("is-open");
+  document.body.classList.add("modal-open");
+}
+
+function closeJobCardModal() {
+  const modal = document.getElementById("jobCardModal");
+  if (!modal) return;
+  modal.classList.remove("is-open");
+  document.body.classList.remove("modal-open");
+}
+
+// Closes modal only when the dark backdrop itself is clicked,
+// not when clicking inside the card.
+function handleModalOverlayClick(event) {
+  if (event.target === document.getElementById("jobCardModal")) {
+    closeJobCardModal();
+  }
+}
+
+// Populate all modal fields from a job card object.
+function _populateModal(card) {
+  const titleEl = document.getElementById("modalJobTitle");
+  if (titleEl) titleEl.innerText = card.title || "—";
+
+  const descEl = document.getElementById("modalJobDescription");
+  if (descEl) descEl.innerText = card.description || "";
+
+  const imgEl    = document.getElementById("modalJobImage");
+  const phEl     = document.getElementById("modalImagePlaceholder");
+  const imgSrc   = `../assets/jobcards/${card.id}.png`;
+
+  if (imgEl) {
+    imgEl.src   = imgSrc;
+    imgEl.alt   = card.title || "";
+    imgEl.style.display = "none"; // hide until confirmed loaded
+
+    imgEl.onload  = () => {
+      imgEl.style.display = "block";
+      if (phEl) phEl.style.display = "none";
+    };
+    imgEl.onerror = () => {
+      imgEl.style.display = "none";
+      if (phEl) phEl.style.display = "flex";
+    };
+  }
+
+  // Debug hints — remove once real PNG assets are in place
+  _renderCorrectAnswerHints(card);
+}
 
 
 // ======================
@@ -32,36 +95,48 @@ function loadJobCard() {
 
   activeJobCard = jobCards[Math.floor(Math.random() * jobCards.length)];
 
+  // --- Banner strip ---
   const titleEl = document.getElementById("jobCardTitle");
   if (titleEl) titleEl.innerText = activeJobCard.title;
 
-  const imgEl = document.getElementById("jobCardImage");
-  if (imgEl) {
-    imgEl.src = `../assets/jobcards/${activeJobCard.id}.png`;
-    imgEl.alt = activeJobCard.title;
-    // Hide broken image icon if asset not yet available
-    imgEl.onerror = () => { imgEl.style.display = "none"; };
-    imgEl.onload  = () => { imgEl.style.display = "block"; };
-  }
-
   const descEl = document.getElementById("jobCardDescription");
-  if (descEl && activeJobCard.description) {
-    descEl.innerText = activeJobCard.description;
+  if (descEl) descEl.innerText = activeJobCard.description || "";
+
+  const stripImg = document.getElementById("jobCardImage");
+  const stripFb  = document.getElementById("jobCardImageFallback");
+  if (stripImg) {
+    stripImg.src = `../assets/jobcards/${activeJobCard.id}.png`;
+    stripImg.alt = activeJobCard.title;
+    stripImg.style.display = "none";
+    stripImg.onload  = () => {
+      stripImg.style.display = "block";
+      if (stripFb) stripFb.style.display = "none";
+    };
+    stripImg.onerror = () => {
+      stripImg.style.display = "none";
+      if (stripFb) stripFb.style.display = "flex";
+    };
   }
 
-  // Show which answers are correct (visible hint for placeholder phase)
-  _renderCorrectAnswerHints(activeJobCard);
+  // --- Modal ---
+  _populateModal(activeJobCard);
+
+  // 6.1 — Auto-open modal so player reads the card before choosing
+  openJobCardModal();
 
   console.log(`[Resume] Job card loaded: ${activeJobCard.title}`);
 }
 
-// Temporary helper — renders correct answer hints in a debug element.
-// Remove or hide this once real job card PNG assets are in place.
+// Temporary helper — renders correct answer hints in the modal debug element.
+// Remove or hide once real job card PNG assets are in place.
 function _renderCorrectAnswerHints(card) {
   const hintEl = document.getElementById("jobCardHints");
   if (!hintEl || !card.correctAnswers) return;
   const c = card.correctAnswers;
-  hintEl.innerText = `Correct: plant=${c.plant} | photo=${c.photo} | date=${c.date}`;
+  hintEl.innerHTML =
+    `<span class="hint-tag">plant: ${c.plant}</span>` +
+    `<span class="hint-tag">photo: ${c.photo}</span>` +
+    `<span class="hint-tag">date: ${c.date}</span>`;
 }
 
 
@@ -120,7 +195,6 @@ function calculateResumeScore() {
   const correct = activeJobCard.correctAnswers;
   let base = 0;
 
-  // --- Component scoring ---
   // Each correct choice: +1. Each wrong choice: -1.
   if (resume.plant !== null) {
     const hit = resume.plant === correct.plant;
@@ -143,9 +217,7 @@ function calculateResumeScore() {
   // Hard floor before modifiers
   if (base < 1) base = 1;
 
-  // --- 5.2 — Apply active modifiers ---
-  // applyModifiersToScore handles: bonus_per_resume, penalty_reduction,
-  // score_multiplier. Returns score with hard floor of 1 enforced again.
+  // 5.2 — Apply active modifiers
   const finalScore = (typeof applyModifiersToScore === "function")
     ? applyModifiersToScore(base)
     : base;
@@ -157,14 +229,12 @@ function calculateResumeScore() {
 
 // ======================
 // 2.4 — DAILY RESUME LIMIT
-// Base limit comes from ModeConfig via getConfig().
-// Extra slots from active "extra_resume_slot" modifiers are added on top.
 // ======================
 
 function getDailyResumeLimit() {
   const base = (typeof getConfig === "function")
     ? getConfig().resumesPerDay
-    : 5; // safe fallback
+    : 5;
 
   const extra = (typeof getExtraResumeSlots === "function")
     ? getExtraResumeSlots()
@@ -191,7 +261,7 @@ function isResumeLimitReached() {
 //   8. Reset selections and UI counter
 //   9. 2.7 — Check win condition
 //  10. 4.1 — Attempt NPC spawn
-//  11. Load next job card
+//  11. Load next job card (auto-opens modal for next application — 6.1)
 // ======================
 
 function submitResume() {
@@ -222,9 +292,7 @@ function submitResume() {
   resumesToday     += 1;
   resumesSentTotal += 1;
 
-  // Step 5 — 5.3: Tick resume-duration modifiers
-  // Must happen AFTER score is calculated so the modifier applies to this resume,
-  // then decrements so it will expire correctly for future resumes.
+  // Step 5 — 5.3: Tick resume-duration modifiers AFTER score is calculated
   if (typeof tickResumeModifiers === "function") {
     tickResumeModifiers();
   }
@@ -248,7 +316,7 @@ function submitResume() {
   // Step 9 — 2.7: Win check — redirects to win.html if condition met
   if (typeof checkWin === "function" && checkWin()) return;
 
-  // Daily limit now reached after this submit — show message and block
+  // Daily limit now reached after this submit
   if (isResumeLimitReached()) {
     showDailyLimitReached();
     return;
@@ -257,29 +325,24 @@ function submitResume() {
   // Step 10 — 4.1: NPC spawn attempt (20% chance, respects daily limit)
   trySpawnNPCFromResume();
 
-  // Step 11 — Load next job card for the next resume
+  // Step 11 — Load next job card (openJobCardModal is called inside loadJobCard)
   loadJobCard();
 }
 
 
 // ======================
 // 4.1 — NPC SPAWN TRIGGER (Resume Room)
-// Called on page load and after each resume submission.
-// Slightly lower chance than HUB (20% vs 30%) — player is mid-task.
 // ======================
 
 function trySpawnNPCFromResume() {
   if (typeof npcInteractionsToday === "undefined" ||
       typeof npcInteractionsLimit === "undefined") return;
 
-  // Respect daily interaction limit
   if (npcInteractionsToday >= npcInteractionsLimit) return;
 
-  // Don't spawn if a pending NPC event already exists
   const save = (typeof loadRaw === "function") ? loadRaw() : {};
   if (save.npcPending) return;
 
-  // 20% chance per trigger
   if (Math.random() > 0.20) return;
 
   const npc = (typeof getRandomNPC === "function") ? getRandomNPC() : null;
@@ -292,8 +355,6 @@ function trySpawnNPCFromResume() {
 
 // ======================
 // 4.2 — WRITE npcPending + REDIRECT (from Resume Room)
-// Stores which NPC appeared and sets origin to resume.html.
-// Delay: 1200ms so player reads the submit feedback before redirect.
 // ======================
 
 function spawnNPCEventFromResume(npcId) {
@@ -344,7 +405,6 @@ function showDailyLimitReached() {
   if (btn) btn.disabled = true;
 }
 
-// Feedback text — communicates quality without revealing numeric score
 function getSubmitFeedback(score) {
   if (score >= 3) return "Excellent resume! The employer seems very interested.";
   if (score === 2) return "Good resume. Solid choices.";
@@ -358,7 +418,6 @@ function updateResumeCounter() {
   if (el) el.innerText = `${resumesToday} / ${limit}`;
 }
 
-// Update active modifier labels shown on resume screen (optional UI element)
 function updateModifierDisplay() {
   const el = document.getElementById("activeModifiersResume");
   if (!el) return;
@@ -382,17 +441,15 @@ function updateModifierDisplay() {
 function initResumePage() {
   if (typeof loadGame === "function") loadGame();
 
-  // Guard: no active game → send to start
   if (typeof hasSave === "function" && !hasSave()) {
     window.location.href = "start.html";
     return;
   }
 
-  loadJobCard();
+  loadJobCard();        // populates banner + modal, auto-opens modal (6.1)
   updateResumeCounter();
   updateModifierDisplay();
 
-  // If limit already reached (player navigated back without starting new day)
   if (isResumeLimitReached()) {
     showDailyLimitReached();
     return;
@@ -411,10 +468,13 @@ initResumePage();
 // EXPORTS
 // ======================
 
-window.selectPlant            = selectPlant;
-window.selectPhoto            = selectPhoto;
-window.selectDate             = selectDate;
-window.submitResume           = submitResume;
-window.loadJobCard            = loadJobCard;
-window.trySpawnNPCFromResume  = trySpawnNPCFromResume;
-window.initResumePage         = initResumePage;
+window.selectPlant             = selectPlant;
+window.selectPhoto             = selectPhoto;
+window.selectDate              = selectDate;
+window.submitResume            = submitResume;
+window.loadJobCard             = loadJobCard;
+window.openJobCardModal        = openJobCardModal;
+window.closeJobCardModal       = closeJobCardModal;
+window.handleModalOverlayClick = handleModalOverlayClick;
+window.trySpawnNPCFromResume   = trySpawnNPCFromResume;
+window.initResumePage          = initResumePage;
