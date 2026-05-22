@@ -160,6 +160,33 @@ body {
   transform: translateY(0);
 }
 
+/* ── Abandon button ── */
+.room-secondary {
+  position: relative;
+  z-index: 10;
+  margin-top: 0.6rem;
+}
+
+.ghost-btn {
+  border: 1px solid rgba(232, 213, 163, 0.35);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: clamp(0.7rem, 1.8vw, 0.82rem);
+  font-weight: normal;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(232, 213, 163, 0.6);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.ghost-btn:hover {
+  color: rgba(232, 213, 163, 0.95);
+  border-color: rgba(232, 213, 163, 0.7);
+}
+
 /* ── Mobile ── */
 @media (max-width: 480px) {
   .hub {

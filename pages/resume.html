@@ -16,7 +16,7 @@
   <!-- Opens automatically on page load and after each  -->
   <!-- submit. Also triggered by the "View card" button -->
   <!-- ================================================ -->
-  <div id="jobCardModal" class="modal-overlay" onclick="handleModalOverlayClick(event)" aria-modal="true" role="dialog" aria-labelledby="modalJobTitle">
+  <div id="jobCardModal" class="modal-overlay" onclick="handleModalOverlayClick(event)" aria-modal="true" role="dialog" aria-labelledby="modalCardTitle">
 
     <div class="modal-card">
 
@@ -25,18 +25,8 @@
         <button class="modal-close-btn" onclick="closeJobCardModal()" aria-label="Close job card">✕</button>
       </div>
 
-      <h2 id="modalJobTitle" class="modal-title">—</h2>
-
-      <div class="modal-image-wrap">
-        <img id="modalJobImage" src="" alt="" />
-        <!-- Placeholder shown when image is missing -->
-        <div id="modalImagePlaceholder" class="modal-image-placeholder">📜</div>
-      </div>
-
-      <p id="modalJobDescription" class="modal-description">—</p>
-
-      <!-- Debug hints — remove once real assets are in place -->
-      <div id="jobCardHints" class="modal-hints"></div>
+      <!-- Full-size HTML job card rendered here by buildJobCardHTML() -->
+      <div id="jobCardRenderModal"></div>
 
       <button class="modal-confirm-btn" onclick="closeJobCardModal()">
         Got it — build my resume
@@ -56,16 +46,10 @@
       <span id="resumesTodayDisplay" class="resume-counter">0 / 5</span>
     </div>
 
-    <!-- Job card strip — persistent banner, "View" reopens modal -->
+    <!-- Job card strip — mini card + "View" button re-opens modal -->
     <div class="job-card-strip">
-      <div class="job-card-strip-thumb">
-        <img id="jobCardImage" src="" alt="" />
-        <span id="jobCardImageFallback" class="strip-thumb-fallback">📜</span>
-      </div>
-      <div class="job-card-strip-info">
-        <p id="jobCardTitle" class="strip-title">Loading…</p>
-        <p id="jobCardDescription" class="strip-desc"></p>
-      </div>
+      <!-- Mini HTML card rendered here by buildJobCardHTML() -->
+      <div id="jobCardRenderStrip" class="strip-card-wrap"></div>
       <button class="strip-view-btn" onclick="openJobCardModal()" aria-label="View full job card">
         👁 View card
       </button>
@@ -91,7 +75,7 @@
       <h3>📸 Photo</h3>
       <div class="btn-group">
         <button data-group="photo" onclick="selectPhoto('neutral',  this)">😐 Neutral</button>
-        <button data-group="photo" onclick="selectPhoto('smile',    this)">😀 Smile</button>
+        <button data-group="photo" onclick="selectPhoto('smile',    this)">😊 Smile</button>
         <button data-group="photo" onclick="selectPhoto('serious',  this)">🧐 Serious</button>
       </div>
     </div>
