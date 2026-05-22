@@ -120,6 +120,11 @@ function checkWin() {
     // Save final state before showing win screen
     saveGame({ hiddenScore });
 
+    // Ensure save is cleared before navigating to win screen
+    if (typeof clearSave === 'function') {
+      clearSave();
+    }
+
     goWin();
     return true;
   }
