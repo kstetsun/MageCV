@@ -6,12 +6,13 @@
 //   2.5 — correct answers driven by active job card from jobCards.js
 //   2.6 — random job card selected on page load, displayed in UI
 //   2.7 — checkWin() called after every submitResume()
+//   4.1 — NPC spawn check on page load and after submit
+//   4.2 — write npcPending to localStorage before redirecting to npc.html
 // ======================
 
 
 // ======================
 // 📋 ACTIVE JOB CARD
-// Set on page load via loadJobCard().
 // ======================
 
 let activeJobCard = null;
@@ -19,8 +20,6 @@ let activeJobCard = null;
 
 // ======================
 // 2.6 — LOAD & DISPLAY JOB CARD
-// Picks a random card from jobCards[] (defined in js/data/jobCards.js).
-// Updates the UI to show the card image and title.
 // ======================
 
 function loadJobCard() {
@@ -29,23 +28,17 @@ function loadJobCard() {
     return;
   }
 
-  // Pick a random card
   activeJobCard = jobCards[Math.floor(Math.random() * jobCards.length)];
 
-  // --- Update UI ---
-
-  // Card title
   const titleEl = document.getElementById("jobCardTitle");
   if (titleEl) titleEl.innerText = activeJobCard.title;
 
-  // Card image (PNG from assets/jobcards/)
   const imgEl = document.getElementById("jobCardImage");
   if (imgEl) {
     imgEl.src = `../assets/jobcards/${activeJobCard.id}.png`;
     imgEl.alt = activeJobCard.title;
   }
 
-  // Card description (optional flavour text)
   const descEl = document.getElementById("jobCardDescription");
   if (descEl && activeJobCard.description) {
     descEl.innerText = activeJobCard.description;
@@ -57,7 +50,6 @@ function loadJobCard() {
 
 // ======================
 // 📄 RESUME STATE
-// Resets after each submission.
 // ======================
 
 let resume = {
@@ -68,7 +60,7 @@ let resume = {
 
 
 // ======================
-// 🌱 SELECTION HANDLERS
+// SELECTION HANDLERS
 // ======================
 
 function clearSelection(group) {
@@ -97,10 +89,6 @@ function selectDate(type, btn) {
 
 // ======================
 // 2.5 — SCORE CALCULATION
-// Correct answers are read from activeJobCard.correctAnswers.
-// +1 for each correct choice, -1 for each wrong choice.
-// Minimum score per resume: 1 point (hard floor).
-// Modifiers from modifiers.js are applied after base calculation.
 // ======================
 
 function calculateResumeScore() {
@@ -112,25 +100,12 @@ function calculateResumeScore() {
   const correct = activeJobCard.correctAnswers;
   let base = 0;
 
-  // 🌱 Plant
-  if (resume.plant !== null) {
-    base += (resume.plant === correct.plant) ? 1 : -1;
-  }
+  if (resume.plant !== null) base += (resume.plant === correct.plant) ? 1 : -1;
+  if (resume.photo !== null) base += (resume.photo === correct.photo) ? 1 : -1;
+  if (resume.date  !== null) base += (resume.date  === correct.date)  ? 1 : -1;
 
-  // 📸 Photo
-  if (resume.photo !== null) {
-    base += (resume.photo === correct.photo) ? 1 : -1;
-  }
-
-  // 📅 Date
-  if (resume.date !== null) {
-    base += (resume.date === correct.date) ? 1 : -1;
-  }
-
-  // Hard floor before modifiers
   if (base < 1) base = 1;
 
-  // Apply active modifiers (bonus_per_resume, multipliers, etc.)
   const finalScore = (typeof applyModifiersToScore === "function")
     ? applyModifiersToScore(base)
     : base;
@@ -141,15 +116,13 @@ function calculateResumeScore() {
 
 
 // ======================
-// 2.4 — DAILY LIMIT CHECK
-// Reads limit from ModeConfig via getConfig(), not hardcoded.
-// Also accounts for extra_resume_slot modifiers.
+// 2.4 — DAILY LIMIT
 // ======================
 
 function getDailyResumeLimit() {
   const base = (typeof getConfig === "function")
     ? getConfig().resumesPerDay
-    : 5; // safe fallback
+    : 5;
 
   const extra = (typeof getExtraResumeSlots === "function")
     ? getExtraResumeSlots()
@@ -165,78 +138,111 @@ function isResumeLimitReached() {
 
 // ======================
 // 📨 SUBMIT RESUME
-// Full flow:
-//   1. Validate selections
-//   2. Check daily limit (2.4)
-//   3. Calculate score using job card (2.5)
-//   4. Apply score to hiddenScore
-//   5. Tick resume modifiers
-//   6. Update + save state
-//   7. Check win condition (2.7)
-//   8. Load new job card for next resume
 // ======================
 
 function submitResume() {
 
-  // Guard: core scripts loaded
   if (typeof saveGame !== "function" || typeof goHub !== "function") {
     alert("Core game scripts not loaded. Please reload the page.");
     return;
   }
 
-  // Guard: all selections made
   if (!resume.plant || !resume.photo || !resume.date) {
     showResumeMessage("Please select all resume components before submitting.");
     return;
   }
 
-  // 2.4 — Daily limit check
   if (isResumeLimitReached()) {
-    showResumeMessage("You've reached today's resume limit. Come back tomorrow!");
+    showResumeMessage("You've reached today's resume limit. Head back to the HUB!");
     return;
   }
 
-  // 2.5 — Calculate score
   const gained = calculateResumeScore();
 
-  // Update state
-  hiddenScore          += gained;
-  resumesToday         += 1;
-  resumesSentTotal     += 1;
+  hiddenScore      += gained;
+  resumesToday     += 1;
+  resumesSentTotal += 1;
 
-  // Tick resume-duration modifiers
-  if (typeof tickResumeModifiers === "function") {
-    tickResumeModifiers();
-  }
+  if (typeof tickResumeModifiers === "function") tickResumeModifiers();
 
-  // Persist
   saveGame({
     hiddenScore,
-    resumesSentToday:  resumesToday,
+    resumesSentToday: resumesToday,
     resumesSentTotal,
     activeModifiers
   });
 
-  // Show feedback (no score values revealed)
   showResumeMessage(getSubmitFeedback(gained));
 
-  // Reset selections
   resume = { plant: null, photo: null, date: null };
   clearAllSelections();
+  updateResumeCounter();
 
-  // 2.7 — Win check (redirects to win.html if condition met)
-  if (typeof checkWin === "function" && checkWin()) {
-    return; // navigation handled by checkWin → goWin()
-  }
+  // 2.7 — Win check
+  if (typeof checkWin === "function" && checkWin()) return;
 
-  // Check if daily limit now reached — show Next Day prompt
+  // Daily limit now reached after this submit
   if (isResumeLimitReached()) {
     showDailyLimitReached();
     return;
   }
 
-  // Load a new job card for the next resume
+  // 4.1 — Attempt NPC spawn after resume submission
+  trySpawnNPCFromResume();
+
+  // Load next job card
   loadJobCard();
+}
+
+
+// ======================
+// 4.1 — NPC SPAWN TRIGGER (Resume Room)
+// Called on page load and after each resume is submitted.
+// Uses a lower spawn chance than HUB to avoid interrupting every resume.
+// ======================
+
+function trySpawnNPCFromResume() {
+  // Respect daily interaction limit
+  if (npcInteractionsToday >= npcInteractionsLimit) return;
+
+  // Don't spawn if a pending NPC event already exists
+  const save = (typeof loadRaw === "function") ? loadRaw() : {};
+  if (save.npcPending) return;
+
+  // 20% chance per trigger (slightly lower than HUB's 30%)
+  if (Math.random() > 0.20) return;
+
+  const npc = (typeof getRandomNPC === "function") ? getRandomNPC() : null;
+  if (!npc) return;
+
+  console.log(`[Resume] NPC spawned: ${npc.name}`);
+
+  // 4.2 — Save pending NPC + origin, then redirect
+  spawnNPCEventFromResume(npc.id);
+}
+
+
+// ======================
+// 4.2 — WRITE npcPending + REDIRECT (from Resume Room)
+// ======================
+
+function spawnNPCEventFromResume(npcId) {
+  if (typeof saveField !== "function") {
+    console.warn("[Resume] saveField() not available — cannot spawn NPC.");
+    return;
+  }
+
+  saveField("npcPending", {
+    npcId:        npcId,
+    originScreen: "resume.html"
+  });
+
+  console.log(`[Resume] npcPending saved: ${npcId} → return to resume.html`);
+
+  // Delay so player reads the resume feedback message before redirect
+  setTimeout(() => {
+    window.location.href = "npc.html";
+  }, 1200);
 }
 
 
@@ -244,38 +250,31 @@ function submitResume() {
 // UI HELPERS
 // ======================
 
-// Clear all selected button highlights
 function clearAllSelections() {
   ["plant", "photo", "date"].forEach(group => clearSelection(group));
 }
 
-// Show inline feedback message instead of alert()
 function showResumeMessage(text) {
   const el = document.getElementById("resumeMessage");
   if (el) {
     el.innerText = text;
     el.style.display = "block";
-    // Auto-hide after 3 seconds
     setTimeout(() => { el.style.display = "none"; }, 3000);
   } else {
-    // Fallback if element not in HTML yet
     console.log("[Resume Message]", text);
   }
 }
 
-// Show prompt when daily resume limit is reached
 function showDailyLimitReached() {
   const el = document.getElementById("resumeMessage");
   if (el) {
-    el.innerText = "You've sent all your resumes for today. Head back to the HUB!";
+    el.innerText = "All resumes sent for today. Head back to the HUB!";
     el.style.display = "block";
   }
-  // Disable submit button
   const btn = document.getElementById("submitResumeBtn");
   if (btn) btn.disabled = true;
 }
 
-// Feedback text based on score gained — no numbers revealed
 function getSubmitFeedback(score) {
   if (score >= 3) return "Excellent resume! The employer seems very interested.";
   if (score === 2) return "Good resume. Solid choices.";
@@ -283,7 +282,6 @@ function getSubmitFeedback(score) {
   return "Resume sent. Keep trying!";
 }
 
-// Update the resumes-sent counter in the UI
 function updateResumeCounter() {
   const limit = getDailyResumeLimit();
   const el = document.getElementById("resumesTodayDisplay");
@@ -293,29 +291,26 @@ function updateResumeCounter() {
 
 // ======================
 // 🚀 PAGE INIT
-// Runs when resume.html loads.
 // ======================
 
 function initResumePage() {
-  // Load saved state
   if (typeof loadGame === "function") loadGame();
 
-  // Block access if no active game
   if (typeof hasSave === "function" && !hasSave()) {
     window.location.href = "start.html";
     return;
   }
 
-  // Load a job card
   loadJobCard();
-
-  // Update counter display
   updateResumeCounter();
 
-  // If limit already reached (player navigated back), show message
   if (isResumeLimitReached()) {
     showDailyLimitReached();
+    return;
   }
+
+  // 4.1 — Attempt NPC spawn on Resume Room page load
+  trySpawnNPCFromResume();
 
   console.log("[Resume] Page ready.");
 }
@@ -327,9 +322,10 @@ initResumePage();
 // EXPORTS
 // ======================
 
-window.selectPlant      = selectPlant;
-window.selectPhoto      = selectPhoto;
-window.selectDate       = selectDate;
-window.submitResume     = submitResume;
-window.loadJobCard      = loadJobCard;
-window.initResumePage   = initResumePage;
+window.selectPlant            = selectPlant;
+window.selectPhoto            = selectPhoto;
+window.selectDate             = selectDate;
+window.submitResume           = submitResume;
+window.loadJobCard            = loadJobCard;
+window.trySpawnNPCFromResume  = trySpawnNPCFromResume;
+window.initResumePage         = initResumePage;

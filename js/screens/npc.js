@@ -6,8 +6,8 @@
 //   — Display NPC name, portrait emoji, description, dialogue line
 //   — Run countdown timer (15–45s); auto-dismiss on expire
 //   — Render 2–3 choice buttons from npcs.js dialogue data
-//   — On choice: apply modifier, increment interaction count, return to origin
-//   — On skip / expire: return to origin with no effect
+//   4.4 — On choice: resolve outcome → call modifiers.js → apply to activeModifiers[]
+//   4.5 — Enforce daily NPC interaction limit before allowing interaction
 // ======================
 
 
@@ -34,21 +34,31 @@ function initNPCPage() {
     return;
   }
 
+  // 4.5 — Check daily limit BEFORE rendering NPC
+  // If limit already reached, don't allow interaction — just return
+  if (isNPCLimitReached()) {
+    console.log("[NPC] Daily interaction limit already reached. Returning.");
+    if (typeof saveField === "function") saveField("npcPending", null);
+    returnToOrigin();
+    return;
+  }
+
   // Read pending NPC from save
   const save = (typeof loadRaw === "function") ? loadRaw() : {};
   const pending = save.npcPending;
 
   if (!pending || !pending.npcId) {
-    console.warn("[NPC] No pending NPC found. Returning to hub.");
-    window.location.href = "hub.html";
+    console.warn("[NPC] No pending NPC found. Returning.");
+    returnToOrigin();
     return;
   }
 
-  // Resolve origin screen
   originScreen = pending.originScreen || "hub.html";
 
-  // Find NPC definition from npcs.js data
-  currentNPC = npcData.find(n => n.id === pending.npcId) || null;
+  // Find NPC definition from npcs.js
+  currentNPC = (typeof npcData !== "undefined")
+    ? npcData.find(n => n.id === pending.npcId) || null
+    : null;
 
   if (!currentNPC) {
     console.warn("[NPC] Unknown NPC id:", pending.npcId);
@@ -74,31 +84,29 @@ const NPC_PORTRAITS = {
 };
 
 function renderNPC(npc) {
-  // Portrait emoji
   const portrait = document.getElementById("npcPortrait");
   if (portrait) portrait.innerText = NPC_PORTRAITS[npc.id] || "👤";
 
-  // Name + description
   const nameEl = document.getElementById("npcName");
   if (nameEl) nameEl.innerText = npc.name;
 
   const descEl = document.getElementById("npcDescription");
   if (descEl) descEl.innerText = npc.description;
 
-  // Random dialogue line
+  // Pick a random dialogue line from the NPC's messages array
   const msg = npc.messages[Math.floor(Math.random() * npc.messages.length)];
   const msgEl = document.getElementById("npcMessage");
   if (msgEl) msgEl.innerText = msg;
 
-  // Render choice buttons
   renderChoices(npc);
 }
 
 
 // ======================
 // RENDER CHOICES
-// Reads dialogue choices from npc.choices[] if defined,
-// otherwise falls back to two generic options.
+// Uses npc.choices[] from npcs.js if defined.
+// Each choice: { label, outcome }
+// Falls back to 3 generic options if no choices defined.
 // ======================
 
 function renderChoices(npc) {
@@ -107,13 +115,12 @@ function renderChoices(npc) {
 
   container.innerHTML = "";
 
-  // Use defined choices if available, otherwise generic fallback
   const choices = (npc.choices && npc.choices.length > 0)
     ? npc.choices
     : [
-        { label: "Respond politely",  outcome: "positive" },
-        { label: "Nod and say nothing", outcome: "neutral" },
-        { label: "Dismiss them",       outcome: "negative" }
+        { label: "Respond politely",    outcome: "positive" },
+        { label: "Nod and say nothing", outcome: "neutral"  },
+        { label: "Dismiss them",        outcome: "negative" }
       ];
 
   choices.forEach((choice, index) => {
@@ -127,20 +134,51 @@ function renderChoices(npc) {
 
 
 // ======================
-// RESOLVE CHOICE
+// 4.5 — DAILY LIMIT CHECK
+// Checks npcInteractionsToday against npcInteractionsLimit.
+// Both vars come from game.js global state, loaded via loadGame().
+// ======================
+
+function isNPCLimitReached() {
+  const today  = (typeof npcInteractionsToday !== "undefined") ? npcInteractionsToday : 0;
+  const limit  = (typeof npcInteractionsLimit !== "undefined") ? npcInteractionsLimit : 2;
+  return today >= limit;
+}
+
+function getRemainingNPCInteractions() {
+  const today = (typeof npcInteractionsToday !== "undefined") ? npcInteractionsToday : 0;
+  const limit = (typeof npcInteractionsLimit !== "undefined") ? npcInteractionsLimit : 2;
+  return Math.max(0, limit - today);
+}
+
+
+// ======================
+// 4.4 — RESOLVE CHOICE
+// Stops timer, increments interaction counter,
+// maps outcome → modifier via applyNPCModifier(),
+// saves state, clears pending, returns to origin.
 // ======================
 
 function resolveChoice(choice, index) {
   stopTimer();
   disableChoices();
 
-  // Increment NPC interaction counter
+  // 4.5 — Final limit check at resolution moment
+  // (edge case: limit could have been reached by another tab/session)
+  if (isNPCLimitReached()) {
+    console.log("[NPC] Limit reached at resolution. No modifier applied.");
+    if (typeof saveField === "function") saveField("npcPending", null);
+    returnToOrigin();
+    return;
+  }
+
+  // 4.5 — Increment interaction counter
   npcInteractionsToday++;
   if (typeof saveField === "function") {
     saveField("npcInteractionsToday", npcInteractionsToday);
   }
 
-  // Apply modifier based on NPC type + outcome
+  // 4.4 — Apply modifier based on NPC type + player outcome choice
   applyNPCModifier(currentNPC, choice.outcome);
 
   // Clear pending NPC from save
@@ -148,51 +186,78 @@ function resolveChoice(choice, index) {
     saveField("npcPending", null);
   }
 
-  console.log(`[NPC] Choice made: "${choice.label}" (${choice.outcome})`);
+  // Show remaining interactions count in UI if element exists
+  updateNPCLimitDisplay();
 
-  // Brief delay so player sees the choice was registered
-  setTimeout(returnToOrigin, 600);
+  console.log(`[NPC] Choice resolved: "${choice.label}" → outcome: ${choice.outcome}`);
+  console.log(`[NPC] Interactions today: ${npcInteractionsToday} / ${npcInteractionsLimit}`);
+
+  setTimeout(returnToOrigin, 700);
 }
 
 
 // ======================
-// APPLY MODIFIER BY OUTCOME
-// Maps NPC type + outcome string → ModifierTemplates call
+// 4.4 — APPLY MODIFIER BY NPC TYPE + OUTCOME
+// Maps { npcId, outcome } → correct ModifierTemplates entry.
+// Wizard always ignores player choice — purely random.
+// Requires modifiers.js to be loaded.
 // ======================
 
 function applyNPCModifier(npc, outcome) {
   if (typeof applyModifier !== "function" || typeof ModifierTemplates === "undefined") {
-    console.warn("[NPC] modifiers.js not available.");
+    console.warn("[NPC] modifiers.js not loaded — cannot apply modifier.");
     return;
   }
 
   let modifier = null;
 
+  // --- ELF: supportive, rewards politeness ---
   if (npc.id === "elf") {
-    if (outcome === "positive") modifier = ModifierTemplates.elfBonusResume(2);
-    else if (outcome === "neutral") modifier = ModifierTemplates.elfBonusDay();
-    else modifier = null; // dismissed — no effect
+    if      (outcome === "positive") modifier = ModifierTemplates.elfBonusResume(2);
+    else if (outcome === "neutral")  modifier = ModifierTemplates.elfBonusDay();
+    else if (outcome === "negative") modifier = null; // dismissed — no effect
   }
 
+  // --- DWARF: realistic, slight penalty for rudeness ---
   else if (npc.id === "dwarf") {
-    if (outcome === "positive") modifier = ModifierTemplates.dwarfPenaltyReduction();
-    else if (outcome === "neutral") modifier = ModifierTemplates.dwarfSmallBonus();
-    else modifier = ModifierTemplates.dwarfDebuff();
+    if      (outcome === "positive") modifier = ModifierTemplates.dwarfPenaltyReduction();
+    else if (outcome === "neutral")  modifier = ModifierTemplates.dwarfSmallBonus();
+    else if (outcome === "negative") modifier = ModifierTemplates.dwarfDebuff();
   }
 
+  // --- WIZARD: completely chaotic — outcome is irrelevant ---
   else if (npc.id === "wizard") {
-    // Always chaotic — ignores player choice
     modifier = (typeof getRandomWizardModifier === "function")
       ? getRandomWizardModifier()
       : null;
+
+    if (modifier) {
+      console.log(`[NPC] Wizard rolled: ${modifier.label} (chaos — choice ignored)`);
+    }
   }
 
+  // Apply to activeModifiers[] via modifiers.js
   if (modifier) {
-    applyModifier(modifier);
-    console.log(`[NPC] Modifier applied: ${modifier.label}`);
+    applyModifier(modifier); // modifiers.js — pushes to activeModifiers[], saves
+    console.log(`[NPC] Modifier applied: ${modifier.label} (${modifier.duration})`);
   } else {
     console.log("[NPC] No modifier for this outcome.");
   }
+}
+
+
+// ======================
+// UI — NPC LIMIT DISPLAY
+// Updates an optional element showing remaining interactions.
+// ======================
+
+function updateNPCLimitDisplay() {
+  const el = document.getElementById("npcLimitDisplay");
+  if (!el) return;
+  const remaining = getRemainingNPCInteractions();
+  el.innerText = remaining > 0
+    ? `${remaining} interaction${remaining !== 1 ? "s" : ""} remaining today`
+    : "No more NPC interactions today";
 }
 
 
@@ -202,30 +267,26 @@ function applyNPCModifier(npc, outcome) {
 // ======================
 
 function startTimer() {
-  timerSeconds = Math.floor(Math.random() * 31) + 15; // 15–45
+  timerSeconds = Math.floor(Math.random() * 31) + 15;
 
-  const fill = document.getElementById("timerFill");
+  const fill  = document.getElementById("timerFill");
+  const total = timerSeconds;
+
   if (fill) fill.style.width = "100%";
-
-  const totalSeconds = timerSeconds;
 
   timerInterval = setInterval(() => {
     timerSeconds--;
 
-    // Update timer bar width
     if (fill) {
-      const pct = (timerSeconds / totalSeconds) * 100;
+      const pct = (timerSeconds / total) * 100;
       fill.style.width = pct + "%";
 
-      // Colour shift: green → amber → red
-      if (pct > 60)      fill.style.background = "var(--color-positive)";
+      if      (pct > 60) fill.style.background = "var(--color-positive)";
       else if (pct > 25) fill.style.background = "var(--color-accent)";
       else               fill.style.background = "var(--color-negative)";
     }
 
-    if (timerSeconds <= 0) {
-      onTimerExpired();
-    }
+    if (timerSeconds <= 0) onTimerExpired();
   }, 1000);
 }
 
@@ -245,7 +306,7 @@ function onTimerExpired() {
 
   if (typeof saveField === "function") saveField("npcPending", null);
 
-  console.log("[NPC] Timer expired. NPC left.");
+  console.log("[NPC] Timer expired. NPC left without interaction.");
   setTimeout(returnToOrigin, 1800);
 }
 
@@ -257,6 +318,7 @@ function onTimerExpired() {
 function skipNPC() {
   stopTimer();
   if (typeof saveField === "function") saveField("npcPending", null);
+  console.log("[NPC] Player skipped NPC. No modifier applied.");
   returnToOrigin();
 }
 
@@ -294,5 +356,7 @@ initNPCPage();
 // EXPORTS
 // ======================
 
-window.skipNPC        = skipNPC;
-window.resolveChoice  = resolveChoice;
+window.skipNPC              = skipNPC;
+window.resolveChoice        = resolveChoice;
+window.isNPCLimitReached    = isNPCLimitReached;
+window.applyNPCModifier     = applyNPCModifier;
