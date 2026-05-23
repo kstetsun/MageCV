@@ -99,6 +99,8 @@ function initNPCPage() {
 
   if (currentNPC.dialogues && currentNPC.dialogues.length) {
     startMultiTurnDialogue();
+  } else {
+    startLegacyDialogue();
   }
 }
 
@@ -128,15 +130,17 @@ function switchUIState(newState) {
 }
 
 // ── Identity ───────────────────────────────────────────────────────────────────
-const PORTRAITS = { elf: "🧝", dwarf: "⛏️", wizard: "🧙" };
+const PORTRAIT_PATHS = { elf: "../media/photos/elf.png", dwarf: "../media/photos/dwarf.png", wizard: "../media/photos/wizard.png" };
 
 function renderNPCIdentity() {
-  if (portrait) portrait.textContent = PORTRAITS[currentNPC.id] || "?";
+  if (portrait) {
+    portrait.innerHTML = `<img src="${PORTRAIT_PATHS[currentNPC.id] || '../media/photos/default.png'}" alt="${currentNPC.id}" class="npc-portrait-img">`;
+  }
   if (nameEl)   nameEl.textContent = currentNPC.name;
-  if (descEl)   descEl.textContent = currentNPC.description;
+  if (descEl)   descEl.style.display = "none";
 }
 
-// ── MULTI-TURN DIALOGUE ──────────────────────────────────────────────────
+// ── MULTI-TURN DIALOGUE (ELF) ──────────────────────────────────────────────────
 
 function startMultiTurnDialogue() {
   currentDialogue   = getRandomDialogue(currentNPC);
@@ -147,8 +151,8 @@ function startMultiTurnDialogue() {
 
   // Start in INITIAL state
   switchUIState(UI_STATE.INITIAL);
-  // Hide skip/return button while chat is active
-  if (skipBtn) skipBtn.style.display = "none";
+  // Show skip button at start; text changes to 'Return to Hub' after conversation ends
+  if (skipBtn) { skipBtn.textContent = 'Ignore and return'; skipBtn.style.display = ''; skipBtn.onclick = skipNPC; }
 
   // Re-assert npcPending in storage to avoid premature clearing by other flows
   if (typeof saveField === 'function') {
@@ -172,7 +176,7 @@ function showNode(node) {
   if (currentUIState === UI_STATE.INITIAL) {
     if (messageEl) messageEl.textContent = node.line;
   }
-  // CHAT state: render full history
+  // CHAT state: render history (typewriter will hide then reveal choices)
   else if (currentUIState === UI_STATE.CHAT) {
     renderHistory();
   }
@@ -218,14 +222,17 @@ function onMultiTurnChoice(choice) {
     switchUIState(UI_STATE.CHAT);
   }
 
+  // Render player bubble immediately
+  renderHistory();
+
   const nextNode = getDialogueNode(currentDialogue, choice.next);
   if (!nextNode) {
     resolveMultiTurn();
     return;
   }
 
-  // Short pause so player bubble renders before Elf responds
-  setTimeout(() => showNode(nextNode), 150);
+  // Delay NPC response so player bubble is visible first
+  setTimeout(() => showNode(nextNode), 600);
 }
 
 function renderHistory() {
@@ -243,7 +250,8 @@ function renderHistory() {
       bubble.className = "history-entry " + (entry.type === "npc" ? "history-npc" : "history-player");
 
       if (entry.type === "npc") {
-        const isFirstNPCMessage = lastRenderedIndex === -1;
+        const npcMsgsSoFar = conversationHistory.slice(0, lastRenderedIndex + 1).filter(e => e.type === "npc").length;
+        const isFirstNPCMessage = npcMsgsSoFar === 0;
         const isTerminal = currentNode && currentNode.terminal;
 
         bubble.innerHTML = `<span class="history-label">${currentNPC.name.split(" ")[0]}:</span> <span class="history-text"></span>`;
@@ -257,7 +265,7 @@ function renderHistory() {
           textEl.textContent = entry.text;
           historyEl.scrollTop = historyEl.scrollHeight;
         } else {
-          // Hide choices while NPC is typing
+          // Hide choices while NPC is typing, reveal in onDone
           if (choicesEl) choicesEl.style.visibility = "hidden";
           typewriterBubble(textEl, entry.text, 28, () => {
             historyEl.scrollTop = historyEl.scrollHeight;
@@ -301,6 +309,30 @@ function resolveMultiTurn() {
   finishInteraction(outcome);
 }
 
+// ── LEGACY DIALOGUE (DWARF / WIZARD) ───────────────────────────────────────────
+
+function startLegacyDialogue() {
+  // Use LEGACY state (shows messageEl without timer switching logic)
+  switchUIState(UI_STATE.LEGACY);
+
+  if (messageEl) messageEl.textContent = getRandomNPCMessage(currentNPC);
+
+  choicesEl.innerHTML = "";
+  currentNPC.choices.forEach((choice) => {
+    const btn = document.createElement("button");
+    btn.className   = "btn-secondary npc-choice-btn";
+    btn.textContent = choice.label;
+    btn.addEventListener("click", () => {
+      stopTimer();
+      disableChoices();
+      finishInteraction(choice.outcome);
+    });
+    choicesEl.appendChild(btn);
+  });
+
+  resetTimer();
+}
+
 // ── SHARED RESOLUTION ──────────────────────────────────────────────────────────
 
 function finishInteraction(outcome) {
@@ -329,7 +361,7 @@ function finishInteraction(outcome) {
     return;
   }
 
-  // Legacy behavior for single-turn NPCs: fade out then redirect
+  // Legacy behavior for non-elf NPCs: fade out then redirect
   document.querySelector(".npc-screen").classList.add("npc-leaving");
   setTimeout(() => returnToOrigin(), 700);
 }
@@ -338,7 +370,7 @@ function finishInteraction(outcome) {
 
 function resetTimer() {
   stopTimer();
-  timerMax     = Math.floor(Math.random() * 8) + 8;  // 8–15s
+  timerMax     = Math.floor(Math.random() * 6) + 5;  // 5–10s
   timerSeconds = timerMax;
   if (timerFill) {
     timerFill.style.width      = "100%";
