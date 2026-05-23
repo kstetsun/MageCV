@@ -51,6 +51,16 @@
   border-radius: var(--radius-lg);
 }
 
+/* --- Portrait image (pixel art) --- */
+
+.npc-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  border-radius: var(--radius-lg);
+}
+
 /* --- Dialogue Panel --- */
 
 .npc-dialogue {
@@ -110,7 +120,6 @@
 .history-text {
   color: var(--color-text);
 }
-
 
 /* --- Choices --- */
 
