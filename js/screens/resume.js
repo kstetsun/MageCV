@@ -170,6 +170,10 @@ function _renderJobCard(card) {
 // 2.6 — LOAD & DISPLAY JOB CARD
 // ======================
 
+// ======================
+// 2.6 — LOAD & DISPLAY JOB CARD
+// ======================
+
 function loadJobCard() {
   console.log("[Resume] loadJobCard() called");
   console.log("[Resume] jobCards available:", typeof jobCards !== "undefined" ? jobCards.length : "NOT DEFINED");
@@ -182,12 +186,9 @@ function loadJobCard() {
   activeJobCard = jobCards[Math.floor(Math.random() * jobCards.length)];
   console.log("[Resume] Loaded random job card:", activeJobCard.title);
 
-  // 6.3 — Render HTML card into both slots, then open modal (6.1)
+  // 6.3 — Render HTML card into both slots (but DO NOT auto-open modal)
   _renderJobCard(activeJobCard);
   
-  console.log("[Resume] Opening modal...");
-  openJobCardModal();
-
   console.log(`[Resume] Job card loaded: ${activeJobCard.title}`);
 }
 
