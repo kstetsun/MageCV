@@ -2,14 +2,40 @@
 // JOB CARDS DATA
 // ======================
 
-// Placeholder for job cards; expand with real cards as needed.
+// Minimal sample job cards for MageCV — each card includes correctAnswers
+// used by resume.js. This file intentionally small for testing purposes.
+
 const jobCards = [
-  // Example card:
-  // {
-  //   id: 'junior_dev',
-  //   title: 'Junior Developer',
-  //   difficulty: 1,
-  //   reward: 5,
-  //   description: 'A small quest to fix bugs.'
-  // }
+  {
+    title: "Apprentice Herbologist",
+    description: "Tend enchanted plants and assist with potion gardens.",
+    correctAnswers: {
+      plant: "flower",   // plant type: cactus|flower|fern
+      photo: "smile",    // photo: neutral|smile|serious
+      date:  "correct"   // correct|wrong
+    }
+  },
+
+  {
+    title: "Junior Rune Archivist",
+    description: "Organize rune fragments and maintain the archive ledger.",
+    correctAnswers: {
+      plant: "fern",
+      photo: "serious",
+      date:  "correct"
+    }
+  },
+
+  {
+    title: "Enchanted Product Assistant",
+    description: "Help craft enchanted office supplies and prepare samples.",
+    correctAnswers: {
+      plant: "cactus",
+      photo: "neutral",
+      date:  "wrong"
+    }
+  }
 ];
+
+// Make available on window for legacy scripts
+window.jobCards = jobCards;
