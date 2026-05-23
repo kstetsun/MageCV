@@ -99,8 +99,6 @@ function initNPCPage() {
 
   if (currentNPC.dialogues && currentNPC.dialogues.length) {
     startMultiTurnDialogue();
-  } else {
-    startLegacyDialogue();
   }
 }
 
@@ -138,7 +136,7 @@ function renderNPCIdentity() {
   if (descEl)   descEl.textContent = currentNPC.description;
 }
 
-// ── MULTI-TURN DIALOGUE (ELF) ──────────────────────────────────────────────────
+// ── MULTI-TURN DIALOGUE ──────────────────────────────────────────────────
 
 function startMultiTurnDialogue() {
   currentDialogue   = getRandomDialogue(currentNPC);
@@ -184,7 +182,7 @@ function showNode(node) {
   if (node.terminal) {
     stopTimer();
     if (skipBtn) skipBtn.style.display = "none";
-    setTimeout(() => resolveMultiTurn(), 2200);
+    // resolveMultiTurn called by typewriter onDone in renderHistory
     return;
   }
 
@@ -226,8 +224,8 @@ function onMultiTurnChoice(choice) {
     return;
   }
 
-  // Delay Elf response so player bubble is visible first
-  setTimeout(() => showNode(nextNode), 800);
+  // Short pause so player bubble renders before Elf responds
+  setTimeout(() => showNode(nextNode), 150);
 }
 
 function renderHistory() {
@@ -235,7 +233,7 @@ function renderHistory() {
 
   // Only render new messages since last render (incremental update)
   const newMessages = conversationHistory.slice(lastRenderedIndex + 1);
-  
+
   if (newMessages.length === 0) return;
 
   // Ensure DOM is ready before appending
@@ -243,50 +241,64 @@ function renderHistory() {
     newMessages.forEach(entry => {
       const bubble = document.createElement("div");
       bubble.className = "history-entry " + (entry.type === "npc" ? "history-npc" : "history-player");
-      
+
       if (entry.type === "npc") {
-        bubble.innerHTML = `<span class="history-label">${currentNPC.name.split(" ")[0]}:</span>
-          <span class="history-text">${entry.text}</span>`;
+        const isFirstNPCMessage = lastRenderedIndex === -1;
+        const isTerminal = currentNode && currentNode.terminal;
+
+        bubble.innerHTML = `<span class="history-label">${currentNPC.name.split(" ")[0]}:</span> <span class="history-text"></span>`;
+        historyEl.appendChild(bubble);
+        historyEl.scrollTop = historyEl.scrollHeight;
+
+        const textEl = bubble.querySelector(".history-text");
+
+        if (isFirstNPCMessage) {
+          // First message: no animation, appears instantly
+          textEl.textContent = entry.text;
+          historyEl.scrollTop = historyEl.scrollHeight;
+        } else {
+          // Hide choices while NPC is typing
+          if (choicesEl) choicesEl.style.visibility = "hidden";
+          typewriterBubble(textEl, entry.text, 28, () => {
+            historyEl.scrollTop = historyEl.scrollHeight;
+            if (isTerminal) {
+              // Terminal node: show Return to Hub button right after typing finishes
+              resolveMultiTurn();
+            } else {
+              // Reveal choices after typing
+              if (choicesEl) choicesEl.style.visibility = "";
+            }
+          });
+        }
       } else {
-        bubble.innerHTML = `<span class="history-label">You:</span>
-          <span class="history-text">${entry.text}</span>`;
+        // Player bubble: appears instantly
+        bubble.innerHTML = `<span class="history-label">You:</span> <span class="history-text">${entry.text}</span>`;
+        historyEl.appendChild(bubble);
+        historyEl.scrollTop = historyEl.scrollHeight;
       }
-      
-      historyEl.appendChild(bubble);
     });
 
     lastRenderedIndex = conversationHistory.length - 1;
-    historyEl.scrollTop = historyEl.scrollHeight;
   });
+}
+
+// Typewriter effect: writes text into el character by character.
+// speed: ms per character. onDone: callback when finished.
+function typewriterBubble(el, text, speed, onDone) {
+  let i = 0;
+  const interval = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+      if (typeof onDone === "function") onDone();
+    }
+  }, speed);
 }
 
 function resolveMultiTurn() {
   const outcome = scoreToOutcome(accumulatedScore);
   finishInteraction(outcome);
-}
-
-// ── LEGACY DIALOGUE (DWARF / WIZARD) ───────────────────────────────────────────
-
-function startLegacyDialogue() {
-  // Use LEGACY state (shows messageEl without timer switching logic)
-  switchUIState(UI_STATE.LEGACY);
-
-  if (messageEl) messageEl.textContent = getRandomNPCMessage(currentNPC);
-
-  choicesEl.innerHTML = "";
-  currentNPC.choices.forEach((choice) => {
-    const btn = document.createElement("button");
-    btn.className   = "btn-secondary npc-choice-btn";
-    btn.textContent = choice.label;
-    btn.addEventListener("click", () => {
-      stopTimer();
-      disableChoices();
-      finishInteraction(choice.outcome);
-    });
-    choicesEl.appendChild(btn);
-  });
-
-  resetTimer();
 }
 
 // ── SHARED RESOLUTION ──────────────────────────────────────────────────────────
@@ -304,8 +316,8 @@ function finishInteraction(outcome) {
     saveField("npcPending", null);
   }
 
-  // If this was an Elf multi-turn chat, show Return to Hub button
-  if (currentNPC && currentNPC.id === 'elf') {
+  // If this was a multi-turn dialogue chat, show Return to Hub button
+  if (currentNPC && currentNPC.dialogues && currentNPC.dialogues.length) {
     // Do NOT fade screen — keep conversation visible until player clicks
     if (skipBtn) {
       skipBtn.textContent = 'Return to Hub';
@@ -317,7 +329,7 @@ function finishInteraction(outcome) {
     return;
   }
 
-  // Legacy behavior for non-elf NPCs: fade out then redirect
+  // Legacy behavior for single-turn NPCs: fade out then redirect
   document.querySelector(".npc-screen").classList.add("npc-leaving");
   setTimeout(() => returnToOrigin(), 700);
 }
@@ -326,7 +338,7 @@ function finishInteraction(outcome) {
 
 function resetTimer() {
   stopTimer();
-  timerMax     = Math.floor(Math.random() * 31) + 15;
+  timerMax     = Math.floor(Math.random() * 8) + 8;  // 8–15s
   timerSeconds = timerMax;
   if (timerFill) {
     timerFill.style.width      = "100%";
