@@ -1,7 +1,17 @@
+#confettiCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
 body {
-  background: var(--color-bg, #181825);
+  background: var(--color-bg, #0e0b14);
   color: var(--color-text, #f3f3f3);
-  font-family: 'Pixel', 'Arial', sans-serif;
+  font-family: var(--font-body, 'Crimson Pro', serif);
   margin: 0;
   padding: 0;
 }
@@ -10,23 +20,30 @@ body {
   max-width: 480px;
   margin: 3rem auto 0 auto;
   padding: 2.5rem 1.5rem 3rem 1.5rem;
-  background: rgba(24,24,37,0.98);
+  background: rgba(14, 11, 20, 0.98);
   border-radius: 16px;
-  box-shadow: 0 4px 32px #0005;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .win-heading {
-  font-size: 2.2rem;
-  color: var(--color-accent, #a6e3a1);
-  margin-bottom: 1.2rem;
+  font-family: var(--font-display, 'MedievalSharp', serif);
+  font-size: 2.4rem;
+  color: var(--color-accent, #d4a03c);
+  margin-bottom: 1rem;
   letter-spacing: 1px;
 }
 
 .win-flavour {
-  font-size: 1.1rem;
-  margin-bottom: 2.2rem;
-  color: var(--color-subtle, #b4befe);
+  font-size: 1.15rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-muted, #a09aad);
+}
+
+.win-flavour span {
+  color: var(--color-accent, #d4a03c);
+  font-weight: bold;
 }
 
 .job-offer-letter {
@@ -34,48 +51,75 @@ body {
   color: #232347;
   border: 2px solid #e0cba8;
   border-radius: 10px;
-  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  padding: 1.5rem 1.4rem 1.2rem 1.4rem;
   margin: 0 auto 2.2rem auto;
-  box-shadow: 0 2px 12px #0002;
-  max-width: 350px;
+  max-width: 380px;
   text-align: left;
 }
 
-.job-offer-letter h2 {
-  font-size: 1.3rem;
-  margin-top: 0;
-  margin-bottom: 0.7rem;
+.letter-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: #b08968;
+  text-align: center;
+  margin: 0 0 0.4rem 0;
+}
+
+.job-offer-letter h2 {
+  font-family: var(--font-display, 'MedievalSharp', serif);
+  font-size: 1.25rem;
+  margin: 0 0 1rem 0;
+  color: #3a2a0a;
   text-align: center;
 }
 
 .job-offer-letter ul {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 1rem 0;
 }
 
 .job-offer-letter li {
-  margin-bottom: 0.5rem;
-  font-size: 1.05rem;
+  margin-bottom: 0.55rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.job-offer-letter li strong {
+  color: #7a5c2e;
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.1rem;
+}
+
+.letter-footer {
+  font-size: 0.8rem;
+  color: #b08968;
+  text-align: center;
+  margin: 0.8rem 0 0 0;
+  border-top: 1px dashed #e0cba8;
+  padding-top: 0.7rem;
 }
 
 .play-again-btn {
   display: block;
-  margin: 2.5rem auto 0 auto;
+  margin: 2rem auto 0 auto;
   padding: 0.9rem 2.5rem;
-  font-size: 1.15rem;
-  background: var(--color-accent, #a6e3a1);
-  color: #232347;
+  font-family: var(--font-display, 'MedievalSharp', serif);
+  font-size: 1.1rem;
+  background: var(--color-accent, #d4a03c);
+  color: #0e0b14;
   border: none;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 2px 8px #0002;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
 
 .play-again-btn:hover {
-  background: #b4befe;
-  color: #232347;
+  background: var(--color-accent-glow, #f0c060);
+  transform: scale(1.03);
 }

@@ -8,30 +8,28 @@
   <link rel="stylesheet" href="../styles/win.css">
 </head>
 <body>
+  <canvas id="confettiCanvas"></canvas>
   <main class="win-container">
     <h1 class="win-heading">You got the job!</h1>
     <p class="win-flavour">After <span id="winDays">?</span> days and <span id="winResumeCount">?</span> resumes, a letter arrived at your door...</p>
     <section class="job-offer-letter">
+      <p class="letter-label">OFFICIAL OFFER OF MAGICAL EMPLOYMENT</p>
       <h2 id="winJobTitle">[Magical Job Title]</h2>
       <ul>
-        <li><strong>Days taken:</strong> <span id="winDays">?</span></li>
-        <li><strong>Total resumes sent:</strong> <span id="winResumeCount">?</span></li>
-        <li><strong>Game mode:</strong> <span id="winMode">?</span></li>
+        <li><strong>Compensation:</strong> <span id="winSalary">?</span></li>
+        <li><strong>Perks:</strong> <span id="winPerks">?</span></li>
+        <li><strong>Start date:</strong> <span id="winStartDate">?</span></li>
       </ul>
+      <p class="letter-footer">Signed in enchanted ink · <span id="winMode">?</span> Mode</p>
     </section>
     <button class="play-again-btn" onclick="startOver()">Play Again</button>
   </main>
-  <!-- Data -->
-<script src="../js/data/jobCards.js"></script>
-<script src="../js/data/npcs.js"></script>
-<script src="../js/data/messages.js"></script>
-
-<!-- Core -->
-<script src="../js/core/storage.js"></script>
-<script src="../js/core/game.js"></script>
-<script src="../js/core/modifiers.js"></script>
-
-<!-- Screen Logic -->
-<script src="../js/screens/win.js"></script>
+  <script src="../js/data/jobCards.js"></script>
+  <script src="../js/data/npcs.js"></script>
+  <script src="../js/data/messages.js"></script>
+  <script src="../js/core/storage.js"></script>
+  <script src="../js/core/game.js"></script>
+  <script src="../js/core/modifiers.js"></script>
+  <script src="../js/screens/win.js"></script>
 </body>
 </html>
