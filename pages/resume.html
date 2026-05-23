@@ -63,20 +63,38 @@
     <!-- 🌱 PLANT -->
     <div class="resume-block">
       <h3>🪴 Plant</h3>
-      <div class="btn-group">
-        <button data-group="plant" onclick="selectPlant('cactus', this)">🌵 Cactus</button>
-        <button data-group="plant" onclick="selectPlant('flower', this)">🌷 Flower</button>
-        <button data-group="plant" onclick="selectPlant('fern',   this)">🌿 Fern</button>
+      <div class="btn-group btn-group--media">
+        <button class="media-btn" data-group="plant" onclick="selectPlant('cactus', this)">
+          <img src="../media/plants/cactus.gif" alt="Cactus" draggable="false" />
+          <span>Cactus</span>
+        </button>
+        <button class="media-btn" data-group="plant" onclick="selectPlant('flower', this)">
+          <img src="../media/plants/flower.gif" alt="Flower" draggable="false" />
+          <span>Flower</span>
+        </button>
+        <button class="media-btn" data-group="plant" onclick="selectPlant('fern', this)">
+          <img src="../media/plants/fern.gif" alt="Fern" draggable="false" />
+          <span>Fern</span>
+        </button>
       </div>
     </div>
 
     <!-- 📸 PHOTO -->
     <div class="resume-block">
       <h3>📸 Photo</h3>
-      <div class="btn-group">
-        <button data-group="photo" onclick="selectPhoto('neutral',  this)">😐 Neutral</button>
-        <button data-group="photo" onclick="selectPhoto('smile',    this)">😊 Smile</button>
-        <button data-group="photo" onclick="selectPhoto('serious',  this)">🧐 Serious</button>
+      <div class="btn-group btn-group--media">
+        <button class="media-btn" data-group="photo" onclick="selectPhoto('neutral', this)">
+          <img src="../media/photos/neutral.png" alt="Neutral" draggable="false" />
+          <span>Neutral</span>
+        </button>
+        <button class="media-btn" data-group="photo" onclick="selectPhoto('smile', this)">
+          <img src="../media/photos/smile.png" alt="Smile" draggable="false" />
+          <span>Smile</span>
+        </button>
+        <button class="media-btn" data-group="photo" onclick="selectPhoto('serious', this)">
+          <img src="../media/photos/serious.png" alt="Serious" draggable="false" />
+          <span>Serious</span>
+        </button>
       </div>
     </div>
 
