@@ -99,8 +99,6 @@ function initNPCPage() {
 
   if (currentNPC.dialogues && currentNPC.dialogues.length) {
     startMultiTurnDialogue();
-  } else {
-    startLegacyDialogue();
   }
 }
 
@@ -138,7 +136,7 @@ function renderNPCIdentity() {
   if (descEl)   descEl.textContent = currentNPC.description;
 }
 
-// ── MULTI-TURN DIALOGUE (ELF) ──────────────────────────────────────────────────
+// ── MULTI-TURN DIALOGUE ──────────────────────────────────────────────────
 
 function startMultiTurnDialogue() {
   currentDialogue   = getRandomDialogue(currentNPC);
@@ -301,30 +299,6 @@ function typewriterBubble(el, text, speed, onDone) {
 function resolveMultiTurn() {
   const outcome = scoreToOutcome(accumulatedScore);
   finishInteraction(outcome);
-}
-
-// ── LEGACY DIALOGUE (DWARF / WIZARD) ───────────────────────────────────────────
-
-function startLegacyDialogue() {
-  // Use LEGACY state (shows messageEl without timer switching logic)
-  switchUIState(UI_STATE.LEGACY);
-
-  if (messageEl) messageEl.textContent = getRandomNPCMessage(currentNPC);
-
-  choicesEl.innerHTML = "";
-  currentNPC.choices.forEach((choice) => {
-    const btn = document.createElement("button");
-    btn.className   = "btn-secondary npc-choice-btn";
-    btn.textContent = choice.label;
-    btn.addEventListener("click", () => {
-      stopTimer();
-      disableChoices();
-      finishInteraction(choice.outcome);
-    });
-    choicesEl.appendChild(btn);
-  });
-
-  resetTimer();
 }
 
 // ── SHARED RESOLUTION ──────────────────────────────────────────────────────────
