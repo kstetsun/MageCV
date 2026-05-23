@@ -342,8 +342,8 @@ function finishInteraction(outcome) {
     saveField("npcPending", null);
   }
 
-  // If this was an Elf multi-turn chat, show Return to Hub button
-  if (currentNPC && currentNPC.id === 'elf') {
+  // If this was a multi-turn dialogue chat, show Return to Hub button
+  if (currentNPC && currentNPC.dialogues && currentNPC.dialogues.length) {
     // Do NOT fade screen — keep conversation visible until player clicks
     if (skipBtn) {
       skipBtn.textContent = 'Return to Hub';
@@ -355,7 +355,7 @@ function finishInteraction(outcome) {
     return;
   }
 
-  // Legacy behavior for non-elf NPCs: fade out then redirect
+  // Legacy behavior for single-turn NPCs: fade out then redirect
   document.querySelector(".npc-screen").classList.add("npc-leaving");
   setTimeout(() => returnToOrigin(), 700);
 }
