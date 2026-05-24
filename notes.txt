@@ -1,5 +1,0 @@
-good - i like how its working. so DO NOT CHANGE anything which is not connected to the change i ask to implement. 
-
-little improvements that we should implement - during the second where the text we chosed arrivivng in the chat we still wee - but not active now - the previos 3 choises from which we was chosing. i want to know why do we even have a delay between choose an answear - and get it written in chat 
-
-DO NOT CHANGE anything which is not connected to the change i ask to implement

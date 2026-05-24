@@ -2,7 +2,13 @@
    NPC SCREEN — styles/npc.css
    ====================== */
 
+
 /* --- Layout --- */
+.npc-screen {
+  background-image: url("../media/backgrounds/nps-bg.webp");
+  background-size: cover;
+  background-position: center top;
+}
 
 .npc-screen {
   display: flex;
