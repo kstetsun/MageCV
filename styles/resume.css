@@ -3,10 +3,23 @@
    Styles for pages/resume.html
    ====================== */
 
-
 /* ======================
    SCREEN LAYOUT
    ====================== */
+ 
+body {
+  background-image: url('../media/backgrounds/resume.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+ 
+@media (max-width: 480px) {
+  body {
+    background-image: url('../media/backgrounds/resume_m.webp');
+  }
+}
 
 .resume-screen {
   max-width: 640px;

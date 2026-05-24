@@ -190,6 +190,7 @@ body {
 /* ── Mobile ── */
 @media (max-width: 480px) {
   .hub {
+    background-image: url('../media/backgrounds/hub_m.webp');
     background-position: 55% center;
     padding-bottom: 10vh;
   }
@@ -208,4 +209,5 @@ body {
   .hub { padding-bottom: 0; }
   .stats { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
   .board-wrapper { padding: 0.5rem; }
-}
+  }
+  
