@@ -366,6 +366,29 @@ function trySpawnNPCFromResume() {
   const save = (typeof loadRaw === "function") ? loadRaw() : {};
   if (save.npcPending) return;
 
+  // ── NPC spawn eligibility by mode ────────────────────────────────────────
+  const isFirstNPCToday = npcInteractionsToday === 0;
+
+  if (mode === "demo") {
+    // 1st NPC: window is resume 1–2
+    // 2nd NPC: window is resume 4–5
+    if (isFirstNPCToday) {
+      if (resumesSentTotal < 1 || resumesSentTotal > 2) return;
+    } else {
+      if (resumesSentTotal < 4 || resumesSentTotal > 5) return;
+    }
+  } else {
+    // long mode
+    // 1st NPC: window is resume 1–3
+    // subsequent: at least 2 resumes since last NPC
+    if (isFirstNPCToday) {
+      if (resumesSentTotal < 1 || resumesSentTotal > 3) return;
+    } else {
+      if (resumesSentTotal < resumesSentAtLastNPC + 2) return;
+    }
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
   if (Math.random() > 0.20) return;
 
   const npc = (typeof getRandomNPC === "function") ? getRandomNPC() : null;
