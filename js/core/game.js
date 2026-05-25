@@ -12,6 +12,7 @@ let resumesToday = 0;           // resumes sent today
 let npcInteractionsToday = 0;
 let npcInteractionsLimit = 2;   // recalculated each new day based on mode
 let npcActive = false;
+let resumesSentAtLastNPC = 0;   // resumesSentTotal when last NPC interaction completed
 
 let activeModifiers = [];       // managed by modifiers.js
 
@@ -57,6 +58,7 @@ function startNewGame(selectedMode) {
   resumesToday          = 0;
   npcInteractionsToday  = 0;
   npcInteractionsLimit  = config.npcInteractionsPerDay();
+  resumesSentAtLastNPC  = 0;
   activeModifiers       = [];
 
   saveGame({
@@ -68,6 +70,7 @@ function startNewGame(selectedMode) {
     resumesSentToday:       0,
     npcInteractionsToday:   0,
     npcInteractionsLimit,
+    resumesSentAtLastNPC:   0,
     activeModifiers,
     gameStarted:            true
   });
@@ -190,6 +193,7 @@ window.resumesToday           = resumesToday;
 window.npcInteractionsToday   = npcInteractionsToday;
 window.npcInteractionsLimit   = npcInteractionsLimit;
 window.npcActive              = npcActive;
+window.resumesSentAtLastNPC   = resumesSentAtLastNPC;
 window.activeModifiers        = activeModifiers;
 
 window.ModeConfig             = ModeConfig;

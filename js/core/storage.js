@@ -26,6 +26,7 @@ const defaultSave = {
   npcInteractionsToday: 0,
   npcInteractionsLimit: 2,    // set on new day based on mode
   npcPending: null,           // { npcId, originScreen } — set before redirect to npc.html
+  resumesSentAtLastNPC: 0,    // resumesSentTotal value when last NPC interaction completed
 
   // --- Modifiers ---
   // Each entry: { type, value, duration, remaining }
@@ -67,6 +68,7 @@ function loadGame() {
   if (typeof resumesToday !== "undefined") resumesToday         = raw.resumesSentToday;
   if (typeof npcInteractionsToday !== "undefined") npcInteractionsToday = raw.npcInteractionsToday;
   if (typeof npcInteractionsLimit !== "undefined") npcInteractionsLimit = raw.npcInteractionsLimit;
+  if (typeof resumesSentAtLastNPC !== "undefined") resumesSentAtLastNPC = raw.resumesSentAtLastNPC;
   if (typeof activeModifiers !== "undefined") activeModifiers   = raw.activeModifiers;
 }
 

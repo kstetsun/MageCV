@@ -208,6 +208,7 @@ function showNode(node) {
 function onMultiTurnChoice(choice) {
   stopTimer();
   disableChoices();
+  if (choicesEl) choicesEl.style.visibility = "hidden";
 
   accumulatedScore += choice.score;
 
@@ -343,6 +344,12 @@ function finishInteraction(outcome) {
   }
 
   applyNPCModifier(currentNPC, outcome);
+
+  // Record resumesSentTotal at moment of this NPC interaction (for spawn spacing)
+  resumesSentAtLastNPC = resumesSentTotal;
+  if (typeof saveField === "function") {
+    saveField("resumesSentAtLastNPC", resumesSentAtLastNPC);
+  }
 
   if (typeof saveField === "function") {
     saveField("npcPending", null);
