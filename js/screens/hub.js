@@ -51,6 +51,10 @@ function updateHubUI() {
   // Mode badge
   const modeEl = document.getElementById("gameMode");
   if (modeEl) modeEl.innerText = (mode === "demo") ? "Demo" : "Long Mode";
+
+  // Score display
+  const scoreEl = document.getElementById("score");
+  if (scoreEl) scoreEl.innerText = hiddenScore;
 }
 
 
