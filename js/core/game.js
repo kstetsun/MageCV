@@ -183,18 +183,10 @@ initGame();
 // ======================
 // EXPORTS
 // ======================
-
-window.mode                   = mode;
-window.targetScore            = targetScore;
-window.hiddenScore            = hiddenScore;
-window.day                    = day;
-window.resumesSentTotal       = resumesSentTotal;
-window.resumesToday           = resumesToday;
-window.npcInteractionsToday   = npcInteractionsToday;
-window.npcInteractionsLimit   = npcInteractionsLimit;
-window.npcActive              = npcActive;
-window.resumesSentAtLastNPC   = resumesSentAtLastNPC;
-window.activeModifiers        = activeModifiers;
+// Note: primitive globals (mode, hiddenScore, etc.) are NOT exported via
+// window.* because plain assignment copies the value at load time and
+// never reflects subsequent updates. They are accessible globally as-is
+// since all scripts run in the same window scope (no modules).
 
 window.ModeConfig             = ModeConfig;
 window.getConfig              = getConfig;
