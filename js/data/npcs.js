@@ -5,8 +5,7 @@
 const npcData = [
   {
     id: "elf",
-    name: "Elf ☕",
-    description: "Friendly networker, believes in people",
+    name: "Elf",
     minEffect: 2,
     maxEffect: 5,
     dialogues: [
@@ -292,8 +291,7 @@ const npcData = [
 
   {
     id: "dwarf",
-    name: "Dwarf HR",
-    description: "Weary realist, knows how things work",
+    name: "Dwarf",
     minEffect: -3,
     maxEffect: 2,
     dialogues: [
@@ -579,8 +577,7 @@ const npcData = [
 
   {
     id: "wizard",
-    name: "Chaos Wizard",
-    description: "Unpredictable, loves experiments",
+    name: "Wizard",
     minEffect: -5,
     maxEffect: 6,
     dialogues: [
