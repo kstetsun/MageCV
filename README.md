@@ -47,5 +47,3 @@
     ├── plants/                 ← 3 plant PNGs
     └── audio/                  ← Background music track(s)
 ```
-
-spawnNPCEvent("elf", "hub.html");
