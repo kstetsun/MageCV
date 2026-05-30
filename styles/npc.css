@@ -3,12 +3,23 @@
    ====================== */
 
 
-/* --- Layout --- */
-.npc-screen {
+/* --- Background --- */
+
+body {
   background-image: url("../media/backgrounds/npc_bg.webp");
   background-size: cover;
   background-position: center top;
+  background-repeat: no-repeat;
 }
+
+@media (max-width: 480px) {
+  body {
+    background-image: url("../media/backgrounds/npc_bg_m.webp");
+    background-position: center center;
+  }
+}
+
+/* --- Layout --- */
 
 .npc-screen {
   display: flex;
@@ -16,13 +27,6 @@
   gap: 1.5rem;
   padding-top: 1.5rem;
   min-height: 100vh;
-}
-
-@media (max-width: 480px) {
-  .npc-screen {
-    background-image: url("../media/backgrounds/npc_bg_m.webp");
-    background-position: center center;
-  }
 }
 
 /* --- Timer Bar --- */
