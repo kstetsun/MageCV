@@ -370,12 +370,16 @@ function trySpawnNPCFromResume() {
   const isFirstNPCToday = npcInteractionsToday === 0;
 
   if (mode === "demo") {
-    // 1st NPC: window is resume 1–2
-    // 2nd NPC: window is resume 4–5
+    // 1st NPC: guaranteed on resume 1 or 2 (50% on 1, 100% on 2 if missed)
+    // 2nd NPC: guaranteed on resume 4 or 5 (50% on 4, 100% on 5 if missed)
     if (isFirstNPCToday) {
-      if (resumesSentTotal < 1 || resumesSentTotal > 2) return;
+      if (resumesSentTotal === 1)      { if (Math.random() > 0.50) return; }
+      else if (resumesSentTotal === 2) { /* guaranteed */ }
+      else return;
     } else {
-      if (resumesSentTotal < 4 || resumesSentTotal > 5) return;
+      if (resumesSentTotal === 4)      { if (Math.random() > 0.50) return; }
+      else if (resumesSentTotal === 5) { /* guaranteed */ }
+      else return;
     }
   } else {
     // long mode
@@ -386,10 +390,10 @@ function trySpawnNPCFromResume() {
     } else {
       if (resumesSentTotal < resumesSentAtLastNPC + 2) return;
     }
+    // Random check for long mode only
+    if (Math.random() > 0.50) return;
   }
   // ─────────────────────────────────────────────────────────────────────────
-
-  if (Math.random() > 0.20) return;
 
   const npc = (typeof getRandomNPC === "function") ? getRandomNPC() : null;
   if (!npc) return;

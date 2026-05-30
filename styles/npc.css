@@ -3,12 +3,23 @@
    ====================== */
 
 
-/* --- Layout --- */
-.npc-screen {
-  background-image: url("../media/backgrounds/nps-bg.webp");
+/* --- Background --- */
+
+body {
+  background-image: url("../media/backgrounds/npc_bg.webp");
   background-size: cover;
   background-position: center top;
+  background-repeat: no-repeat;
 }
+
+@media (max-width: 480px) {
+  body {
+    background-image: url("../media/backgrounds/npc_bg_m.webp");
+    background-position: center center;
+  }
+}
+
+/* --- Layout --- */
 
 .npc-screen {
   display: flex;
