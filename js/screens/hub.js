@@ -10,10 +10,6 @@
 // ======================
 
 
-// ======================
-// UI UPDATE
-// ======================
-
 function updateHubUI() {
   // Day counter
   const dayEl = document.getElementById("day");
