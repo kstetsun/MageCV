@@ -18,9 +18,9 @@
   min-height: 100vh;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .npc-screen {
-    background-image: url("../media/backgrounds/nps_bg_m.webp");
+    background-image: url("../media/backgrounds/npc_bg_m.webp");
     background-position: center center;
   }
 }
