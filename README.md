@@ -38,7 +38,10 @@
 │   │
 │   └── data/                   ← Static content, no logic
 │       ├── jobCards.js         ← 25 job card definitions + correct answers
-│       ├── npcs.js             ← NPC types, dialogue trees, modifier templates
+│       ├── npcs.js             ← NPC types, modifier templates
+│       ├── elf.js             ← dialogue tree
+│       ├── dwarf.js             ← dialogue tree
+│       ├── wizard.js             ← dialogue tree
 │       └── messages.js         ← HUB flavor text, event messages, UI strings
 │
 └── media/
