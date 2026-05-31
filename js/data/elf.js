@@ -1,8 +1,8 @@
 const elfData = {
   id: "elf",
   name: "Elf",
-  minEffect: 2,
-  maxEffect: 5,
+  minEffect: 1,
+  maxEffect: 3,
   dialogues: [
     {
       id: "royal_portrait",
