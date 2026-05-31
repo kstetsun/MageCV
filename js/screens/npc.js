@@ -413,7 +413,12 @@ function onTimerExpire() {
   document.body.classList.add("screen-pulse");
   if (messageEl) messageEl.innerText = "They waited... but you didn't respond. They left.";
 
+  // Advance interaction counter so demo spawn window moves to next slot
+  npcInteractionsToday += 1;
+  resumesSentAtLastNPC = resumesSentTotal;
   if (typeof saveField === "function") {
+    saveField("npcInteractionsToday", npcInteractionsToday);
+    saveField("resumesSentAtLastNPC", resumesSentAtLastNPC);
     saveField("npcPending", null);
   }
 
@@ -435,7 +440,12 @@ function returnToOrigin() {
 
 function skipNPC() {
   stopTimer();
+  // Advance interaction counter so demo spawn window moves to next slot
+  npcInteractionsToday += 1;
+  resumesSentAtLastNPC = resumesSentTotal;
   if (typeof saveField === "function") {
+    saveField("npcInteractionsToday", npcInteractionsToday);
+    saveField("resumesSentAtLastNPC", resumesSentAtLastNPC);
     saveField("npcPending", null);
   }
   returnToOrigin();
