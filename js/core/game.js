@@ -30,7 +30,7 @@ const ModeConfig = {
   },
   long: {
     resumesPerDay: 10,
-    npcInteractionsPerDay: () => Math.floor(Math.random() * 3) + 1,  // 1–3
+    npcInteractionsPerDay: () => Math.floor(Math.random() * 2) + 2,  // 2–3
     targetScore: () => Math.floor(Math.random() * 31) + 30           // 30–60
   }
 };

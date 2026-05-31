@@ -1,7 +1,7 @@
 const dwarfData = {
     id: "dwarf",
     name: "Dwarf",
-    minEffect: -3,
+    minEffect: 0,
     maxEffect: 2,
     dialogues: [
       {

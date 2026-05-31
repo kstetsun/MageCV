@@ -382,16 +382,27 @@ function trySpawnNPCFromResume() {
       else return;
     }
   } else {
-    // long mode
-    // 1st NPC: window is resume 1–3
-    // subsequent: at least 2 resumes since last NPC
-    if (isFirstNPCToday) {
-      if (resumesSentTotal < 1 || resumesSentTotal > 3) return;
-    } else {
-      if (resumesSentTotal < resumesSentAtLastNPC + 2) return;
-    }
-    // Random check for long mode only
-    if (Math.random() > 0.50) return;
+    // long mode — evenly spread across day, min 2 guaranteed per day
+    // Divide 10 resumes into npcInteractionsLimit equal slots.
+    // Within each slot: 50% chance per resume, 100% on last resume of slot.
+    // No NPC before first resume of the day.
+    if (resumesToday < 1) return;
+
+    const resumesPerDay = getConfig().resumesPerDay;
+    const slotSize      = Math.floor(resumesPerDay / npcInteractionsLimit);
+    const currentSlot   = Math.floor((resumesToday - 1) / slotSize);
+
+    // Past all slots → no more NPCs
+    if (currentSlot >= npcInteractionsLimit) return;
+
+    // This slot belongs to a different NPC index → not our turn yet
+    if (currentSlot !== npcInteractionsToday) return;
+
+    const posInSlot = ((resumesToday - 1) % slotSize) + 1;
+    const isLastInSlot = posInSlot >= slotSize;
+
+    if (!isLastInSlot && Math.random() > 0.50) return;
+    // isLastInSlot → guaranteed, no random check
   }
   // ─────────────────────────────────────────────────────────────────────────
 
