@@ -30,28 +30,81 @@ body {
   }
 }
 
-/* Parchment panel — sits ON the scroll, warm & textured */
+
+/* Generated parchment panel — mimics the painted scroll in the background art */
 .resume-screen {
   width: 100%;
-  max-width: 500px;
-  padding: 1.4rem 1.25rem 1.6rem;
+  max-width: 480px;
+  padding: 1.4rem 1.3rem 1.6rem;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
 
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
-    linear-gradient(160deg, #fdf6e8 0%, #f5e9cc 55%, #ede0b8 100%);
-  border: 1px solid rgba(160, 120, 60, 0.35);
-  border-radius: 4px;
-  box-shadow:
-    0 2px 0 rgba(200,160,80,0.18),
-    0 6px 32px rgba(60, 35, 10, 0.28),
-    inset 0 1px 0 rgba(255,255,255,0.6),
-    inset 0 -1px 0 rgba(160,120,60,0.15);
+  position: relative;
+  border-radius: 6px 6px 12px 12px;
 
-  /* Slight rotation to echo the tilted scroll in the art */
-  transform: rotate(-0.4deg);
+  /* Layered parchment: noise grain + warm gradient */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+    linear-gradient(170deg,
+      #f2dfa8 0%,
+      #e8ce88 18%,
+      #f0dda0 35%,
+      #e2c878 52%,
+      #edd998 68%,
+      #dfc070 85%,
+      #cba855 100%
+    );
+
+  /* Rolled-edge feel: darker at bottom, lighter top highlight */
+  box-shadow:
+    inset 0 2px 0 rgba(255, 248, 210, 0.85),
+    inset 0 -3px 8px rgba(100, 65, 10, 0.25),
+    inset 3px 0 8px rgba(120, 75, 10, 0.12),
+    inset -3px 0 8px rgba(120, 75, 10, 0.12),
+    0 4px 32px rgba(40, 22, 4, 0.45),
+    0 1px 0 rgba(180, 130, 40, 0.4);
+
+  /* Aged parchment border */
+  border: 1px solid rgba(160, 110, 35, 0.55);
+  border-bottom: 2px solid rgba(130, 85, 20, 0.6);
+
+  /* Slight tilt like the painted scroll */
+  transform: rotate(-0.3deg);
+}
+
+/* Top scroll curl — painted line at top edge */
+.resume-screen::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 5%; right: 5%;
+  height: 6px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(200, 155, 55, 0.5) 20%,
+    rgba(240, 210, 120, 0.7) 50%,
+    rgba(200, 155, 55, 0.5) 80%,
+    transparent 100%
+  );
+  border-radius: 0 0 50% 50% / 0 0 4px 4px;
+  pointer-events: none;
+}
+
+/* Bottom worn edge */
+.resume-screen::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 3%; right: 3%;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(130, 85, 20, 0.45) 30%,
+    rgba(100, 60, 10, 0.55) 50%,
+    rgba(130, 85, 20, 0.45) 70%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 
@@ -66,14 +119,14 @@ body {
   flex-wrap: wrap;
   gap: 0.5rem;
   padding-bottom: 0.6rem;
-  border-bottom: 1px solid rgba(160, 120, 60, 0.2);
+  border-bottom: 1px solid rgba(160, 110, 35, 0.2);
 }
 
 .resume-heading {
   font-size: 1.15rem;
   font-weight: 700;
   margin: 0;
-  color: #3a2408;
+  color: #2e1a04;
   letter-spacing: 0.01em;
 }
 
@@ -81,15 +134,15 @@ body {
   font-size: 0.8rem;
   font-weight: 600;
   color: #7a4f1a;
-  background: rgba(160, 100, 30, 0.1);
-  border: 1px solid rgba(160, 100, 30, 0.28);
+  background: rgba(160, 100, 30, 0.12);
+  border: 1px solid rgba(160, 100, 30, 0.3);
   border-radius: 20px;
   padding: 3px 11px;
 }
 
 .resume-instruction {
   font-size: 0.85rem;
-  color: #6b4c22;
+  color: #6b4422;
   margin: 0;
   font-style: italic;
 }
@@ -103,8 +156,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.32);
-  border: 1px solid rgba(160, 120, 60, 0.18);
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(160, 110, 35, 0.18);
   border-radius: 6px;
   padding: 0.6rem 0.75rem;
 }
@@ -139,9 +192,9 @@ body {
   align-items: center;
   gap: 0.25rem;
   padding: 0.4rem 0.4rem 0.32rem;
-  border: 2px solid rgba(160, 120, 60, 0.22);
+  border: 2px solid rgba(160, 110, 35, 0.22);
   border-radius: 8px;
-  background: rgba(255, 252, 240, 0.8);
+  background: rgba(255, 248, 220, 0.6);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, transform 0.12s, box-shadow 0.15s;
   width: 78px;
@@ -165,13 +218,13 @@ body {
 
 .media-btn:hover {
   border-color: rgba(160, 100, 30, 0.55);
-  background: rgba(255, 252, 240, 0.98);
+  background: rgba(255, 248, 220, 0.9);
   box-shadow: 0 3px 10px rgba(100, 60, 10, 0.18);
 }
 
 .media-btn.selected {
   border-color: #a0641e;
-  background: rgba(160, 100, 30, 0.12);
+  background: rgba(160, 100, 30, 0.15);
   transform: scale(1.06);
   box-shadow: 0 4px 14px rgba(140, 80, 10, 0.28);
 }
@@ -194,9 +247,9 @@ body {
 
 .btn-group:not(.btn-group--media) button {
   padding: 0.44rem 1rem;
-  border: 2px solid rgba(160, 120, 60, 0.22);
+  border: 2px solid rgba(160, 110, 35, 0.22);
   border-radius: 8px;
-  background: rgba(255, 252, 240, 0.8);
+  background: rgba(255, 248, 220, 0.6);
   color: #3a2408;
   font-size: 0.86rem;
   font-weight: 600;
@@ -206,14 +259,14 @@ body {
 }
 
 .btn-group:not(.btn-group--media) button:hover {
-  border-color: rgba(160, 100, 30, 0.5);
-  background: rgba(255, 252, 240, 0.98);
+  border-color: rgba(160, 100, 30, 0.55);
+  background: rgba(255, 248, 220, 0.9);
   box-shadow: 0 3px 10px rgba(100, 60, 10, 0.15);
 }
 
 .btn-group:not(.btn-group--media) button.selected {
   border-color: #a0641e;
-  background: rgba(160, 100, 30, 0.12);
+  background: rgba(160, 100, 30, 0.15);
   transform: scale(1.04);
   box-shadow: 0 3px 12px rgba(140, 80, 10, 0.22);
 }
@@ -226,11 +279,11 @@ body {
 .resume-message {
   padding: 0.6rem 0.85rem;
   border-radius: 6px;
-  background: rgba(160, 100, 30, 0.08);
-  border: 1px solid rgba(160, 100, 30, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(160, 110, 35, 0.2);
   font-size: 0.85rem;
   font-weight: 500;
-  color: #5a3510;
+  color: #e8d5a3;
 }
 
 
@@ -244,7 +297,7 @@ body {
   flex-wrap: wrap;
   margin-top: 0.1rem;
   padding-top: 0.6rem;
-  border-top: 1px solid rgba(160, 120, 60, 0.2);
+  border-top: 1px solid rgba(160, 110, 35, 0.2);
 }
 
 /* Override main.css big-btn / small-btn for parchment theme */
@@ -306,8 +359,8 @@ body {
   font-size: 0.75rem;
   padding: 2px 9px;
   border-radius: 20px;
-  background: rgba(160, 100, 30, 0.09);
-  border: 1px solid rgba(160, 100, 30, 0.22);
+  background: rgba(160, 100, 30, 0.1);
+  border: 1px solid rgba(160, 100, 30, 0.25);
   color: #7a4f1a;
 }
 
