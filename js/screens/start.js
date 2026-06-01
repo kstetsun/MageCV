@@ -57,24 +57,64 @@ function onSelectLong() {
 }
 
 function confirmNewGame(selectedMode) {
-  // If a save exists, warn before overwriting
   if (typeof hasSave === "function" && hasSave()) {
-    const ok = confirm(
-      "Starting a new game will erase your current saved run.\n\nAre you sure?"
-    );
-    if (!ok) return;
+    showMagicConfirm(() => {
+      _startFresh(selectedMode);
+    });
+    return;
   }
+  _startFresh(selectedMode);
+}
 
-  // Clear any existing save and start fresh
+function _startFresh(selectedMode) {
   if (typeof clearSave === "function") clearSave();
   if (typeof clearModifiers === "function") clearModifiers();
-
-  // startNewGame() is in game.js — sets all state, saves, then goHub()
   if (typeof startNewGame === "function") {
     startNewGame(selectedMode);
   } else {
     console.error("[Start] startNewGame() not found. Is game.js loaded?");
   }
+}
+
+function showMagicConfirm(onConfirm) {
+  const overlay = document.createElement("div");
+  overlay.id = "magicWarnOverlay";
+  overlay.innerHTML = `
+    <div class="mw-backdrop"></div>
+    <div class="mw-box" role="dialog" aria-modal="true">
+      <div class="mw-sparkle-zone"></div>
+      <div class="mw-content">
+        <span class="mw-icon" aria-hidden="true">⚗️</span>
+        <div class="mw-msg">
+          Starting a new game will erase your current saved run.
+          <br><br>
+          This cannot be undone.
+        </div>
+        <div class="mw-btns">
+          <button class="mw-btn-back">Turn Back</button>
+          <button class="mw-btn-erase">Burn It All</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const sparkleZone = overlay.querySelector(".mw-sparkle-zone");
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement("div");
+    s.className = "mw-sparkle";
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;` +
+      `animation-delay:${Math.random()*2.5}s;animation-duration:${2+Math.random()*1.5}s;`;
+    sparkleZone.appendChild(s);
+  }
+
+  const close = () => overlay.remove();
+  overlay.querySelector(".mw-btn-back").addEventListener("click", close);
+  overlay.querySelector(".mw-btn-erase").addEventListener("click", () => {
+    close();
+    onConfirm();
+  });
+  overlay.querySelector(".mw-backdrop").addEventListener("click", close);
 }
 
 

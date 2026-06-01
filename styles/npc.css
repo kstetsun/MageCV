@@ -151,6 +151,14 @@ body {
   text-align: left;
   padding: 0.8rem 1.2rem;
   font-size: 0.95rem;
+  background: linear-gradient(135deg, #3d2817 0%, #2d1810 100%);
+  border: 1px solid #8b6f47;
+  color: #f5e6d3;
+}
+
+.npc-choice-btn:hover {
+  background: linear-gradient(135deg, #4a3220 0%, #3a1f18 100%);
+  border-color: #c89f5b;
 }
 
 .npc-choice-btn:disabled {
@@ -163,14 +171,16 @@ body {
 .npc-skip {
   align-self: center;
   font-size: 0.8rem;
-  color: var(--color-text-muted);
-  border-color: transparent;
+  color: #f5e6d3;
+  border-color: #8b6f47;
   padding: 0.4rem 0.8rem;
+  background: rgba(61, 40, 23, 0.6);
 }
 
 .npc-skip:hover {
-  color: var(--color-text);
-  border-color: var(--color-border);
+  color: #ffd699;
+  border-color: #c89f5b;
+  background: rgba(61, 40, 23, 0.9);
 }
 
 /* --- Timers and Effects --- */
