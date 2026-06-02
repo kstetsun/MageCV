@@ -16,24 +16,23 @@
   <!-- Opens automatically on page load and after each  -->
   <!-- submit. Also triggered by the "View card" button -->
   <!-- ================================================ -->
-  <div id="jobCardModal" class="modal-overlay" onclick="handleModalOverlayClick(event)" aria-modal="true" role="dialog" aria-labelledby="modalCardTitle">
+<div id="jobCardModal" class="modal-overlay" onclick="handleModalOverlayClick(event)" aria-modal="true" role="dialog">
 
-    <div class="modal-card">
+  <div class="modal-card">
 
-      <div class="modal-header">
-        <span class="modal-label">You are applying for</span>
-        <button class="modal-close-btn" onclick="closeJobCardModal()" aria-label="Close job card">✕</button>
-      </div>
-
-      <!-- Full-size HTML job card rendered here by buildJobCardHTML() -->
-      <div id="jobCardRenderModal"></div>
-
-      <button class="modal-confirm-btn" onclick="closeJobCardModal()">
-        Got it — build my resume
-      </button>
-
+    <div class="modal-header">
+      <span class="modal-label">You are applying for</span>
+      <button class="modal-close-btn" onclick="closeJobCardModal()" aria-label="Close">✕</button>
     </div>
+
+    <div id="jobCardRenderModal"></div>
+
+    <button class="modal-confirm-btn" onclick="closeJobCardModal()">
+      Got it — build my resume
+    </button>
+
   </div>
+</div>
 
 
   <!-- ================================================ -->
