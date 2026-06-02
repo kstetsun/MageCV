@@ -60,14 +60,14 @@ const PLANT_EMOJI = {
   fern:   "🌿"
 };
 
-// Returns a deadline string. "correct" gives today+7, "wrong" gives today+6.
-// Both look plausible — the player should not immediately spot the wrong one.
+const DATE_LABELS = {
+  summer_solstice: "Summer Solstice",
+  winter_solstice: "Winter Solstice"
+};
+
 function _deadlineLabel(dateOption) {
-  const base  = new Date();
-  const delta = dateOption === "correct" ? 7 : 6;
-  base.setDate(base.getDate() + delta);
-  const d = base.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-  return `📅 Apply by ${d}`;
+  const label = DATE_LABELS[dateOption] ?? dateOption;
+  return `📅 Apply by ${label}`;
 }
 
 // Builds a description mentioning the plant emoji exactly 3 times.
