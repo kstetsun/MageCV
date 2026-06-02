@@ -60,34 +60,29 @@ const PLANT_EMOJI = {
   fern:   "🌿"
 };
 
-// Returns a deadline string. "correct" gives today+7, "wrong" gives today+6.
-// Both look plausible — the player should not immediately spot the wrong one.
+const DATE_LABELS = {
+  summer_solstice: "Summer Solstice",
+  winter_solstice: "Winter Solstice"
+};
+
 function _deadlineLabel(dateOption) {
-  const base  = new Date();
-  const delta = dateOption === "correct" ? 7 : 6;
-  base.setDate(base.getDate() + delta);
-  const d = base.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-  return `📅 Apply by ${d}`;
+  const label = DATE_LABELS[dateOption] ?? dateOption;
+  return `📅 Apply by ${label}`;
 }
 
-// Builds a description mentioning the plant emoji exactly 3 times.
-// Uses the card's own description as a base and appends the plant emoji.
 function _plantLine(plantType, baseDesc) {
-  const emoji = PLANT_EMOJI[plantType] || "🪴";
-  const desc  = baseDesc ? baseDesc.trim() : "A position for a dedicated mage.";
-  // Wrap the description and append the plant emoji three times as thematic accents.
-  return `${desc} The office desk features a ${emoji}, a second ${emoji} by the window, and a miniature ${emoji} on the filing cabinet.`;
+  const desc = baseDesc ? baseDesc.trim() : "A position for a dedicated mage.";
+  return desc;
 }
 
 function buildJobCardHTML(card, size) {
   if (!card) return "<p>No card loaded.</p>";
 
-  const isMini      = size === "mini";
-  const correct     = card.correctAnswers || {};
-  const photoEmoji  = PHOTO_EMOJI[correct.photo] || "😐";
-  const deadline    = _deadlineLabel(correct.date);
-  const plantDesc   = _plantLine(correct.plant, card.description);
-  const sizeClass   = isMini ? "jc jc--mini" : "jc jc--full";
+  const correct    = card.correctAnswers || {};
+  const photoEmoji = PHOTO_EMOJI[correct.photo] || "😐";
+  const deadline   = DATE_LABELS[correct.date] ?? correct.date;
+  const desc       = card.description ? card.description.trim() : "A position for a dedicated mage.";
+  const sizeClass  = size === "mini" ? "jc jc--mini" : "jc jc--full";
 
   return `
     <div class="${sizeClass}">
@@ -95,9 +90,9 @@ function buildJobCardHTML(card, size) {
         <span class="jc__photo">${photoEmoji}</span>
         <span class="jc__title">${_esc(card.title)}</span>
       </div>
-      <p class="jc__desc">${_esc(plantDesc)}</p>
-      <div class="jc__footer">
-        <span class="jc__deadline">${deadline}</span>
+      <div class="jc__body">
+        <p class="jc__desc">${_esc(desc)}</p>
+        <span class="jc__deadline">Apply by ${_esc(deadline)}</span>
       </div>
     </div>
   `;
@@ -164,11 +159,6 @@ function _renderJobCard(card) {
 
   console.log("[Resume] Card rendered to both slots ✓");
 }
-
-
-// ======================
-// 2.6 — LOAD & DISPLAY JOB CARD
-// ======================
 
 // ======================
 // 2.6 — LOAD & DISPLAY JOB CARD
