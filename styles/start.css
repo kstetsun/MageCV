@@ -9,10 +9,14 @@
 .start-bg {
   position: fixed;
   inset: 0;
-  background:
+  background-image:
     radial-gradient(ellipse at 20% 50%, rgba(139, 90, 43, 0.15) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 20%, rgba(90, 60, 130, 0.18) 0%, transparent 55%),
-    #0e0b14;
+    url("../media/backgrounds/start.webp");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-color: #0e0b14;
   z-index: 0;
   pointer-events: none;
 }
@@ -56,12 +60,22 @@
 
 /* --- Title Block --- */
 
+.start-title-block {
+  background: #f5e6d3;
+  border: 2px solid #d4a03c;
+  border-radius: var(--radius);
+  padding: 2.2rem 2.5rem;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
 .start-eyebrow {
   text-align: center;
   font-family: var(--font-body);
   font-size: 0.75rem;
   letter-spacing: 0.2em;
-  color: var(--color-accent-dim);
+  color: #3d2817;
   margin: 0 0 0.5rem;
   text-transform: uppercase;
 }
@@ -69,25 +83,25 @@
 .start-title {
   font-family: var(--font-display);
   font-size: clamp(3.5rem, 10vw, 6.5rem);
-  color: var(--color-accent);
+  color: #3d2817;
   text-align: center;
   margin: 0;
   line-height: 1;
   text-shadow:
-    0 0 30px rgba(212, 160, 60, 0.5),
-    0 0 80px rgba(212, 160, 60, 0.2);
+    0 0 30px rgba(212, 160, 60, 0.3),
+    0 0 60px rgba(212, 160, 60, 0.15);
   animation: titleGlow 3s ease-in-out infinite alternate;
 }
 
 @keyframes titleGlow {
-  0%   { text-shadow: 0 0 20px rgba(212,160,60,0.4), 0 0 60px rgba(212,160,60,0.15); }
-  100% { text-shadow: 0 0 40px rgba(212,160,60,0.7), 0 0 100px rgba(212,160,60,0.3); }
+  0%   { text-shadow: 0 0 20px rgba(212,160,60,0.2), 0 0 50px rgba(212,160,60,0.08); }
+  100% { text-shadow: 0 0 40px rgba(212,160,60,0.4), 0 0 80px rgba(212,160,60,0.15); }
 }
 
 .start-subtitle {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: var(--color-text-muted);
+  color: #3d2817;
   text-align: center;
   margin: 0.6rem 0 0;
   line-height: 1.7;
@@ -102,6 +116,11 @@
   gap: 1rem;
   width: 100%;
   max-width: 480px;
+  background: #f5e6d3;
+  border: 2px solid #d4a03c;
+  border-radius: var(--radius);
+  padding: 1.8rem 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .start-modes-label {
@@ -109,7 +128,7 @@
   font-size: 0.8rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: #3d2817;
   margin: 0;
 }
 
@@ -126,31 +145,32 @@
   align-items: center;
   gap: 0.4rem;
   padding: 1.4rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(212, 160, 60, 0.2);
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid #d4a03c;
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--color-text);
+  color: #3d2817;
   font-family: var(--font-body);
   text-align: center;
 }
 
 .mode-card:hover {
-  background: rgba(212, 160, 60, 0.07);
-  border-color: rgba(212, 160, 60, 0.5);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #d4a03c;
   transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(212, 160, 60, 0.2);
 }
 
 .mode-card--main {
-  border-color: rgba(212, 160, 60, 0.45);
-  background: rgba(212, 160, 60, 0.05);
+  border-color: #d4a03c;
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .mode-card--main:hover {
-  background: rgba(212, 160, 60, 0.12);
-  border-color: var(--color-accent);
-  box-shadow: 0 0 20px rgba(212, 160, 60, 0.15);
+  background: rgba(255, 255, 255, 1);
+  border-color: #d4a03c;
+  box-shadow: 0 4px 20px rgba(212, 160, 60, 0.3);
 }
 
 .mode-icon {
@@ -161,13 +181,13 @@
 .mode-name {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-accent);
+  color: #3d2817;
   letter-spacing: 0.05em;
 }
 
 .mode-desc {
   font-size: 0.75rem;
-  color: var(--color-text-muted);
+  color: #5c3f2a;
   line-height: 1.5;
 }
 
@@ -180,6 +200,11 @@
   flex-direction: column;
   align-items: center;
   gap: 0.8rem;
+  background: #f5e6d3;
+  border: 2px solid #d4a03c;
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .continue-divider {
@@ -187,7 +212,7 @@
   align-items: center;
   gap: 0.8rem;
   width: 100%;
-  color: var(--color-text-muted);
+  color: #3d2817;
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -198,7 +223,7 @@
   content: "";
   flex: 1;
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(61, 40, 23, 0.2);
 }
 
 .btn-continue {
@@ -208,25 +233,27 @@
   align-items: center;
   gap: 0.3rem;
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid #d4a03c;
   border-radius: var(--radius);
-  color: var(--color-text);
+  color: #3d2817;
   font-family: var(--font-body);
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-weight: 600;
 }
 
 .btn-continue:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.8);
+  border-color: #d4a03c;
   transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(212, 160, 60, 0.2);
 }
 
 .continue-meta {
   font-size: 0.72rem;
-  color: var(--color-text-muted);
+  color: #5c3f2a;
   letter-spacing: 0.05em;
 }
 
@@ -235,12 +262,17 @@
 .start-footer {
   display: flex;
   justify-content: center;
+  background: #f5e6d3;
+  border: 2px solid #d4a03c;
+  border-radius: var(--radius);
+  padding: 0.8rem 1.2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .btn-rules {
   background: none;
   border: none;
-  color: var(--color-text-muted);
+  color: #3d2817;
   font-family: var(--font-body);
   font-size: 0.85rem;
   cursor: pointer;
@@ -250,11 +282,12 @@
   text-decoration: underline;
   text-decoration-color: transparent;
   text-underline-offset: 3px;
+  font-weight: 600;
 }
 
 .btn-rules:hover {
-  color: var(--color-accent);
-  text-decoration-color: var(--color-accent);
+  color: #5c3f2a;
+  text-decoration-color: #5c3f2a;
 }
 
 /* --- Mobile --- */

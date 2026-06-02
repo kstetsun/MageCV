@@ -8,39 +8,141 @@
   <link rel="stylesheet" href="../styles/rules.css">
 </head>
 <body>
-  <button class="back-btn" onclick="goStart()">← Back</button>
-  <h1>How to Play</h1>
-  <p class="intro">You are a recent graduate of a magical academy, seeking your first job in the fantasy world. Send out resumes every day until you land your dream job!</p>
 
-  <section>
-    <h2>The Daily Loop</h2>
-    <p>Each day, you can send a limited number of resumes. When you reach the daily limit, press the "Next Day" button to continue your job search on a new day.</p>
-  </section>
+  <button class="rules-back-btn" onclick="goStart()">← Back</button>
 
-  <section>
-    <h2>Resume Building</h2>
-    <p>Each resume has three elements: a plant, a photo, and a date. Your choices affect your score — experiment to find the best combinations!</p>
-  </section>
+  <div class="rules-content">
+    <h1 class="rules-title">How to Play</h1>
+    <div class="rules-divider"><div class="rules-divider-gem"></div></div>
+    <p class="rules-intro">You are a freshly graduated mage seeking your first post in the magical world. Send resumes each day, charm the locals, and keep going — victory will come.</p>
 
-  <section>
-    <h2>NPCs</h2>
-    <p>Randomly, magical NPCs may appear: the friendly Elf, the realistic Dwarf, and the unpredictable Wizard. They can give you helpful buffs or tricky debuffs, so be ready!</p>
-  </section>
+    <div class="rules-sections" id="rulesSections">
 
-  <section>
-    <h2>Modes</h2>
-    <ul>
-      <li><strong>Demo:</strong> 5 resumes per day, fixed win target.</li>
-      <li><strong>Long:</strong> 10 resumes per day, random win target.</li>
-    </ul>
-  </section>
+      <div class="rules-section open" data-idx="0">
+        <span class="rules-section-rod top"></span>
+        <div class="rules-section-scroll" onclick="toggleSection(0)">
+          <div class="rules-section-header">
+            <span class="rules-section-icon">📅</span>
+            <span class="rules-section-title">The Daily Loop</span>
+            <span class="rules-section-arrow">▼</span>
+          </div>
+          <div class="rules-section-body-wrap">
+            <div class="rules-section-body">
+              <p>Each day you have a limited number of resumes to send. Use them wisely — then press <em>Next Day</em> to advance. NPC encounters and limits also reset each new day.</p>
+              <div class="rules-pill-row">
+                <span class="rules-pill">Demo: 5 resumes / day</span>
+                <span class="rules-pill">Long: 10 resumes / day</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="rules-section-rod bottom"></span>
+      </div>
 
-  <section>
-    <h2>Win Condition</h2>
-    <p>Keep sending resumes and improving your score. When you reach the hidden win target, you'll know — victory is magical!</p>
-  </section>
+      <div class="rules-section" data-idx="1">
+        <span class="rules-section-rod top"></span>
+        <div class="rules-section-scroll" onclick="toggleSection(1)">
+          <div class="rules-section-header">
+            <span class="rules-section-icon">📜</span>
+            <span class="rules-section-title">Building a Resume</span>
+            <span class="rules-section-arrow">▼</span>
+          </div>
+          <div class="rules-section-body-wrap">
+            <div class="rules-section-body">
+              <p>Every resume is assembled from three elements: a <strong>plant decoration</strong>, a <strong>profile photo</strong>, and a <strong>work start date</strong>. A job card tells you what the employer wants — read it carefully before choosing.</p>
+              <p>Each correct choice helps your cause; each wrong one works against you. You will receive qualitative feedback after submitting — no numbers, just feeling.</p>
+              <div class="rules-pill-row">
+                <span class="rules-pill">3 elements per resume</span>
+                <span class="rules-pill">25 job cards</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="rules-section-rod bottom"></span>
+      </div>
 
-  <button class="footer-btn" onclick="goStart()">Ready — Let's Go</button>
+      <div class="rules-section" data-idx="2">
+        <span class="rules-section-rod top"></span>
+        <div class="rules-section-scroll" onclick="toggleSection(2)">
+          <div class="rules-section-header">
+            <span class="rules-section-icon">🧙</span>
+            <span class="rules-section-title">NPCs &amp; Encounters</span>
+            <span class="rules-section-arrow">▼</span>
+          </div>
+          <div class="rules-section-body-wrap">
+            <div class="rules-section-body">
+              <p>Three characters may appear at any time with a countdown timer of 15–45 seconds. Miss the timer and they leave without effect. Speak with them for buffs, debuffs, or surprises.</p>
+              <div class="rules-npc-row">
+                <div class="rules-npc-entry">
+                  <span class="rules-npc-label">The Elf</span>
+                  <span class="rules-npc-desc">Networking enthusiast. Tends toward helpful buffs when engaged sincerely.</span>
+                </div>
+                <div class="rules-npc-entry">
+                  <span class="rules-npc-label">The Dwarf</span>
+                  <span class="rules-npc-desc">Veteran realist. Results are modest — rarely a big bonus, rarely a disaster.</span>
+                </div>
+                <div class="rules-npc-entry">
+                  <span class="rules-npc-label">The Wizard</span>
+                  <span class="rules-npc-desc">Utterly unpredictable. Always applies a random modifier regardless of what you say.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="rules-section-rod bottom"></span>
+      </div>
+
+      <div class="rules-section" data-idx="3">
+        <span class="rules-section-rod top"></span>
+        <div class="rules-section-scroll" onclick="toggleSection(3)">
+          <div class="rules-section-header">
+            <span class="rules-section-icon">⚗️</span>
+            <span class="rules-section-title">Modes</span>
+            <span class="rules-section-arrow">▼</span>
+          </div>
+          <div class="rules-section-body-wrap">
+            <div class="rules-section-body">
+              <div class="rules-mode-grid">
+                <div class="rules-mode-card">
+                  <div class="rules-mode-card-title">Demo</div>
+                  <p>5 resumes per day</p>
+                  <p>2 NPC interactions / day</p>
+                  <p>Fixed win target</p>
+                </div>
+                <div class="rules-mode-card">
+                  <div class="rules-mode-card-title">Long</div>
+                  <p>10 resumes per day</p>
+                  <p>1–3 NPC interactions / day</p>
+                  <p>Randomised win target</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="rules-section-rod bottom"></span>
+      </div>
+
+      <div class="rules-section" data-idx="4">
+        <span class="rules-section-rod top"></span>
+        <div class="rules-section-scroll" onclick="toggleSection(4)">
+          <div class="rules-section-header">
+            <span class="rules-section-icon">✨</span>
+            <span class="rules-section-title">Winning</span>
+            <span class="rules-section-arrow">▼</span>
+          </div>
+          <div class="rules-section-body-wrap">
+            <div class="rules-section-body">
+              <p>There is no way to lose — only to keep trying. At some point, when you have impressed the right people enough, an offer will arrive. You will not know how close you are. Stay persistent. The offer letter awaits.</p>
+            </div>
+          </div>
+        </div>
+        <span class="rules-section-rod bottom"></span>
+      </div>
+
+    </div>
+
+    <button class="rules-footer-btn" onclick="goStart()">✦ Ready — Let's Go ✦</button>
+  </div>
 
   <script src="../js/data/jobCards.js"></script>
   <script src="../js/data/elf.js"></script>
