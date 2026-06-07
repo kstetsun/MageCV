@@ -15,17 +15,24 @@ body {
   font-family: var(--font-body, 'Crimson Pro', serif);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+}
+
+@media (max-width: 480px) {
+  body {
+    background: url('../media/backgrounds/win_m.webp') center / cover no-repeat fixed;
+  }
 }
 
 .win-container {
   max-width: 480px;
-  margin: 3rem auto 0 auto;
-  padding: 2.5rem 1.5rem 3rem 1.5rem;
-  background: rgba(14, 11, 20, 0.85);
-  border-radius: 16px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem 1.5rem;
   text-align: center;
   position: relative;
   z-index: 1;
+  background: none;
+  border-radius: 0;
 }
 
 .win-heading {
@@ -34,12 +41,14 @@ body {
   color: var(--color-accent, #d4a03c);
   margin-bottom: 1rem;
   letter-spacing: 1px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.9);
 }
 
 .win-flavour {
   font-size: 1.15rem;
   margin-bottom: 2rem;
-  color: var(--color-text-muted, #a09aad);
+  color: #f3f3f3;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8), 0 2px 12px rgba(0,0,0,0.6);
 }
 
 .win-flavour span {
@@ -48,7 +57,7 @@ body {
 }
 
 .job-offer-letter {
-  background: #f7f3e7;
+  background: rgba(247, 243, 231, 0.93);
   color: #232347;
   border: 2px solid #e0cba8;
   border-radius: 10px;
@@ -56,6 +65,7 @@ body {
   margin: 0 auto 2.2rem auto;
   max-width: 380px;
   text-align: left;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.35);
 }
 
 .letter-label {
@@ -118,6 +128,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
 }
 
 .play-again-btn:hover {

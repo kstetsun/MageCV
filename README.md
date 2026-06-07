@@ -48,5 +48,6 @@
     ├── jobcards/               ← 25 PNG job card images
     ├── photos/                 ← 3 profile photo PNGs
     ├── plants/                 ← 3 plant PNGs
+    ├── backgrounds/            
     └── audio/                  ← Background music track(s)
 ```
