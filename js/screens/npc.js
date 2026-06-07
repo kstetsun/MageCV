@@ -298,6 +298,8 @@ function typewriterBubble(el, text, speed, onDone) {
   const interval = setInterval(() => {
     el.textContent += text[i];
     i++;
+    // Scroll down each character
+    if (historyEl) historyEl.scrollTop = historyEl.scrollHeight;
     if (i >= text.length) {
       clearInterval(interval);
       if (typeof onDone === "function") onDone();
