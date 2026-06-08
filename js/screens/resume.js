@@ -75,24 +75,30 @@ function _plantLine(plantType, baseDesc) {
   return desc;
 }
 
+
 function buildJobCardHTML(card, size) {
   if (!card) return "<p>No card loaded.</p>";
 
-  const correct    = card.correctAnswers || {};
-  const photoEmoji = PHOTO_EMOJI[correct.photo] || "😐";
-  const deadline   = DATE_LABELS[correct.date] ?? correct.date;
-  const desc       = card.description ? card.description.trim() : "A position for a dedicated mage.";
-  const sizeClass  = size === "mini" ? "jc jc--mini" : "jc jc--full";
+  const desc      = card.description ? card.description.trim() : "A position for a dedicated mage.";
+  const sizeClass = size === "mini" ? "jc jc--mini" : "jc jc--full";
+
+  if (size === "mini") {
+    return `
+      <div class="${sizeClass}">
+        <div class="jc__header">
+          <span class="jc__title">${_esc(card.title)}</span>
+        </div>
+      </div>
+    `;
+  }
 
   return `
     <div class="${sizeClass}">
       <div class="jc__header">
-        <span class="jc__photo">${photoEmoji}</span>
         <span class="jc__title">${_esc(card.title)}</span>
       </div>
       <div class="jc__body">
         <p class="jc__desc">${_esc(desc)}</p>
-        <span class="jc__deadline">Apply by ${_esc(deadline)}</span>
       </div>
     </div>
   `;
