@@ -13,40 +13,36 @@
 
   <div class="hub">
 
-    <!-- Room name in top bar -->
-    <div class="stats">
-      <p>🏠 Mage's Room</p>
-    </div>
-
     <!-- Board centred over the chalkboard -->
     <div class="board-wrapper">
       <div class="board">
-        <h3>📌 Board</h3>
+        <h3>Board</h3>
+
+        <!-- Tracker moved inside the board -->
+        <div class="tracker">
+          <p>Score: <span id="score">0</span></p>
+          <p>Day: <span id="day">1</span></p>
+          <p>Resumes Today: <span id="resumesToday">0</span></p>
+        </div>
+
         <p id="boardText">"We're still reviewing your resume..."</p>
       </div>
     </div>
 
-    <!-- Tracker between board and buttons -->
-    <div class="tracker">
-      <p>⭐ Score: <span id="score">0</span></p>
-      <p>📅 Day: <span id="day">1</span></p>
-      <p>📨 Resumes Today: <span id="resumesToday">0</span></p>
-    </div>
-
-    <!-- Buttons below tracker -->
+    <!-- Buttons below board -->
     <div class="room">
       <button class="big-btn" onclick="goResume()">
-        💻 Work on resumes
+        Work on resumes
       </button>
       <button class="small-btn" onclick="nextDay()">
-        ⏭ New day
+        New day
       </button>
     </div>
 
-    <!-- Back to main menu -->
+    <!-- Abandon -->
     <div class="room-secondary">
       <button class="ghost-btn" onclick="location.href='start.html'">
-        🚪 Abandon Run
+        Abandon Run
       </button>
     </div>
 

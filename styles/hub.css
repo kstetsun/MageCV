@@ -7,7 +7,7 @@
 body {
   min-height: 100vh;
   background: #1a1a2e;
-  font-family: 'Georgia', serif;
+  font-family: var(--font-body);
   overflow-x: hidden;
 }
 
@@ -23,10 +23,9 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 12vh; /* shift content up toward board centre */
+  padding-bottom: 12vh;
 }
 
-/* Dark overlay so text stays legible */
 .hub::before {
   content: '';
   position: absolute;
@@ -36,48 +35,10 @@ body {
   z-index: 0;
 }
 
-/* ── Title bar at the top ── */
-.stats {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 0.6rem 1rem;
-  background: rgba(10, 20, 10, 0.55);
-  backdrop-filter: blur(4px);
-  z-index: 10;
-}
 
-.stats p {
-  color: #e8d5a3;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
 
-/* ── Tracker between board and buttons ── */
-.tracker {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 0.8rem;
-}
+/* ── Board wrapper ── */
 
-.tracker p {
-  color: #e8d5a3;
-  font-size: clamp(0.8rem, 2.2vw, 0.95rem);
-  letter-spacing: 0.04em;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
-
-/* ── Board: centred on the green chalkboard area ── */
 .board-wrapper {
   position: relative;
   z-index: 10;
@@ -88,7 +49,6 @@ body {
   padding: clamp(1rem, 4vw, 2.5rem) clamp(1rem, 4vw, 3rem);
 }
 
-/* Subtle tinted glass so text is readable on any phone/zoom */
 .board {
   width: 100%;
   background: rgba(15, 50, 25, 0.45);
@@ -98,22 +58,53 @@ body {
 }
 
 .board h3 {
-  color: #b8e0b0;
-  font-size: clamp(1rem, 3vw, 1.35rem);
-  margin-bottom: 0.6rem;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+  color: rgba(235, 255, 228, 0.95);
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  margin-bottom: 0.75rem;
+  text-shadow: 0 0 18px rgba(180, 255, 160, 0.25), 0 1px 4px rgba(0,0,0,0.8);
+  letter-spacing: 0.1em;
 }
 
 .board p {
-  color: #dff0d8;
+  font-family: var(--font-body);
+  color: rgba(223, 240, 216, 0.82);
   font-size: clamp(0.95rem, 2.8vw, 1.2rem);
   font-style: italic;
   line-height: 1.7;
   text-shadow: 0 1px 4px rgba(0,0,0,0.8);
 }
 
+
+/* ── Tracker (inside board) ── */
+
+.tracker {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(180, 220, 160, 0.15);
+}
+
+.tracker p {
+  font-family: var(--font-body);
+  color: rgba(200, 230, 190, 0.7);
+  font-size: clamp(0.75rem, 2vw, 0.88rem);
+  letter-spacing: 0.04em;
+  font-style: normal;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.tracker p span {
+  color: rgba(220, 245, 210, 0.95);
+  font-weight: 600;
+}
+
+
 /* ── Action buttons ── */
+
 .room {
   position: relative;
   z-index: 10;
@@ -121,14 +112,14 @@ body {
   gap: 0.8rem;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 0.6rem;
 }
 
-.big-btn, .small-btn {
+.big-btn,
+.small-btn {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-family: inherit;
   font-weight: bold;
   letter-spacing: 0.04em;
   transition: transform 0.15s, box-shadow 0.15s;
@@ -136,6 +127,7 @@ body {
 }
 
 .big-btn {
+  font-family: var(--font-display);
   background: linear-gradient(135deg, #4a7c3f 0%, #2d5a27 100%);
   color: #e8f5e2;
   font-size: clamp(0.85rem, 2.5vw, 1.05rem);
@@ -144,6 +136,7 @@ body {
 }
 
 .small-btn {
+  font-family: var(--font-display);
   background: linear-gradient(135deg, #5a4a2a 0%, #3a2e18 100%);
   color: #e8d5a3;
   font-size: clamp(0.75rem, 2vw, 0.9rem);
@@ -151,16 +144,20 @@ body {
   box-shadow: 0 3px 10px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
-.big-btn:hover, .small-btn:hover {
+.big-btn:hover,
+.small-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.6);
 }
 
-.big-btn:active, .small-btn:active {
+.big-btn:active,
+.small-btn:active {
   transform: translateY(0);
 }
 
+
 /* ── Abandon button ── */
+
 .room-secondary {
   position: relative;
   z-index: 10;
@@ -168,10 +165,10 @@ body {
 }
 
 .ghost-btn {
+  font-family: var(--font-display);
   border: 1px solid rgba(232, 213, 163, 0.35);
   border-radius: 6px;
   cursor: pointer;
-  font-family: inherit;
   font-size: clamp(0.7rem, 1.8vw, 0.82rem);
   font-weight: normal;
   letter-spacing: 0.04em;
@@ -187,7 +184,9 @@ body {
   border-color: rgba(232, 213, 163, 0.7);
 }
 
+
 /* ── Mobile ── */
+
 @media (max-width: 480px) {
   .hub {
     background-image: url('../media/backgrounds/hub_m.webp');
@@ -207,7 +206,6 @@ body {
 /* Landscape phones */
 @media (max-height: 500px) {
   .hub { padding-bottom: 0; }
-  .stats { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+  .stats { padding: 0.3rem 0.6rem; }
   .board-wrapper { padding: 0.5rem; }
-  }
-  
+}
