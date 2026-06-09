@@ -1,3 +1,13 @@
+/* ======================
+   win.css
+   Styles for pages/win.html
+   ====================== */
+
+
+/* ======================
+   CONFETTI CANVAS
+   ====================== */
+
 #confettiCanvas {
   position: fixed;
   top: 0;
@@ -7,6 +17,11 @@
   pointer-events: none;
   z-index: 999;
 }
+
+
+/* ======================
+   BODY / BACKGROUND
+   ====================== */
 
 body {
   background: url('../media/backgrounds/win.webp') center / cover no-repeat fixed;
@@ -24,6 +39,11 @@ body {
   }
 }
 
+
+/* ======================
+   WIN CONTAINER
+   ====================== */
+
 .win-container {
   max-width: 480px;
   margin: 0 auto;
@@ -31,107 +51,154 @@ body {
   text-align: center;
   position: relative;
   z-index: 1;
-  background: none;
-  border-radius: 0;
 }
+
+
+/* ======================
+   HEADING + FLAVOUR
+   FIX 3 — staggered entrance animation
+   FIX 5 — flavour line scaled down
+   ====================== */
 
 .win-heading {
   font-family: var(--font-display, 'MedievalSharp', serif);
   font-size: 2.4rem;
   color: var(--color-accent, #d4a03c);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   letter-spacing: 1px;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.9);
+  text-shadow:
+    0 2px 8px rgba(255, 248, 220, 0.9),
+    0 4px 20px rgba(255, 240, 180, 0.7),
+    0 0 40px rgba(255, 235, 160, 0.5);
 }
 
 .win-flavour {
-  font-size: 1.15rem;
+  font-family: var(--font-body, 'Crimson Pro', serif);
+  font-size: 0.95rem;
   margin-bottom: 2rem;
-  color: #f3f3f3;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.95), 0 2px 16px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,1);
+  color: #1a0e04;
+  font-style: italic;
+  text-shadow:
+    0 0 8px rgba(253, 240, 200, 0.9),
+    0 0 20px rgba(253, 240, 200, 0.7),
+    0 0 35px rgba(240, 220, 160, 0.5);
 }
 
 .win-flavour span {
   color: var(--color-accent, #d4a03c);
   font-weight: bold;
+  font-style: normal;
 }
 
+
+/* ======================
+   OFFER LETTER CARD
+   FIX 1 — warm parchment tones, not white
+   FIX 2 — definition rows instead of list
+   ====================== */
+
 .job-offer-letter {
-  background: rgba(247, 243, 231, 0.97);
-  color: #232347;
-  border: 2px solid #c8a87a;
+  background: rgba(253, 246, 228, 0.96);
+  color: #3a2408;
+  border: 1.5px solid #b8925a;
   border-radius: 10px;
   padding: 1.5rem 1.4rem 1.2rem 1.4rem;
-  margin: 0 auto 2.2rem auto;
+  margin: 0 auto 2rem auto;
   max-width: 380px;
   text-align: left;
   box-shadow: 0 8px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .letter-label {
-  font-size: 0.7rem;
+  font-family: var(--font-body, 'Crimson Pro', serif);
+  font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #b08968;
+  color: #8b5e2e;
   text-align: center;
-  margin: 0 0 0.4rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .job-offer-letter h2 {
   font-family: var(--font-display, 'MedievalSharp', serif);
-  font-size: 1.25rem;
-  margin: 0 0 1rem 0;
-  color: #3a2a0a;
+  font-size: 1.2rem;
+  margin: 0 0 1.1rem 0;
+  color: #2e1a04;
   text-align: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(160, 110, 35, 0.2);
 }
 
+/* FIX 2 — list replaced with definition rows in HTML,
+   but keeping li support in case JS populates it */
 .job-offer-letter ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .job-offer-letter li {
-  margin-bottom: 0.55rem;
-  font-size: 1rem;
-  line-height: 1.4;
+  padding: 0.55rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(160, 110, 35, 0.12);
+  color: #3a2408;
+}
+
+.job-offer-letter li:last-child {
+  border-bottom: none;
 }
 
 .job-offer-letter li strong {
-  color: #7a5c2e;
+  font-family: var(--font-body, 'Crimson Pro', serif);
+  color: #7a4f1a;
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 0.1rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.15rem;
+  font-weight: 700;
 }
 
 .letter-footer {
-  font-size: 0.8rem;
-  color: #b08968;
+  font-family: var(--font-body, 'Crimson Pro', serif);
+  font-size: 0.78rem;
+  color: #8b5e2e;
   text-align: center;
   margin: 0.8rem 0 0 0;
-  border-top: 1px dashed #e0cba8;
+  border-top: 1px dashed rgba(160, 110, 35, 0.35);
   padding-top: 0.7rem;
+  font-style: italic;
 }
+
+
+/* ======================
+   PLAY AGAIN BUTTON
+   FIX 4 — dark brown, matches resume screen Submit button
+   ====================== */
 
 .play-again-btn {
   display: block;
-  margin: 2rem auto 0 auto;
-  padding: 0.9rem 2.5rem;
+  margin: 0 auto;
+  padding: 0.75rem 2.5rem;
   font-family: var(--font-display, 'MedievalSharp', serif);
-  font-size: 1.1rem;
-  background: var(--color-accent, #d4a03c);
-  color: #0e0b14;
+  font-size: 1rem;
+  background: linear-gradient(135deg, #8b4e12 0%, #6b3509 100%);
+  color: #fdf0d5;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+  letter-spacing: 0.02em;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 3px 14px rgba(80, 35, 5, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 .play-again-btn:hover {
-  background: var(--color-accent-glow, #f0c060);
-  transform: scale(1.03);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(80, 35, 5, 0.5);
+}
+
+.play-again-btn:active {
+  transform: translateY(0);
 }
