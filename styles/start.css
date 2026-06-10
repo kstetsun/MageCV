@@ -1,7 +1,5 @@
 /* ======================
    START SCREEN — styles/start.css
-   Fantasy pixel-art career sim aesthetic.
-   Dark parchment tone, warm amber accents, medieval-magical feel.
    ====================== */
 
 /* --- Background --- */
@@ -44,8 +42,10 @@
   100% { opacity: 1; }
 }
 
+
 /* --- Main Layout --- */
 
+/* FIX 4 — tighter gap, feels like one poster */
 .start-screen {
   position: relative;
   z-index: 1;
@@ -54,11 +54,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1.2rem;
   padding: 2rem 1.5rem 3rem;
 }
 
-/* --- Title Block — floats freely on the background, no panel --- */
+
+/* --- Title Block --- */
 
 .start-title-block {
   text-align: center;
@@ -97,24 +98,26 @@
   100% { text-shadow: 0 0 15px rgba(212,160,60,0.5), 0 0 40px rgba(212,160,60,0.25), 0 0 70px rgba(212,160,60,0.1), 0 2px 4px rgba(0,0,0,0.6); }
 }
 
+/* FIX 4 — tighter margin under subtitle */
 .start-subtitle {
   font-family: var(--font-body);
   font-size: 0.95rem;
   color: rgba(245, 230, 195, 0.9);
   text-align: center;
-  margin: 0.8rem 0 0;
+  margin: 0.5rem 0 0;
   line-height: 1.7;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5);
   font-style: italic;
 }
 
-/* --- Mode Cards — parchment panels matching other screens --- */
+
+/* --- Mode Cards --- */
 
 .start-modes {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   width: 100%;
   max-width: 480px;
 }
@@ -135,13 +138,14 @@
   width: 100%;
 }
 
+/* FIX 2 — base card is secondary (Long Mode) */
 .mode-card {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.4rem;
-  padding: 1.4rem 1rem;
+  gap: 0.35rem;
+  padding: 1.2rem 1rem;
   background: #f5e6c8;
   border: 2px solid #c49a2e;
   border-radius: var(--radius);
@@ -150,45 +154,49 @@
   color: #3d2817;
   font-family: var(--font-body);
   text-align: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(212,160,60,0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .mode-card:hover {
   background: #fdf3dc;
   border-color: #d4a03c;
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 160, 60, 0.2);
+  /* FIX 5 — warm gold glow on hover */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 28px rgba(212, 160, 60, 0.25);
 }
 
-.mode-card--main {
+/* FIX 2 — Demo is primary: gold border + ambient glow */
+.mode-card--primary {
   border-color: #d4a03c;
   background: #faefd6;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 16px rgba(212,160,60,0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 24px rgba(212, 160, 60, 0.2);
 }
 
-.mode-card--main:hover {
+.mode-card--primary:hover {
   background: #fdf3dc;
   border-color: #e8b840;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 30px rgba(212, 160, 60, 0.3);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 36px rgba(212, 160, 60, 0.35);
 }
 
-.mode-icon {
-  font-size: 1.8rem;
-  line-height: 1;
-}
+/* No icon row — removed */
 
 .mode-name {
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;
   color: #5c3206;
   letter-spacing: 0.05em;
 }
 
+/* FIX 3 — larger, darker desc text */
 .mode-desc {
-  font-size: 0.75rem;
-  color: #6b4423;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: #5a3610;
   line-height: 1.5;
+  font-style: italic;
 }
+
 
 /* --- Continue Block --- */
 
@@ -244,7 +252,7 @@
   background: #fdf3dc;
   border-color: #d4a03c;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(212, 160, 60, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 24px rgba(212, 160, 60, 0.2);
 }
 
 .continue-meta {
@@ -254,6 +262,7 @@
   font-weight: 400;
 }
 
+
 /* --- Footer / Rules --- */
 
 .start-footer {
@@ -261,6 +270,7 @@
   justify-content: center;
 }
 
+/* FIX 1 — no emoji, clean text link */
 .btn-rules {
   background: none;
   border: none;
@@ -282,6 +292,7 @@
   text-decoration-color: #d4a03c;
 }
 
+
 /* --- Mobile --- */
 
 @media (max-width: 480px) {
@@ -293,6 +304,7 @@
     font-size: 3rem;
   }
 }
+
 
 /* ======================
    MAGIC CONFIRM POPUP
