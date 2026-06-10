@@ -9,14 +9,15 @@ body {
   padding: 0;
 }
 
+/* FIX 3 — parchment-style back button */
 .rules-back-btn {
   position: absolute;
   top: 20px;
   left: 20px;
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-accent-dim);
-  color: var(--color-accent);
-  font-family: var(--font-body);
+  background: rgba(245, 230, 190, 0.85);
+  border: 1.5px solid rgba(160, 110, 35, 0.5);
+  color: #3a2408;
+  font-family: var(--font-display);
   font-size: 14px;
   padding: 6px 14px;
   border-radius: var(--radius);
@@ -24,12 +25,12 @@ body {
   letter-spacing: 0.03em;
   transition: var(--transition);
   z-index: 10;
+  backdrop-filter: blur(4px);
 }
 
 .rules-back-btn:hover {
-  background: var(--color-surface);
-  border-color: var(--color-accent);
-  color: var(--color-accent-glow);
+  background: rgba(253, 246, 228, 0.98);
+  border-color: rgba(160, 110, 35, 0.8);
 }
 
 .rules-content {
@@ -40,13 +41,18 @@ body {
   z-index: 2;
 }
 
+/* FIX 1 — warm white title with gold glow shadow */
 .rules-title {
   font-family: var(--font-display);
-  color: var(--color-accent);
+  color: #fff8ee;
   font-size: 32px;
   text-align: center;
   margin: 0 0 6px;
   letter-spacing: 0.04em;
+  text-shadow:
+    0 2px 8px rgba(180, 110, 20, 0.9),
+    0 4px 24px rgba(160, 90, 10, 0.7),
+    0 0 48px rgba(140, 80, 0, 0.5);
 }
 
 .rules-divider {
@@ -71,13 +77,18 @@ body {
   transform: rotate(45deg);
 }
 
+/* FIX 1 — dark ink with cream halo for readability */
 .rules-intro {
   text-align: center;
-  color: var(--color-text-muted);
+  color: #1a0e04;
   font-size: 16px;
   font-style: italic;
   line-height: 1.7;
   margin: 0 0 28px;
+  text-shadow:
+    0 0 8px rgba(253, 240, 200, 0.9),
+    0 0 20px rgba(253, 240, 200, 0.7),
+    0 0 35px rgba(240, 220, 160, 0.5);
 }
 
 .rules-sections {
@@ -111,38 +122,35 @@ body {
   margin-top: -2px;
 }
 
-/* parchment body */
 .rules-section-scroll {
   position: relative;
   z-index: 1;
   cursor: pointer;
 }
 
+/* FIX 5 — more breathing room in header */
 .rules-section-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 18px;
+  padding: 14px 20px;
   user-select: none;
 }
 
-.rules-section-icon {
-  font-size: 17px;
-  width: 24px;
-  text-align: center;
-  flex-shrink: 0;
-}
+/* FIX 2 — icon span removed from HTML, no icon styles needed */
 
+/* FIX 5 — larger title */
 .rules-section-title {
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: 0.03em;
   flex: 1;
 }
 
+/* FIX 5 — larger, more visible arrow */
 .rules-section-arrow {
-  font-size: 11px;
-  opacity: 0.6;
+  font-size: 13px;
+  opacity: 0.8;
   transition: transform 0.4s ease;
 }
 
@@ -162,7 +170,7 @@ body {
 }
 
 .rules-section-body {
-  padding: 4px 18px 16px;
+  padding: 4px 20px 18px;
   border-top: 1px solid rgba(0,0,0,0.1);
   font-size: 15px;
   line-height: 1.7;
@@ -214,8 +222,8 @@ body {
 .rules-pill {
   background: rgba(0,0,0,0.08);
   border: 1px solid rgba(0,0,0,0.18);
-  font-size: 13px;
-  padding: 3px 10px;
+  font-size: 14px;
+  padding: 4px 12px;
   border-radius: 20px;
   font-family: var(--font-body);
 }
@@ -275,15 +283,15 @@ body {
   opacity: 0.75;
 }
 
-/* ── Footer button ── */
+/* FIX 4 — footer button matches dark brown from other screens */
 .rules-footer-btn {
   display: block;
   width: 100%;
   max-width: 320px;
   margin: 32px auto 0;
   padding: 13px 0;
-  background: #e8c84a;
-  color: #1a1207;
+  background: linear-gradient(135deg, #8b4e12 0%, #6b3509 100%);
+  color: #fdf0d5;
   border: none;
   border-radius: var(--radius);
   font-family: var(--font-display);
@@ -291,10 +299,15 @@ body {
   letter-spacing: 0.06em;
   cursor: pointer;
   text-align: center;
-  transition: var(--transition);
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 3px 14px rgba(80, 35, 5, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 .rules-footer-btn:hover {
-  background: #f2d45a;
-  color: #0e0b00;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(80, 35, 5, 0.5);
+}
+
+.rules-footer-btn:active {
+  transform: translateY(0);
 }
