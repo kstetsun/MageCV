@@ -9,57 +9,59 @@ body {
   padding: 0;
 }
 
-/* FIX 3 — parchment-style back button */
+/* ── Back button ── */
 .rules-back-btn {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px;
-  background: rgba(245, 230, 190, 0.85);
-  border: 1.5px solid rgba(160, 110, 35, 0.5);
+  background: rgba(245, 230, 190, 0.88);
+  border: 1.5px solid rgba(160, 110, 35, 0.55);
   color: #3a2408;
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 13px;
   padding: 6px 14px;
   border-radius: var(--radius);
   cursor: pointer;
-  letter-spacing: 0.03em;
-  transition: var(--transition);
-  z-index: 10;
-  backdrop-filter: blur(4px);
+  letter-spacing: 0.04em;
+  transition: background 0.15s, border-color 0.15s;
+  z-index: 100;
+  backdrop-filter: blur(6px);
 }
 
 .rules-back-btn:hover {
   background: rgba(253, 246, 228, 0.98);
-  border-color: rgba(160, 110, 35, 0.8);
+  border-color: rgba(160, 110, 35, 0.85);
 }
 
+/* ── Content wrapper ── */
 .rules-content {
   max-width: 680px;
   margin: 0 auto;
-  padding: 56px 24px 48px;
+  padding: 48px 24px 64px;
   position: relative;
   z-index: 2;
 }
 
-/* FIX 1 — warm white title with gold glow shadow */
+/* ── Title ── */
 .rules-title {
   font-family: var(--font-display);
   color: #fff8ee;
-  font-size: 32px;
+  font-size: 34px;
   text-align: center;
-  margin: 0 0 6px;
-  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+  letter-spacing: 0.06em;
   text-shadow:
-    0 2px 8px rgba(180, 110, 20, 0.9),
-    0 4px 24px rgba(160, 90, 10, 0.7),
-    0 0 48px rgba(140, 80, 0, 0.5);
+    0 2px 8px rgba(180, 110, 20, 0.95),
+    0 4px 28px rgba(160, 90, 10, 0.8),
+    0 0 56px rgba(140, 80, 0, 0.55);
 }
 
+/* ── Divider gem ── */
 .rules-divider {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 0 0 20px;
+  margin: 0 0 18px;
 }
 
 .rules-divider::before,
@@ -67,113 +69,113 @@ body {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-accent-dim), transparent);
+  background: linear-gradient(90deg, transparent, rgba(212,160,60,0.5), transparent);
 }
 
 .rules-divider-gem {
-  width: 8px;
-  height: 8px;
-  background: var(--color-accent);
+  width: 7px;
+  height: 7px;
+  background: #d4a03c;
   transform: rotate(45deg);
+  box-shadow: 0 0 6px rgba(212,160,60,0.6);
 }
 
-/* FIX 1 — dark ink with cream halo for readability */
+/* ── Intro text ── */
 .rules-intro {
   text-align: center;
-  color: #1a0e04;
-  font-size: 16px;
+  color: rgba(255, 248, 238, 0.95);
+  font-size: 1rem;
   font-style: italic;
-  line-height: 1.7;
+  line-height: 1.75;
   margin: 0 0 28px;
   text-shadow:
-    0 0 8px rgba(253, 240, 200, 0.9),
-    0 0 20px rgba(253, 240, 200, 0.7),
-    0 0 35px rgba(240, 220, 160, 0.5);
+    0 1px 3px rgba(0, 0, 0, 0.95),
+    0 3px 12px rgba(0, 0, 0, 0.8),
+    0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
+/* ── Section list ── */
 .rules-sections {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
-/* ── Scroll rod top & bottom ── */
+/* ── Individual scroll section ── */
 .rules-section {
   border-radius: 4px;
   overflow: visible;
   position: relative;
 }
 
+/* ── Scroll rods — thinner, less dominant ── */
 .rules-section-rod {
   display: block;
-  height: 14px;
-  border-radius: 7px;
+  height: 10px;
   position: relative;
   z-index: 2;
-  box-shadow: 0 2px 6px #00000055, inset 0 1px 0 #ffffff22;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
-.rules-section-rod.top {
-  border-radius: 7px 7px 2px 2px;
-}
+.rules-section-rod.top    { border-radius: 6px 6px 2px 2px; }
+.rules-section-rod.bottom { border-radius: 2px 2px 6px 6px; margin-top: -2px; }
 
-.rules-section-rod.bottom {
-  border-radius: 2px 2px 7px 7px;
-  margin-top: -2px;
-}
-
+/* ── Scroll parchment body ── */
 .rules-section-scroll {
   position: relative;
   z-index: 1;
   cursor: pointer;
+  transition: filter 0.15s;
 }
 
-/* FIX 5 — more breathing room in header */
+.rules-section-scroll:hover {
+  filter: brightness(1.03);
+}
+
+/* ── Section header ── */
 .rules-section-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 20px;
+  padding: 13px 20px;
   user-select: none;
 }
 
-/* FIX 2 — icon span removed from HTML, no icon styles needed */
-
-/* FIX 5 — larger title */
 .rules-section-title {
   font-family: var(--font-display);
   font-size: 15px;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   flex: 1;
 }
 
-/* FIX 5 — larger, more visible arrow */
 .rules-section-arrow {
-  font-size: 13px;
-  opacity: 0.8;
-  transition: transform 0.4s ease;
+  font-size: 12px;
+  opacity: 0.75;
+  transition: transform 0.4s ease, opacity 0.2s;
 }
 
 .rules-section.open .rules-section-arrow {
   transform: rotate(180deg);
+  opacity: 1;
 }
 
 /* ── Unroll animation ── */
 .rules-section-body-wrap {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: max-height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .rules-section.open .rules-section-body-wrap {
-  max-height: 600px;
+  max-height: 700px;
 }
 
+/* ── Body content ── */
 .rules-section-body {
-  padding: 4px 20px 18px;
+  padding: 6px 20px 18px;
   border-top: 1px solid rgba(0,0,0,0.1);
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.75;
 }
 
 .rules-section-body p {
@@ -211,7 +213,12 @@ body {
 .rules-section:nth-child(5) .rules-section-body   { color: #3c2808; border-color: #c4a068; }
 .rules-section:nth-child(5) .rules-section-arrow  { color: #885820; }
 
-/* ── Shared inner components ── */
+/* ── Open section: slightly lift the scroll ── */
+.rules-section.open .rules-section-scroll {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+/* ── Pill row ── */
 .rules-pill-row {
   display: flex;
   gap: 8px;
@@ -221,13 +228,14 @@ body {
 
 .rules-pill {
   background: rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.18);
-  font-size: 14px;
-  padding: 4px 12px;
+  border: 1px solid rgba(0,0,0,0.16);
+  font-size: 0.85rem;
+  padding: 4px 13px;
   border-radius: 20px;
   font-family: var(--font-body);
 }
 
+/* ── Mode grid ── */
 .rules-mode-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -255,6 +263,7 @@ body {
   opacity: 0.75;
 }
 
+/* ── NPC list ── */
 .rules-npc-row {
   display: flex;
   flex-direction: column;
@@ -278,12 +287,12 @@ body {
 }
 
 .rules-npc-desc {
-  font-size: 14px;
-  line-height: 1.5;
-  opacity: 0.75;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  opacity: 0.78;
 }
 
-/* FIX 4 — footer button matches dark brown from other screens */
+/* ── Footer button ── */
 .rules-footer-btn {
   display: block;
   width: 100%;
@@ -295,7 +304,7 @@ body {
   border: none;
   border-radius: var(--radius);
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 15px;
   letter-spacing: 0.06em;
   cursor: pointer;
   text-align: center;
@@ -305,7 +314,7 @@ body {
 
 .rules-footer-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(80, 35, 5, 0.5);
+  box-shadow: 0 6px 22px rgba(80, 35, 5, 0.52);
 }
 
 .rules-footer-btn:active {
