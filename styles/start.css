@@ -88,7 +88,7 @@
   font-size: 0.75rem;
   letter-spacing: 0.22em;
   color: rgba(212, 160, 60, 0.85);
-  margin: 0 0 0.5rem;
+  margin: 5vh 0 -5vh;
   text-transform: uppercase;
   text-shadow: 0 0 12px rgba(212, 160, 60, 0.5);
 }
@@ -98,7 +98,7 @@
   font-size: clamp(3.5rem, 10vw, 6.5rem);
   color: #d4a03c;
   text-align: center;
-  margin: 0;
+  margin-top: 8vh;
   line-height: 1;
   text-shadow:
     0 0 20px rgba(212, 160, 60, 0.6),
@@ -135,7 +135,7 @@
   align-items: center;
   gap: 0.75rem;
   width: 100%;
-  max-width: 480px;
+  max-width: 620px;   /* was 480px — wider on PC */
 }
 
 .start-modes-label {
@@ -218,7 +218,7 @@
 
 .start-continue {
   width: 100%;
-  max-width: 480px;
+  max-width: 620px;   /* was 480px — match the modes width */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -336,6 +336,12 @@
 
   .paper {
     display: none;
+  }
+
+  /* keep the cluster narrow on phones */
+  .start-modes,
+  .start-continue {
+    max-width: 100%;
   }
 }
 
@@ -491,6 +497,22 @@
 /* ======================
    FLOATING PAPERS — desktop only
    ====================== */
+
+/* Wider, roomier cards on desktop */
+@media (min-width: 700px) {
+  .start-modes,
+  .start-continue {
+    max-width: 680px;
+  }
+
+  .mode-card {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .btn-continue {
+    padding: 1rem 1.5rem;
+  }
+}
 
 @media (min-width: 481px) {
 

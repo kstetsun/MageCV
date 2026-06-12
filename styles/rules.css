@@ -35,11 +35,44 @@ body {
 
 /* ── Content wrapper ── */
 .rules-content {
-  max-width: 680px;
+  max-width: 760px;   /* was 680px — wider on PC */
   margin: 0 auto;
   padding: 48px 24px 64px;
   position: relative;
   z-index: 2;
+}
+
+/* Wider, roomier on desktop */
+@media (min-width: 800px) {
+  .rules-content {
+    max-width: 800px;
+    padding: 56px 32px 72px;
+  }
+
+  .rules-title {
+    font-size: 40px;   /* bigger hero title on large screens */
+  }
+
+  .rules-section-header {
+    padding: 15px 26px;   /* a touch more breathing room in the scrolls */
+  }
+
+  .rules-section-body {
+    padding: 8px 26px 22px;
+    font-size: 1rem;
+  }
+}
+
+/* Keep a comfortable reading width on phones */
+@media (max-width: 600px) {
+  .rules-content {
+    max-width: 100%;
+    padding: 40px 18px 56px;
+  }
+
+  .rules-footer-btn {
+    max-width: 100%;
+  }
 }
 
 /* ── Title ── */
@@ -318,7 +351,7 @@ body {
 .rules-footer-btn {
   display: block;
   width: 100%;
-  max-width: 320px;
+  max-width: 420px;
   margin: 32px auto 0;
   padding: 13px 0;
   background: linear-gradient(135deg, #8b4e12 0%, #6b3509 100%);
