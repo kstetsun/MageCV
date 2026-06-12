@@ -98,7 +98,7 @@ function buildJobCardHTML(card, size) {
         <span class="jc__title">${_esc(card.title)}</span>
       </div>
       <div class="jc__body">
-        <p class="jc__desc">${_esc(desc)}</p>
+        <p class="jc__desc">${desc}</p>
       </div>
     </div>
   `;
