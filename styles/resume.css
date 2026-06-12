@@ -1,6 +1,9 @@
 /* ======================
    resume.css
    Styles for pages/resume.html
+   v2 — torn scroll, ornament rules, date cards,
+        selection summary, merged job bar,
+        wax-seal submit, staggered entrance
    ====================== */
 
 
@@ -31,17 +34,35 @@ body {
 }
 
 
-/* Generated parchment panel — mimics the painted scroll in the background art */
+/* ======================
+   SCROLL WRAPPER
+   NEW — needed so drop-shadow survives clip-path.
+   HTML: wrap .resume-screen in <div class="scroll-wrap">
+   ====================== */
+
+.scroll-wrap {
+  width: 100%;
+  max-width: 488px;
+  filter:
+    drop-shadow(0 6px 28px rgba(40, 22, 4, 0.5))
+    drop-shadow(0 1px 2px rgba(40, 22, 4, 0.35));
+  transform: rotate(-0.3deg);
+}
+
+
+/* ======================
+   PARCHMENT PANEL
+   IMPROVEMENT 2 — ragged torn-scroll silhouette
+   ====================== */
+
 .resume-screen {
   width: 100%;
-  max-width: 480px;
-  padding: 1.4rem 1.3rem 1.6rem;
+  padding: 1.6rem 1.5rem 1.9rem;
   display: flex;
   flex-direction: column;
   gap: 0;
-
   position: relative;
-  border-radius: 6px 6px 12px 12px;
+  box-sizing: border-box;
 
   /* Layered parchment: noise grain + warm gradient */
   background:
@@ -56,21 +77,25 @@ body {
       #cba855 100%
     );
 
-  /* Rolled-edge feel: darker at bottom, lighter top highlight */
+  /* Inner aging stays; outer shadow moved to .scroll-wrap */
   box-shadow:
     inset 0 2px 0 rgba(255, 248, 210, 0.85),
     inset 0 -3px 8px rgba(100, 65, 10, 0.25),
     inset 3px 0 8px rgba(120, 75, 10, 0.12),
-    inset -3px 0 8px rgba(120, 75, 10, 0.12),
-    0 4px 32px rgba(40, 22, 4, 0.45),
-    0 1px 0 rgba(180, 130, 40, 0.4);
+    inset -3px 0 8px rgba(120, 75, 10, 0.12);
 
-  /* Aged parchment border */
-  border: 1px solid rgba(160, 110, 35, 0.55);
-  border-bottom: 2px solid rgba(130, 85, 20, 0.6);
-
-  /* Slight tilt like the painted scroll */
-  transform: rotate(-0.3deg);
+  /* Irregular torn edges — kills the "rounded div" look */
+  clip-path: polygon(
+    0.6% 1.2%, 4% 0.3%, 9% 0.9%, 15% 0.2%, 22% 0.8%, 30% 0.1%,
+    38% 0.7%, 47% 0.2%, 55% 0.9%, 63% 0.3%, 71% 0.8%, 79% 0.2%,
+    86% 0.9%, 93% 0.3%, 98.5% 1%, 99.6% 4%, 99.2% 10%, 99.8% 18%,
+    99.3% 27%, 99.8% 37%, 99.2% 48%, 99.7% 58%, 99.3% 68%, 99.8% 78%,
+    99.2% 87%, 99.7% 94%, 98.8% 98.6%, 94% 99.4%, 87% 98.8%, 79% 99.6%,
+    70% 99%, 61% 99.7%, 52% 99.1%, 43% 99.7%, 34% 99%, 25% 99.6%,
+    17% 99%, 10% 99.7%, 4.5% 99%, 1% 98.2%, 0.3% 93%, 0.9% 85%,
+    0.2% 76%, 0.8% 66%, 0.2% 55%, 0.7% 45%, 0.2% 35%, 0.8% 25%,
+    0.2% 16%, 0.7% 8%
+  );
 }
 
 /* Top scroll curl — painted line at top edge */
@@ -118,12 +143,11 @@ body {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
   border-bottom: 1px solid rgba(160, 110, 35, 0.25);
 }
 
-/* FIX 1 — use display font from main.css variables */
 .resume-heading {
   font-family: var(--font-display);
   font-size: 1.15rem;
@@ -133,6 +157,7 @@ body {
   letter-spacing: 0.01em;
 }
 
+/* IMPROVEMENT 9 — labeled counter */
 .resume-counter {
   font-family: var(--font-body);
   font-size: 0.8rem;
@@ -144,12 +169,76 @@ body {
   padding: 3px 11px;
 }
 
-/* FIX 1 — use body font */
+.resume-counter::before {
+  content: 'Submissions ';
+  font-weight: 500;
+  opacity: 0.8;
+  letter-spacing: 0.02em;
+}
+
+
+/* ======================
+   JOB BAR
+   IMPROVEMENT 6 — single full pill, inline eye button
+   HTML:
+   <div class="resume-jobbar">
+     <span class="jobbar-title">Bloom Festival Organizer</span>
+     <button class="jobbar-view" aria-label="View job card">👁</button>
+   </div>
+   ====================== */
+
+.resume-jobbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 250, 232, 0.85);
+  border: 1px solid rgba(160, 110, 35, 0.35);
+  border-radius: 10px;
+  padding: 0.55rem 0.55rem 0.55rem 1rem;
+  margin-bottom: 0.85rem;
+  box-shadow: inset 0 1px 3px rgba(120, 75, 10, 0.1);
+}
+
+.jobbar-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #3a2408;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jobbar-view {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #7a4f1a;
+  background: rgba(160, 100, 30, 0.1);
+  border: 1px solid rgba(160, 100, 30, 0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.jobbar-view:hover {
+  background: rgba(160, 100, 30, 0.2);
+  border-color: rgba(160, 100, 30, 0.55);
+}
+
 .resume-instruction {
   font-family: var(--font-body);
   font-size: 0.9rem;
   color: #6b4422;
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.85rem;
   padding-top: 0.1rem;
   font-style: italic;
 }
@@ -157,35 +246,57 @@ body {
 
 /* ======================
    CHOICE BLOCKS
-   FIX 2 — blocks feel like one scroll, separated by a ruled line
+   IMPROVEMENT 5 — more breathing room
    ====================== */
 
 .resume-block {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid rgba(160, 110, 35, 0.18);
+  gap: 0.7rem;
+  padding: 1rem 0 1.1rem;
 }
 
 .resume-block:last-of-type {
   border-bottom: none;
 }
 
-/* FIX 1 — section headings use display font */
+/* IMPROVEMENT 3 — illuminated rule headings
+   ornament diamond + fading line, bumped size */
 .resume-block h3 {
   font-family: var(--font-display);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 700;
   margin: 0;
   color: #7a4f1a;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
+
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.resume-block h3::before {
+  content: '◆';
+  font-size: 0.5rem;
+  color: rgba(160, 100, 30, 0.6);
+  transform: translateY(-1px);
+}
+
+.resume-block h3::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(160, 110, 35, 0.45) 0%,
+    rgba(160, 110, 35, 0.15) 60%,
+    transparent 100%
+  );
 }
 
 .btn-group {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.55rem;
   flex-wrap: wrap;
 }
 
@@ -221,7 +332,6 @@ body {
   display: block;
 }
 
-/* FIX 5 — bump label to 0.75rem */
 .media-btn span {
   font-family: var(--font-body);
   font-size: 0.75rem;
@@ -257,20 +367,39 @@ body {
 
 /* ======================
    DATE BUTTONS
+   IMPROVEMENT 4 — same card format as media buttons
+   HTML:
+   <button><span class="date-ico">🌞</span><span>Summer Solstice</span></button>
+   <button><span class="date-ico">❄️</span><span>Winter Solstice</span></button>
    ====================== */
 
 .btn-group:not(.btn-group--media) button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: 96px;
+  padding: 0.55rem 0.4rem 0.45rem;
+
   font-family: var(--font-body);
-  padding: 0.44rem 1rem;
   border: 2px solid rgba(160, 110, 35, 0.22);
   border-radius: 8px;
   background: rgba(255, 248, 220, 0.6);
   color: #3a2408;
-  font-size: 0.86rem;
+  font-size: 0.74rem;
   font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, transform 0.1s, box-shadow 0.15s;
+  transition: border-color 0.15s, background 0.15s, transform 0.12s, box-shadow 0.15s;
   box-shadow: 0 1px 4px rgba(80, 50, 10, 0.1);
+}
+
+.date-ico {
+  font-size: 1.7rem;
+  line-height: 1;
+  display: block;
 }
 
 .btn-group:not(.btn-group--media) button:hover {
@@ -282,14 +411,81 @@ body {
 .btn-group:not(.btn-group--media) button.selected {
   border-color: #a0641e;
   background: rgba(160, 100, 30, 0.15);
-  transform: scale(1.04);
-  box-shadow: 0 3px 12px rgba(140, 80, 10, 0.22);
+  transform: scale(1.06);
+  box-shadow: 0 4px 14px rgba(140, 80, 10, 0.28);
+}
+
+@media (max-width: 400px) {
+  .btn-group:not(.btn-group--media) button {
+    width: 86px;
+  }
+}
+
+
+/* ======================
+   SELECTION SUMMARY
+   IMPROVEMENT 5b — "Your scroll" chips above actions
+   HTML:
+   <div class="resume-summary">
+     <span class="summary-label">Your scroll:</span>
+     <span class="summary-chip">Fern</span>
+     <span class="summary-chip">Smile</span>
+     <span class="summary-chip summary-chip--empty">date…</span>
+   </div>
+   JS: populate chips on each selection.
+   ====================== */
+
+.resume-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  padding: 0.55rem 0.75rem;
+  background: rgba(160, 100, 30, 0.07);
+  border: 1px dashed rgba(160, 100, 30, 0.35);
+  border-radius: 8px;
+}
+
+.summary-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7a4f1a;
+  margin-right: 0.2rem;
+}
+
+/* Wax-seal style chip */
+.summary-chip {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #fdf0d5;
+  background: radial-gradient(circle at 35% 30%, #a9342a 0%, #7c1f17 70%, #5e150f 100%);
+  border-radius: 20px;
+  padding: 3px 11px;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 220, 200, 0.35),
+    inset 0 -2px 3px rgba(40, 5, 0, 0.4),
+    0 1px 3px rgba(60, 10, 5, 0.35);
+  letter-spacing: 0.02em;
+}
+
+/* Placeholder for unpicked slot */
+.summary-chip--empty {
+  color: #9a7340;
+  background: transparent;
+  border: 1px dashed rgba(160, 100, 30, 0.4);
+  box-shadow: none;
+  font-weight: 500;
+  font-style: italic;
 }
 
 
 /* ======================
    FEEDBACK MESSAGE
-   FIX 3 — parchment-native styling, no dark overlay
    ====================== */
 
 .resume-message {
@@ -308,40 +504,64 @@ body {
 
 /* ======================
    ACTIONS (Submit + Back)
+   IMPROVEMENT 7 — wax-seal submit button
    ====================== */
 
 .resume-actions {
   display: flex;
+  align-items: center;
   gap: 0.55rem;
   flex-wrap: wrap;
-  margin-top: 0.75rem;
-  padding-top: 0.65rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
   border-top: 1px solid rgba(160, 110, 35, 0.2);
 }
 
-/* Override main.css big-btn / small-btn for parchment theme */
 .resume-screen .big-btn {
+  position: relative;
   font-family: var(--font-display);
-  background: linear-gradient(135deg, #8b4e12 0%, #6b3509 100%);
+  background: radial-gradient(circle at 35% 25%, #a9342a 0%, #7c1f17 60%, #5e150f 100%);
   color: #fdf0d5;
   font-size: 0.88rem;
-  padding: 0.6rem 1.4rem;
+  padding: 0.65rem 1.5rem 0.65rem 2.5rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 24px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 3px 12px rgba(80, 35, 5, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+  letter-spacing: 0.03em;
+  box-shadow:
+    inset 0 2px 2px rgba(255, 220, 200, 0.3),
+    inset 0 -3px 5px rgba(40, 5, 0, 0.45),
+    0 3px 12px rgba(60, 10, 5, 0.4);
   transition: transform 0.15s, box-shadow 0.15s;
-  letter-spacing: 0.02em;
+}
+
+/* Embossed seal mark */
+.resume-screen .big-btn::before {
+  content: '✶';
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.95rem;
+  color: rgba(255, 230, 210, 0.8);
+  text-shadow: 0 -1px 1px rgba(40, 5, 0, 0.6), 0 1px 1px rgba(255, 230, 210, 0.3);
 }
 
 .resume-screen .big-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 18px rgba(80, 35, 5, 0.45);
+  box-shadow:
+    inset 0 2px 2px rgba(255, 220, 200, 0.3),
+    inset 0 -3px 5px rgba(40, 5, 0, 0.45),
+    0 6px 18px rgba(60, 10, 5, 0.5);
 }
 
+/* Stamp press */
 .resume-screen .big-btn:active {
-  transform: translateY(0);
+  transform: translateY(1px) scale(0.97);
+  box-shadow:
+    inset 0 3px 6px rgba(40, 5, 0, 0.5),
+    0 1px 4px rgba(60, 10, 5, 0.35);
 }
 
 .resume-screen .small-btn {

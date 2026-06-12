@@ -213,19 +213,29 @@ function selectPlant(type, btn) {
   resume.plant = type;
   clearSelection("plant");
   btn.classList.add("selected");
+  updateSummaryChip("summaryPlant", btn.querySelector("span").textContent);
 }
-
+ 
 function selectPhoto(type, btn) {
   resume.photo = type;
   clearSelection("photo");
   btn.classList.add("selected");
+  updateSummaryChip("summaryPhoto", btn.querySelector("span").textContent);
 }
-
+ 
 function selectDate(type, btn) {
   resume.date = type;
   clearSelection("date");
   btn.classList.add("selected");
+  updateSummaryChip("summaryDate", btn.querySelector("span:last-child").textContent);
 }
+ 
+function updateSummaryChip(id, label) {
+  const el = document.getElementById(id);
+  el.textContent = label;
+  el.classList.remove("summary-chip--empty");
+}
+ 
 
 
 // ======================

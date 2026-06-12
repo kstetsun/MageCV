@@ -16,114 +16,162 @@
   <!-- Opens automatically on page load and after each  -->
   <!-- submit. Also triggered by the "View card" button -->
   <!-- ================================================ -->
-<div id="jobCardModal" class="modal-overlay" onclick="handleModalOverlayClick(event)" aria-modal="true" role="dialog">
+  <div id="jobCardModal" class="modal-overlay" onclick="handleModalOverlayClick(event)" aria-modal="true" role="dialog">
 
-  <div class="modal-card">
+    <div class="modal-card">
 
-    <div class="modal-header">
-      <span class="modal-label">You are applying for</span>
-      <button class="modal-close-btn" onclick="closeJobCardModal()" aria-label="Close">✕</button>
+      <div class="modal-header">
+        <span class="modal-label">You are applying for</span>
+        <button class="modal-close-btn" onclick="closeJobCardModal()" aria-label="Close">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <line x1="2" y1="2" x2="10" y2="10"/>
+            <line x1="10" y1="2" x2="2" y2="10"/>
+          </svg>
+        </button>
+      </div>
+
+      <div id="jobCardRenderModal"></div>
+
+      <button class="modal-confirm-btn" onclick="closeJobCardModal()">
+        Got it — build my resume
+      </button>
+
     </div>
-
-    <div id="jobCardRenderModal"></div>
-
-    <button class="modal-confirm-btn" onclick="closeJobCardModal()">
-      Got it — build my resume
-    </button>
-
   </div>
-</div>
 
 
   <!-- ================================================ -->
   <!-- MAIN RESUME SCREEN                               -->
   <!-- ================================================ -->
-  <div class="resume-screen">
+  <div class="scroll-wrap">
+    <div class="resume-screen">
 
-    <div class="resume-topbar">
-      <h1 class="resume-heading">Resume Builder</h1>
-      <span id="resumesTodayDisplay" class="resume-counter">0 / 5</span>
-    </div>
+      <div class="resume-topbar">
+        <h1 class="resume-heading">Resume Builder</h1>
+        <span id="resumesTodayDisplay" class="resume-counter">0 / 5</span>
+      </div>
 
-    <!-- Job card strip — mini card + "View" button re-opens modal -->
-    <div class="job-card-strip">
-      <!-- Mini HTML card rendered here by buildJobCardHTML() -->
-      <div id="jobCardRenderStrip" class="strip-card-wrap"></div>
-      <button class="strip-view-btn" onclick="openJobCardModal()" aria-label="View full job card">
-        👁 View card
-      </button>
-    </div>
-
-    <!-- Active modifier tags (populated by updateModifierDisplay) -->
-    <div id="activeModifiersResume" class="modifier-display"></div>
-
-    <p class="resume-instruction">Choose your resume elements:</p>
-
-    <!-- 🌱 PLANT -->
-    <div class="resume-block">
-      <h3>Plant</h3>
-      <div class="btn-group btn-group--media">
-        <button class="media-btn" data-group="plant" onclick="selectPlant('cactus', this)">
-          <img src="../media/plants/cactus.gif" alt="Cactus" draggable="false" />
-          <span>Cactus</span>
-        </button>
-        <button class="media-btn" data-group="plant" onclick="selectPlant('flower', this)">
-          <img src="../media/plants/flower.gif" alt="Flower" draggable="false" />
-          <span>Flower</span>
-        </button>
-        <button class="media-btn" data-group="plant" onclick="selectPlant('fern', this)">
-          <img src="../media/plants/fern.gif" alt="Fern" draggable="false" />
-          <span>Fern</span>
+      <!-- Job card strip — mini card + "View" button re-opens modal -->
+      <div class="job-card-strip">
+        <!-- Mini HTML card rendered here by buildJobCardHTML() -->
+        <div id="jobCardRenderStrip" class="strip-card-wrap"></div>
+        <button class="strip-view-btn" onclick="openJobCardModal()" aria-label="View full job card">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px; margin-right:3px;">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>View card
         </button>
       </div>
-    </div>
 
-    <!-- 📸 PHOTO -->
-    <div class="resume-block">
-      <h3>Photo</h3>
-      <div class="btn-group btn-group--media">
-        <button class="media-btn" data-group="photo" onclick="selectPhoto('neutral', this)">
-          <img src="../media/photos/neutral.png" alt="Neutral" draggable="false" />
-          <span>Neutral</span>
+      <!-- Active modifier tags (populated by updateModifierDisplay) -->
+      <div id="activeModifiersResume" class="modifier-display"></div>
+
+      <p class="resume-instruction">Choose your resume elements:</p>
+
+      <!-- PLANT -->
+      <div class="resume-block">
+        <h3>Plant</h3>
+        <div class="btn-group btn-group--media">
+          <button class="media-btn" data-group="plant" onclick="selectPlant('cactus', this)">
+            <img src="../media/plants/cactus.gif" alt="Cactus" draggable="false" />
+            <span>Cactus</span>
+          </button>
+          <button class="media-btn" data-group="plant" onclick="selectPlant('flower', this)">
+            <img src="../media/plants/flower.gif" alt="Flower" draggable="false" />
+            <span>Flower</span>
+          </button>
+          <button class="media-btn" data-group="plant" onclick="selectPlant('fern', this)">
+            <img src="../media/plants/fern.gif" alt="Fern" draggable="false" />
+            <span>Fern</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PHOTO -->
+      <div class="resume-block">
+        <h3>Photo</h3>
+        <div class="btn-group btn-group--media">
+          <button class="media-btn" data-group="photo" onclick="selectPhoto('neutral', this)">
+            <img src="../media/photos/neutral.png" alt="Neutral" draggable="false" />
+            <span>Neutral</span>
+          </button>
+          <button class="media-btn" data-group="photo" onclick="selectPhoto('smile', this)">
+            <img src="../media/photos/smile.png" alt="Smile" draggable="false" />
+            <span>Smile</span>
+          </button>
+          <button class="media-btn" data-group="photo" onclick="selectPhoto('serious', this)">
+            <img src="../media/photos/serious.png" alt="Serious" draggable="false" />
+            <span>Serious</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- DATE -->
+      <div class="resume-block">
+        <h3>Date</h3>
+        <div class="btn-group">
+          <button data-group="date" onclick="selectDate('summer_solstice', this)">
+            <span class="date-ico" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b8860b" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="12" r="4" fill="#e9b949" stroke="#b8860b"/>
+                <line x1="12" y1="1.5" x2="12" y2="4.5"/>
+                <line x1="12" y1="19.5" x2="12" y2="22.5"/>
+                <line x1="1.5" y1="12" x2="4.5" y2="12"/>
+                <line x1="19.5" y1="12" x2="22.5" y2="12"/>
+                <line x1="4.6" y1="4.6" x2="6.7" y2="6.7"/>
+                <line x1="17.3" y1="17.3" x2="19.4" y2="19.4"/>
+                <line x1="4.6" y1="19.4" x2="6.7" y2="17.3"/>
+                <line x1="17.3" y1="6.7" x2="19.4" y2="4.6"/>
+              </svg>
+            </span>
+            <span>Summer Solstice</span>
+          </button>
+          <button data-group="date" onclick="selectDate('winter_solstice', this)">
+            <span class="date-ico" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5b87a8" stroke-width="1.8" stroke-linecap="round">
+                <line x1="12" y1="2" x2="12" y2="22"/>
+                <line x1="3.3" y1="7" x2="20.7" y2="17"/>
+                <line x1="20.7" y1="7" x2="3.3" y2="17"/>
+                <path d="M12 2l-2 3M12 2l2 3M12 22l-2-3M12 22l2-3"/>
+                <path d="M3.3 7l3.4.6M3.3 7l.6-3.4M20.7 17l-3.4-.6M20.7 17l-.6 3.4"/>
+                <path d="M20.7 7l-3.4.6M20.7 7l-.6-3.4M3.3 17l3.4-.6M3.3 17l.6 3.4"/>
+              </svg>
+            </span>
+            <span>Winter Solstice</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Selection summary — chips updated by JS on each pick -->
+      <div class="resume-summary" id="resumeSummary">
+        <span class="summary-label">Your scroll:</span>
+        <span id="summaryPlant" class="summary-chip summary-chip--empty">plant…</span>
+        <span id="summaryPhoto" class="summary-chip summary-chip--empty">photo…</span>
+        <span id="summaryDate" class="summary-chip summary-chip--empty">date…</span>
+      </div>
+
+      <!-- Feedback message (shown/hidden by showResumeMessage) -->
+      <div id="resumeMessage" class="resume-message" style="display:none;"></div>
+
+      <div class="resume-actions">
+        <button id="submitResumeBtn" class="big-btn" onclick="submitResume()">
+          Submit Resume
         </button>
-        <button class="media-btn" data-group="photo" onclick="selectPhoto('smile', this)">
-          <img src="../media/photos/smile.png" alt="Smile" draggable="false" />
-          <span>Smile</span>
-        </button>
-        <button class="media-btn" data-group="photo" onclick="selectPhoto('serious', this)">
-          <img src="../media/photos/serious.png" alt="Serious" draggable="false" />
-          <span>Serious</span>
+        <button class="small-btn" onclick="goHub()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px; margin-right:4px;">
+            <line x1="20" y1="12" x2="5" y2="12"/>
+            <polyline points="11 6 5 12 11 18"/>
+          </svg>Back
         </button>
       </div>
+
     </div>
-
-    <!-- 📅 DATE -->
-<div class="resume-block">
-  <h3>Date</h3>
-  <div class="btn-group">
-    <button data-group="date" onclick="selectDate('summer_solstice', this)">☀️ Summer Solstice</button>
-    <button data-group="date" onclick="selectDate('winter_solstice', this)">❄️ Winter Solstice</button>
-  </div>
-</div>
-
-    <!-- Feedback message (shown/hidden by showResumeMessage) -->
-    <div id="resumeMessage" class="resume-message" style="display:none;"></div>
-
-    <div class="resume-actions">
-      <button id="submitResumeBtn" class="big-btn" onclick="submitResume()">
-        Submit Resume
-      </button>
-      <button class="small-btn" onclick="goHub()">
-        ⬅  Back
-      </button>
-    </div>
-
   </div>
 
 
   <!-- JavaScript — load order must not change -->
   <script src="../js/data/jobCards.js"></script>
-  
+
   <script src="../js/data/elf.js"></script>
   <script src="../js/data/dwarf.js"></script>
   <script src="../js/data/wizard.js"></script>
