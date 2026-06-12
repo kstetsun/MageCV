@@ -303,6 +303,10 @@
   .start-title {
     font-size: 3rem;
   }
+
+  .paper {
+    display: none;
+  }
 }
 
 
@@ -440,8 +444,10 @@
 
 
 /* ======================
-   FLOATING PAPERS
+   FLOATING PAPERS — desktop only
    ====================== */
+
+@media (min-width: 481px) {
 
 @keyframes levitate {
   0%   { transform: translateY(0px) rotate(var(--rot)); }
@@ -506,3 +512,5 @@
   --delay: -3s;
   transform: rotate(-14deg);
 }
+
+} /* end desktop-only */
