@@ -58,6 +58,22 @@
   padding: 2rem 1.5rem 3rem;
 }
 
+/* IMAGE 1 — central scrim: keeps title/labels legible over the busy background.
+   Sits behind the text (z-index:-1) but above the background image. */
+.start-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 42%,
+    rgba(14, 11, 20, 0.55) 0%,
+    rgba(14, 11, 20, 0.35) 35%,
+    transparent 70%
+  );
+}
+
 
 /* --- Title Block --- */
 
@@ -209,9 +225,12 @@
   gap: 0.8rem;
 }
 
+/* IMAGE 1 — centered "—— or ——" divider.
+   Rules are drawn on the inner span so they flank the word. */
 .continue-divider {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.8rem;
   width: 100%;
   color: rgba(245, 230, 195, 0.7);
@@ -221,43 +240,53 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
-.continue-divider::before,
-.continue-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: rgba(212, 160, 60, 0.3);
+.continue-divider span {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
+.continue-divider span::before,
+.continue-divider span::after {
+  content: "";
+  width: 48px;
+  height: 1px;
+  background: rgba(212, 160, 60, 0.35);
+}
+
+/* IMAGE 1 — Continue is the secondary action: glassy ghost button,
+   no glow until hover, muted cream text that reads on the dark background. */
 .btn-continue {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.3rem;
-  padding: 1rem 1.5rem;
-  background: #f5e6c8;
-  border: 2px solid #c49a2e;
+  padding: 0.85rem 1.5rem;
+  background: rgba(245, 230, 200, 0.12);
+  border: 1.5px solid rgba(196, 154, 46, 0.45);
   border-radius: var(--radius);
-  color: #3d2817;
+  color: rgba(245, 230, 195, 0.92);
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 600;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+  box-shadow: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
 }
 
 .btn-continue:hover {
-  background: #fdf3dc;
-  border-color: #d4a03c;
+  background: rgba(245, 230, 200, 0.2);
+  border-color: rgba(212, 160, 60, 0.7);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 24px rgba(212, 160, 60, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 18px rgba(212, 160, 60, 0.18);
 }
 
 .continue-meta {
   font-size: 0.72rem;
-  color: #6b4423;
+  color: rgba(245, 230, 195, 0.65);
   letter-spacing: 0.05em;
   font-weight: 400;
 }
@@ -270,26 +299,27 @@
   justify-content: center;
 }
 
-/* FIX 1 — no emoji, clean text link */
+/* FIX 1 — solid flat pill, distinct from the glassy Continue button */
 .btn-rules {
-  background: none;
-  border: none;
-  color: rgba(245, 230, 195, 0.75);
+  background: #2a2018;
+  border: 1px solid rgba(212, 160, 60, 0.45);
+  color: rgba(245, 230, 195, 0.95);
   font-family: var(--font-body);
   font-size: 0.85rem;
   cursor: pointer;
-  padding: 0.4rem 0.8rem;
-  border-radius: var(--radius);
-  transition: color 0.2s ease;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: 3px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .btn-rules:hover {
-  color: #d4a03c;
-  text-decoration-color: #d4a03c;
+  color: #ffe9b8;
+  background: #352920;
+  border-color: rgba(212, 160, 60, 0.8);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35), 0 0 14px rgba(212, 160, 60, 0.22);
 }
 
 
@@ -391,13 +421,28 @@
   50%      { transform: translateY(-5px); }
 }
 
+/* IMAGE 3 — first message line */
 .mw-msg {
   font-family: var(--font-body);
   font-size: 0.95rem;
   color: #3d2817;
   text-align: center;
-  line-height: 1.6;
-  margin: 0.4rem 0;
+  line-height: 1.55;
+  margin: 0.4rem 0 0;
+}
+
+/* IMAGE 3 — deliberate, emphasized second line.
+   Negative top margin tightens it against the flex gap so the two
+   sentences read as a related pair, not a floating paragraph. */
+.mw-msg-warn {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #8a3a1a;
+  text-align: center;
+  line-height: 1.4;
+  margin: -0.35rem 0 0;
+  letter-spacing: 0.02em;
 }
 
 .mw-btns {
