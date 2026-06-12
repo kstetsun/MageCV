@@ -213,6 +213,28 @@ body {
 .rules-section:nth-child(5) .rules-section-body   { color: #3c2808; border-color: #c4a068; }
 .rules-section:nth-child(5) .rules-section-arrow  { color: #885820; }
 
+/* ── State-driven emphasis: closed sections recede, open section leads ── */
+
+/* Closed sections: desaturate and dim slightly so they don't out-shout
+   the open content (overrides the per-section parchment tints). */
+.rules-section:not(.open) .rules-section-scroll {
+  filter: saturate(0.7) brightness(0.94);
+  opacity: 0.9;
+  transition: filter 0.2s, opacity 0.2s, box-shadow 0.2s;
+}
+
+.rules-section:not(.open) .rules-section-scroll:hover {
+  filter: saturate(0.85) brightness(1.0);
+  opacity: 1;
+}
+
+/* Open section: full color, brightest element on the page, clear lift. */
+.rules-section.open .rules-section-scroll {
+  filter: saturate(1.05) brightness(1.02);
+  opacity: 1;
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.3);
+}
+
 /* ── Open section: slightly lift the scroll ── */
 .rules-section.open .rules-section-scroll {
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
@@ -319,4 +341,10 @@ body {
 
 .rules-footer-btn:active {
   transform: translateY(0);
+}
+
+/* Rods recede with their closed section */
+.rules-section:not(.open) .rules-section-rod {
+  filter: saturate(0.75) brightness(0.92);
+  transition: filter 0.2s;
 }
