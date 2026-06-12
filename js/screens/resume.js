@@ -451,22 +451,28 @@ function clearAllSelections() {
   ["plant", "photo", "date"].forEach(group => clearSelection(group));
 }
 
+let _resumeMsgTimer = null;
+ 
 function showResumeMessage(text) {
   const el = document.getElementById("resumeMessage");
   if (el) {
-    el.innerText     = text;
-    el.style.display = "block";
-    setTimeout(() => { el.style.display = "none"; }, 3000);
+    el.innerText = text;
+    el.classList.add("is-visible");
+    clearTimeout(_resumeMsgTimer);
+    _resumeMsgTimer = setTimeout(() => {
+      el.classList.remove("is-visible");
+    }, 3000);
   } else {
     console.log("[Resume Message]", text);
   }
 }
-
+ 
 function showDailyLimitReached() {
   const el = document.getElementById("resumeMessage");
   if (el) {
-    el.innerText     = "All resumes sent for today. Head back to the HUB!";
-    el.style.display = "block";
+    clearTimeout(_resumeMsgTimer);          // stays up, no auto-hide
+    el.innerText = "All resumes sent for today. Head back to the HUB!";
+    el.classList.add("is-visible");
   }
   const btn = document.getElementById("submitResumeBtn");
   if (btn) btn.disabled = true;
