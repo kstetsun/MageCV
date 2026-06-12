@@ -33,19 +33,14 @@ body {
   min-height: 100vh;
 }
 
-@media (max-width: 480px) {
-  body {
-    background: url('../media/backgrounds/win_m.webp') center / cover no-repeat fixed;
-  }
-}
 
-
-/* ======================
-   WIN CONTAINER
-   ====================== */
+/* ============================================================
+   BASE = DESKTOP / PC LAYOUT
+   (mobile overrides live in the @media block at the bottom)
+   ============================================================ */
 
 .win-container {
-  max-width: 480px;
+  max-width: 560px;          /* DESKTOP: wider than before */
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem 1.5rem;
   text-align: center;
@@ -56,20 +51,20 @@ body {
 
 /* ======================
    HEADING + FLAVOUR
-   FIX 3 — staggered entrance animation
-   FIX 5 — flavour line scaled down
    ====================== */
 
 .win-heading {
   font-family: var(--font-display, 'MedievalSharp', serif);
-  font-size: 2.4rem;
-  color: var(--color-accent, #d4a03c);
+  font-size: 2.7rem;
+  color: #e8b84a;            /* slightly brighter gold */
   margin-bottom: 0.75rem;
   letter-spacing: 1px;
+  /* dark base shadow gives the gold real contrast against the
+     bright celebratory background, then warm glow on top */
   text-shadow:
-    0 2px 8px rgba(255, 248, 220, 0.9),
-    0 4px 20px rgba(255, 240, 180, 0.7),
-    0 0 40px rgba(255, 235, 160, 0.5);
+    0 2px 6px rgba(60, 30, 0, 0.55),
+    0 0 24px rgba(255, 235, 160, 0.6),
+    0 0 48px rgba(255, 225, 140, 0.4);
 }
 
 .win-flavour {
@@ -93,20 +88,46 @@ body {
 
 /* ======================
    OFFER LETTER CARD
-   FIX 1 — warm parchment tones, not white
-   FIX 2 — definition rows instead of list
+   Blended into the scene: a warm, slightly translucent, faintly
+   tilted piece of parchment that looks like it landed among the
+   other flying letters — not a UI card pasted on top.
    ====================== */
 
 .job-offer-letter {
-  background: rgba(253, 246, 228, 0.96);
+  /* layered: inner aging glow over translucent warm parchment, so the
+     background tones seep through faintly and it reads as old paper */
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 250, 235, 0.5), transparent 60%),
+    rgba(250, 242, 222, 0.88);
   color: #3a2408;
-  border: 1.5px solid #b8925a;
-  border-radius: 10px;
-  padding: 1.5rem 1.4rem 1.2rem 1.4rem;
+  border: 1px solid rgba(184, 146, 90, 0.35);   /* faint, not crisp */
+  border-radius: 6px;                            /* less "app card" rounding */
+  padding: 1.8rem 2rem 1.4rem 2rem;
   margin: 0 auto 2rem auto;
-  max-width: 380px;
+  max-width: 100%;                               /* fills the container */
   text-align: left;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);                    /* settles it into the scene */
+  /* soft, warm ambient shadow instead of a hard dark drop */
+  box-shadow:
+    0 10px 50px rgba(80, 50, 20, 0.28),
+    0 2px 6px rgba(80, 50, 20, 0.15);
+  /* a hair of tilt — like a letter resting in the pile, not UI */
+  transform: rotate(-0.6deg);
+}
+
+.job-offer-letter::before {
+  content: "";
+  position: absolute;
+  top: -1.4rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(-0.6deg); /* match the letter's tilt */
+  width: 70%;
+  height: 1.6rem;
+  background: linear-gradient(180deg, rgba(214, 178, 120, 0.95), rgba(196, 158, 100, 0.9));
+  /* triangular flap pointing down, like an open envelope lid */
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  box-shadow: 0 2px 6px rgba(80, 50, 20, 0.2);
+  z-index: -1;
 }
 
 .letter-label {
@@ -126,10 +147,10 @@ body {
   color: #2e1a04;
   text-align: center;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(160, 110, 35, 0.2);
+  border-bottom: 1px solid rgba(140, 95, 30, 0.28);   /* softer, inked-on feel */
 }
 
-/* FIX 2 — list replaced with definition rows in HTML,
+/* list replaced with definition rows in HTML,
    but keeping li support in case JS populates it */
 .job-offer-letter ul {
   list-style: none;
@@ -141,7 +162,7 @@ body {
   padding: 0.55rem 0;
   font-size: 0.95rem;
   line-height: 1.5;
-  border-bottom: 1px solid rgba(160, 110, 35, 0.12);
+  border-bottom: 1px solid rgba(140, 95, 30, 0.14);   /* softer divider */
   color: #3a2408;
 }
 
@@ -166,7 +187,7 @@ body {
   color: #8b5e2e;
   text-align: center;
   margin: 0.8rem 0 0 0;
-  border-top: 1px dashed rgba(160, 110, 35, 0.35);
+  border-top: 1px dashed rgba(140, 95, 30, 0.35);
   padding-top: 0.7rem;
   font-style: italic;
 }
@@ -174,7 +195,7 @@ body {
 
 /* ======================
    PLAY AGAIN BUTTON
-   FIX 4 — dark brown, matches resume screen Submit button
+   (dark brown, matches resume screen Submit button)
    ====================== */
 
 .play-again-btn {
@@ -201,4 +222,63 @@ body {
 
 .play-again-btn:active {
   transform: translateY(0);
+}
+
+
+/* ============================================================
+   DESKTOP BUMP — grander, wider panel (min-width: 768px)
+   ============================================================ */
+
+@media (min-width: 768px) {
+  .win-container {
+    max-width: 720px;
+    padding: 4rem 2rem 5rem;
+  }
+
+  .win-heading {
+    font-size: 3.2rem;
+  }
+
+  .win-flavour {
+    font-size: 1.05rem;
+  }
+
+  .job-offer-letter {
+    max-width: 100%;          /* fills the wider 720px container */
+    padding: 2.2rem 2.6rem 1.8rem;
+  }
+
+  .job-offer-letter h2 {
+    font-size: 1.4rem;
+  }
+
+  .play-again-btn {
+    font-size: 1.1rem;
+    padding: 0.85rem 3rem;
+  }
+}
+
+
+/* ============================================================
+   MOBILE / PHONE LAYOUT (max-width: 480px)
+   ============================================================ */
+
+@media (max-width: 480px) {
+  body {
+    background: url('../media/backgrounds/win_m.webp') center / cover no-repeat fixed;
+  }
+
+  .win-container {
+    max-width: 100%;
+    padding: 2.5rem 1.2rem 3rem;
+  }
+
+  .win-heading {
+    font-size: 2.2rem;
+  }
+
+  .job-offer-letter {
+    max-width: 100%;
+    transform: rotate(-0.4deg);   /* gentler tilt on small screens */
+  }
 }

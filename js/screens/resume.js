@@ -98,7 +98,7 @@ function buildJobCardHTML(card, size) {
         <span class="jc__title">${_esc(card.title)}</span>
       </div>
       <div class="jc__body">
-        <p class="jc__desc">${_esc(desc)}</p>
+        <p class="jc__desc">${desc}</p>
       </div>
     </div>
   `;
@@ -213,19 +213,29 @@ function selectPlant(type, btn) {
   resume.plant = type;
   clearSelection("plant");
   btn.classList.add("selected");
+  updateSummaryChip("summaryPlant", btn.querySelector("span").textContent);
 }
-
+ 
 function selectPhoto(type, btn) {
   resume.photo = type;
   clearSelection("photo");
   btn.classList.add("selected");
+  updateSummaryChip("summaryPhoto", btn.querySelector("span").textContent);
 }
-
+ 
 function selectDate(type, btn) {
   resume.date = type;
   clearSelection("date");
   btn.classList.add("selected");
+  updateSummaryChip("summaryDate", btn.querySelector("span:last-child").textContent);
 }
+ 
+function updateSummaryChip(id, label) {
+  const el = document.getElementById(id);
+  el.textContent = label;
+  el.classList.remove("summary-chip--empty");
+}
+ 
 
 
 // ======================
@@ -441,22 +451,28 @@ function clearAllSelections() {
   ["plant", "photo", "date"].forEach(group => clearSelection(group));
 }
 
+let _resumeMsgTimer = null;
+ 
 function showResumeMessage(text) {
   const el = document.getElementById("resumeMessage");
   if (el) {
-    el.innerText     = text;
-    el.style.display = "block";
-    setTimeout(() => { el.style.display = "none"; }, 3000);
+    el.innerText = text;
+    el.classList.add("is-visible");
+    clearTimeout(_resumeMsgTimer);
+    _resumeMsgTimer = setTimeout(() => {
+      el.classList.remove("is-visible");
+    }, 3000);
   } else {
     console.log("[Resume Message]", text);
   }
 }
-
+ 
 function showDailyLimitReached() {
   const el = document.getElementById("resumeMessage");
   if (el) {
-    el.innerText     = "All resumes sent for today. Head back to the HUB!";
-    el.style.display = "block";
+    clearTimeout(_resumeMsgTimer);          // stays up, no auto-hide
+    el.innerText = "All resumes sent for today. Head back to the HUB!";
+    el.classList.add("is-visible");
   }
   const btn = document.getElementById("submitResumeBtn");
   if (btn) btn.disabled = true;

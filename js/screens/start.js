@@ -79,6 +79,9 @@ function _startFresh(selectedMode) {
 function showMagicConfirm(onConfirm) {
   const overlay = document.createElement("div");
   overlay.id = "magicWarnOverlay";
+  // IMAGE 3 — message split into two elements (no <br><br>):
+  //   .mw-msg      → primary line
+  //   .mw-msg-warn → tight, emphasized warning line (styled in start.css)
   overlay.innerHTML = `
     <div class="mw-backdrop"></div>
     <div class="mw-box" role="dialog" aria-modal="true">
@@ -87,9 +90,8 @@ function showMagicConfirm(onConfirm) {
         <span class="mw-icon" aria-hidden="true">⚗️</span>
         <div class="mw-msg">
           Starting a new game will erase your current saved run.
-          <br><br>
-          This cannot be undone.
         </div>
+        <p class="mw-msg-warn">This cannot be undone.</p>
         <div class="mw-btns">
           <button class="mw-btn-back">Turn Back</button>
           <button class="mw-btn-erase">Burn It All</button>

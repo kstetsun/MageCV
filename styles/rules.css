@@ -9,51 +9,92 @@ body {
   padding: 0;
 }
 
+/* ── Back button ── */
 .rules-back-btn {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px;
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-accent-dim);
-  color: var(--color-accent);
-  font-family: var(--font-body);
-  font-size: 14px;
+  background: rgba(245, 230, 190, 0.88);
+  border: 1.5px solid rgba(160, 110, 35, 0.55);
+  color: #3a2408;
+  font-family: var(--font-display);
+  font-size: 13px;
   padding: 6px 14px;
   border-radius: var(--radius);
   cursor: pointer;
-  letter-spacing: 0.03em;
-  transition: var(--transition);
-  z-index: 10;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, border-color 0.15s;
+  z-index: 100;
+  backdrop-filter: blur(6px);
 }
 
 .rules-back-btn:hover {
-  background: var(--color-surface);
-  border-color: var(--color-accent);
-  color: var(--color-accent-glow);
+  background: rgba(253, 246, 228, 0.98);
+  border-color: rgba(160, 110, 35, 0.85);
 }
 
+/* ── Content wrapper ── */
 .rules-content {
-  max-width: 680px;
+  max-width: 760px;   /* was 680px — wider on PC */
   margin: 0 auto;
-  padding: 56px 24px 48px;
+  padding: 48px 24px 64px;
   position: relative;
   z-index: 2;
 }
 
-.rules-title {
-  font-family: var(--font-display);
-  color: var(--color-accent);
-  font-size: 32px;
-  text-align: center;
-  margin: 0 0 6px;
-  letter-spacing: 0.04em;
+/* Wider, roomier on desktop */
+@media (min-width: 800px) {
+  .rules-content {
+    max-width: 800px;
+    padding: 56px 32px 72px;
+  }
+
+  .rules-title {
+    font-size: 40px;   /* bigger hero title on large screens */
+  }
+
+  .rules-section-header {
+    padding: 15px 26px;   /* a touch more breathing room in the scrolls */
+  }
+
+  .rules-section-body {
+    padding: 8px 26px 22px;
+    font-size: 1rem;
+  }
 }
 
+/* Keep a comfortable reading width on phones */
+@media (max-width: 600px) {
+  .rules-content {
+    max-width: 100%;
+    padding: 40px 18px 56px;
+  }
+
+  .rules-footer-btn {
+    max-width: 100%;
+  }
+}
+
+/* ── Title ── */
+.rules-title {
+  font-family: var(--font-display);
+  color: #fff8ee;
+  font-size: 34px;
+  text-align: center;
+  margin: 0 0 8px;
+  letter-spacing: 0.06em;
+  text-shadow:
+    0 2px 8px rgba(180, 110, 20, 0.95),
+    0 4px 28px rgba(160, 90, 10, 0.8),
+    0 0 56px rgba(140, 80, 0, 0.55);
+}
+
+/* ── Divider gem ── */
 .rules-divider {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 0 0 20px;
+  margin: 0 0 18px;
 }
 
 .rules-divider::before,
@@ -61,111 +102,113 @@ body {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-accent-dim), transparent);
+  background: linear-gradient(90deg, transparent, rgba(212,160,60,0.5), transparent);
 }
 
 .rules-divider-gem {
-  width: 8px;
-  height: 8px;
-  background: var(--color-accent);
+  width: 7px;
+  height: 7px;
+  background: #d4a03c;
   transform: rotate(45deg);
+  box-shadow: 0 0 6px rgba(212,160,60,0.6);
 }
 
+/* ── Intro text ── */
 .rules-intro {
   text-align: center;
-  color: var(--color-text-muted);
-  font-size: 16px;
+  color: rgba(255, 248, 238, 0.95);
+  font-size: 1rem;
   font-style: italic;
-  line-height: 1.7;
+  line-height: 1.75;
   margin: 0 0 28px;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.95),
+    0 3px 12px rgba(0, 0, 0, 0.8),
+    0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
+/* ── Section list ── */
 .rules-sections {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
-/* ── Scroll rod top & bottom ── */
+/* ── Individual scroll section ── */
 .rules-section {
   border-radius: 4px;
   overflow: visible;
   position: relative;
 }
 
+/* ── Scroll rods — thinner, less dominant ── */
 .rules-section-rod {
   display: block;
-  height: 14px;
-  border-radius: 7px;
+  height: 10px;
   position: relative;
   z-index: 2;
-  box-shadow: 0 2px 6px #00000055, inset 0 1px 0 #ffffff22;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
-.rules-section-rod.top {
-  border-radius: 7px 7px 2px 2px;
-}
+.rules-section-rod.top    { border-radius: 6px 6px 2px 2px; }
+.rules-section-rod.bottom { border-radius: 2px 2px 6px 6px; margin-top: -2px; }
 
-.rules-section-rod.bottom {
-  border-radius: 2px 2px 7px 7px;
-  margin-top: -2px;
-}
-
-/* parchment body */
+/* ── Scroll parchment body ── */
 .rules-section-scroll {
   position: relative;
   z-index: 1;
   cursor: pointer;
+  transition: filter 0.15s;
 }
 
+.rules-section-scroll:hover {
+  filter: brightness(1.03);
+}
+
+/* ── Section header ── */
 .rules-section-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 18px;
+  padding: 13px 20px;
   user-select: none;
-}
-
-.rules-section-icon {
-  font-size: 17px;
-  width: 24px;
-  text-align: center;
-  flex-shrink: 0;
 }
 
 .rules-section-title {
   font-family: var(--font-display);
-  font-size: 14px;
-  letter-spacing: 0.03em;
+  font-size: 15px;
+  letter-spacing: 0.04em;
   flex: 1;
 }
 
 .rules-section-arrow {
-  font-size: 11px;
-  opacity: 0.6;
-  transition: transform 0.4s ease;
+  font-size: 12px;
+  opacity: 0.75;
+  transition: transform 0.4s ease, opacity 0.2s;
 }
 
 .rules-section.open .rules-section-arrow {
   transform: rotate(180deg);
+  opacity: 1;
 }
 
 /* ── Unroll animation ── */
 .rules-section-body-wrap {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: max-height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .rules-section.open .rules-section-body-wrap {
-  max-height: 600px;
+  max-height: 700px;
 }
 
+/* ── Body content ── */
 .rules-section-body {
-  padding: 4px 18px 16px;
+  padding: 6px 20px 18px;
   border-top: 1px solid rgba(0,0,0,0.1);
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.75;
 }
 
 .rules-section-body p {
@@ -203,7 +246,34 @@ body {
 .rules-section:nth-child(5) .rules-section-body   { color: #3c2808; border-color: #c4a068; }
 .rules-section:nth-child(5) .rules-section-arrow  { color: #885820; }
 
-/* ── Shared inner components ── */
+/* ── State-driven emphasis: closed sections recede, open section leads ── */
+
+/* Closed sections: desaturate and dim slightly so they don't out-shout
+   the open content (overrides the per-section parchment tints). */
+.rules-section:not(.open) .rules-section-scroll {
+  filter: saturate(0.7) brightness(0.94);
+  opacity: 0.9;
+  transition: filter 0.2s, opacity 0.2s, box-shadow 0.2s;
+}
+
+.rules-section:not(.open) .rules-section-scroll:hover {
+  filter: saturate(0.85) brightness(1.0);
+  opacity: 1;
+}
+
+/* Open section: full color, brightest element on the page, clear lift. */
+.rules-section.open .rules-section-scroll {
+  filter: saturate(1.05) brightness(1.02);
+  opacity: 1;
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Open section: slightly lift the scroll ── */
+.rules-section.open .rules-section-scroll {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+/* ── Pill row ── */
 .rules-pill-row {
   display: flex;
   gap: 8px;
@@ -213,13 +283,14 @@ body {
 
 .rules-pill {
   background: rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.18);
-  font-size: 13px;
-  padding: 3px 10px;
+  border: 1px solid rgba(0,0,0,0.16);
+  font-size: 0.85rem;
+  padding: 4px 13px;
   border-radius: 20px;
   font-family: var(--font-body);
 }
 
+/* ── Mode grid ── */
 .rules-mode-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -247,6 +318,7 @@ body {
   opacity: 0.75;
 }
 
+/* ── NPC list ── */
 .rules-npc-row {
   display: flex;
   flex-direction: column;
@@ -270,31 +342,42 @@ body {
 }
 
 .rules-npc-desc {
-  font-size: 14px;
-  line-height: 1.5;
-  opacity: 0.75;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  opacity: 0.78;
 }
 
 /* ── Footer button ── */
 .rules-footer-btn {
   display: block;
   width: 100%;
-  max-width: 320px;
+  max-width: 420px;
   margin: 32px auto 0;
   padding: 13px 0;
-  background: #e8c84a;
-  color: #1a1207;
+  background: linear-gradient(135deg, #8b4e12 0%, #6b3509 100%);
+  color: #fdf0d5;
   border: none;
   border-radius: var(--radius);
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 15px;
   letter-spacing: 0.06em;
   cursor: pointer;
   text-align: center;
-  transition: var(--transition);
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 3px 14px rgba(80, 35, 5, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 .rules-footer-btn:hover {
-  background: #f2d45a;
-  color: #0e0b00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(80, 35, 5, 0.52);
+}
+
+.rules-footer-btn:active {
+  transform: translateY(0);
+}
+
+/* Rods recede with their closed section */
+.rules-section:not(.open) .rules-section-rod {
+  filter: saturate(0.75) brightness(0.92);
+  transition: filter 0.2s;
 }
