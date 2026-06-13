@@ -8,46 +8,46 @@ function initWinPage() {
   const resumes = data.resumesSentTotal || '?';
   const mode = data.mode ? (data.mode.charAt(0).toUpperCase() + data.mode.slice(1)) : '?';
 
-  const jobTitles = [
-    'Archmage of Spreadsheets',
-    'Potion Logistics Coordinator',
-    'Junior Rune Scribe',
-    'Enchanted Mailroom Clerk',
-    'Wand Quality Inspector',
-    'Scroll Archivist',
-    'Mystic HR Specialist',
-    'Crystal Ball Analyst'
-  ];
+const jobTitles = [
+  'Chief Spreadsheet Wizard',
+  'Potion Delivery Manager',
+  'Junior Rune Writer',
+  'Magic Mailroom Clerk',
+  'Wand Tester',
+  'Scroll Librarian',
+  'Magic HR Officer',
+  'Crystal Ball Reader'
+];
 
-  const salaries = [
-    '420 Gold Coins/month + dragon dental',
-    '800 Enchanted Florins/month + broom allowance',
-    '1,200 Arcane Shillings/month + free cauldron',
-    '650 Moonsilver/month + unlimited spell scrolls',
-    '900 Cursed Doubloons/month + phantom pension',
-    '550 Ethereal Sovereigns/month + hat stipend',
-    '1,000 Runic Marks/month + free wand polishing'
-  ];
+const salaries = [
+  '420 Gold/month + dragon dental plan',
+  '800 Florins/month + free broom fuel',
+  '1,200 Shillings/month + one free cauldron',
+  '650 Moonsilver/month + endless spell scrolls',
+  '900 Doubloons/month + ghost pension (terms unclear)',
+  '550 Sovereigns/month + monthly hat budget',
+  '1,000 Marks/month + free wand shining'
+];
 
-  const perks = [
-    '12 days Astral Plane leave per year',
-    'Complimentary familiar (cat or toad only)',
-    'Unlimited access to the forbidden library',
-    'One free memory wipe per quarter',
-    'Weekly mandatory cauldron yoga',
-    'Private portal to the break room',
-    'Daily enchanted lunch (no eye of newt on Fridays)'
-  ];
+const perks = [
+  '12 days of space leave per year',
+  'Free pet (cat or toad, no refunds)',
+  'Full access to the scary library',
+  'One free memory wipe each season',
+  'Weekly cauldron yoga (not optional, sorry)',
+  'Your own portal to the snack room',
+  'Free magic lunch (no newt eyes on Fridays)'
+];
 
-  const startDates = [
-    'Immediately (the ravens are already watching)',
-    'After the next lunar eclipse',
-    'Upon completion of the onboarding ritual',
-    'First Monday following the next blood moon',
-    'As soon as your references stop screaming',
-    'When Mercury is no longer in retrograde',
-    'Third Thursday of the Harvest Moon'
-  ];
+const startDates = [
+  'Right now (the ravens are watching you)',
+  'After the next moon eclipse',
+  'Once you finish the welcome ritual',
+  'First Monday after the next blood moon',
+  'When your references stop screaming',
+  'When Mercury behaves again',
+  'Third Thursday of the Harvest Moon'
+];
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
