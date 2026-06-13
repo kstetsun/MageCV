@@ -24,34 +24,6 @@ function updateHubUI() {
   const limit = (typeof getConfig === "function") ? getConfig().resumesPerDay : "?";
   if (resTodayEl) resTodayEl.innerText = `${resumesToday} / ${limit}`;
 
-  // Total resumes sent
-  const resTotalEl = document.getElementById("resumesTotal");
-  if (resTotalEl) resTotalEl.innerText = resumesSentTotal;
-
-  // NPC interactions today / limit
-  const npcEl = document.getElementById("npcInteractions");
-  if (npcEl) npcEl.innerText = `${npcInteractionsToday} / ${npcInteractionsLimit}`;
-
-  // Active modifier labels (names only, no score values)
-  const modEl = document.getElementById("activeModifiers");
-  if (modEl) {
-    const labels = (typeof getActiveModifierLabels === "function")
-      ? getActiveModifierLabels()
-      : [];
-
-    if (labels.length === 0) {
-      modEl.innerHTML = `<span class="no-modifiers">None active</span>`;
-    } else {
-      modEl.innerHTML = labels
-        .map(label => `<span class="modifier-tag">✦ ${label}</span>`)
-        .join(" ");
-    }
-  }
-
-  // Mode badge
-  const modeEl = document.getElementById("gameMode");
-  if (modeEl) modeEl.innerText = (mode === "demo") ? "Demo" : "Long Mode";
-
   // Score display
   const scoreEl = document.getElementById("score");
   if (scoreEl) scoreEl.innerText = hiddenScore;

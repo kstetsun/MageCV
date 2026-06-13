@@ -26,74 +26,17 @@ let activeJobCard = null;
 // ======================
 // 6.3 — HTML JOB CARD BUILDER
 // Renders the job card as pure HTML — no img tag.
-// size: "full" (modal) | "mini" (banner strip)
-//
-// Card sections:
-//   Header  — job title + photo smiley face
-//   Body    — plant description mentioning the plant emoji 3 times
-//   Footer  — application deadline (driven by correctAnswers.date)
-//
-// Photo → smiley map:
-//   neutral  → 😐
-//   smile    → 😊
-//   serious  → 🧐
-//
-// Plant → emoji map:
-//   cactus   → 🌵
-//   flower   → 🌷
-//   fern     → 🌿
-//
-// Date → deadline label map:
-//   correct  → deadline label with a plausible near-future date
-//   wrong    → same label but one day off (visually subtle)
+// The card shows the job title and its description (which contains the
+// <strong>-tagged answer clues). Rendered with innerHTML, not textContent.
 // ======================
 
-const PHOTO_EMOJI = {
-  neutral: "😐",
-  smile:   "😊",
-  serious: "🧐"
-};
-
-const PLANT_EMOJI = {
-  cactus: "🌵",
-  flower: "🌷",
-  fern:   "🌿"
-};
-
-const DATE_LABELS = {
-  summer_solstice: "Summer Solstice",
-  winter_solstice: "Winter Solstice"
-};
-
-function _deadlineLabel(dateOption) {
-  const label = DATE_LABELS[dateOption] ?? dateOption;
-  return `📅 Apply by ${label}`;
-}
-
-function _plantLine(plantType, baseDesc) {
-  const desc = baseDesc ? baseDesc.trim() : "A position for a dedicated mage.";
-  return desc;
-}
-
-
-function buildJobCardHTML(card, size) {
+function buildJobCardHTML(card) {
   if (!card) return "<p>No card loaded.</p>";
 
-  const desc      = card.description ? card.description.trim() : "A position for a dedicated mage.";
-  const sizeClass = size === "mini" ? "jc jc--mini" : "jc jc--full";
-
-  if (size === "mini") {
-    return `
-      <div class="${sizeClass}">
-        <div class="jc__header">
-          <span class="jc__title">${_esc(card.title)}</span>
-        </div>
-      </div>
-    `;
-  }
+  const desc = card.description ? card.description.trim() : "A position for a dedicated mage.";
 
   return `
-    <div class="${sizeClass}">
+    <div class="jc jc--full">
       <div class="jc__header">
         <span class="jc__title">${_esc(card.title)}</span>
       </div>
@@ -139,18 +82,16 @@ function handleModalOverlayClick(event) {
   }
 }
 
-// Render the card into both mount points and open the modal.
+// Render the card into the modal mount point.
 function _renderJobCard(card) {
   const modalSlot = document.getElementById("jobCardRenderModal");
-  const stripSlot = document.getElementById("jobCardRenderStrip");
 
   if (!modalSlot) {
     console.error("[Resume] Modal render slot not found.");
     return;
   }
 
-  modalSlot.innerHTML = buildJobCardHTML(card, "full");
-  if (stripSlot) stripSlot.innerHTML = buildJobCardHTML(card, "mini");  // optional now
+  modalSlot.innerHTML = buildJobCardHTML(card);
 }
 
 // ======================
@@ -200,30 +141,20 @@ function selectPlant(type, btn) {
   resume.plant = type;
   clearSelection("plant");
   btn.classList.add("selected");
-  updateSummaryChip("summaryPlant", btn.querySelector("span").textContent);
 }
- 
+
 function selectPhoto(type, btn) {
   resume.photo = type;
   clearSelection("photo");
   btn.classList.add("selected");
-  updateSummaryChip("summaryPhoto", btn.querySelector("span").textContent);
 }
- 
+
 function selectDate(type, btn) {
   resume.date = type;
   clearSelection("date");
   btn.classList.add("selected");
-  updateSummaryChip("summaryDate", btn.querySelector("span:last-child").textContent);
 }
- 
-function updateSummaryChip(id, label) {
-  const el = document.getElementById(id);
-  if (!el) return;   // summary bar removed — guard against null
-  el.textContent = label;
-  el.classList.remove("summary-chip--empty");
-}
- 
+
 
 
 // ======================
