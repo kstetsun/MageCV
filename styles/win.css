@@ -1,284 +1,254 @@
 /* ======================
    win.css
-   Styles for pages/win.html
+   Styles for pages/win.html — sealed-letter version
+   Display: Cinzel · Body: EB Garamond  (load in main.css)
    ====================== */
 
 
 /* ======================
    CONFETTI CANVAS
    ====================== */
-
-#confettiCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 999;
+#confettiCanvas{
+  position:fixed; top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none;
+  z-index:999;
 }
 
 
 /* ======================
    BODY / BACKGROUND
    ====================== */
-
-body {
-  background: url('../media/backgrounds/win.webp') center / cover no-repeat fixed;
-  background-color: var(--color-bg, #0e0b14);
-  color: var(--color-text, #f3f3f3);
-  font-family: var(--font-body, 'Crimson Pro', serif);
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
+body{
+  background:url('../media/backgrounds/win.webp') center / cover no-repeat fixed;
+  background-color:var(--color-bg, #0e0b14);
+  color:#3a2408;
+  font-family:var(--font-body, 'EB Garamond', serif);
+  margin:0;
+  min-height:100vh;
 }
 
 
 /* ============================================================
-   BASE = DESKTOP / PC LAYOUT
-   (mobile overrides live in the @media block at the bottom)
+   BASE = DESKTOP / PC LAYOUT  — wider so the screen feels full
    ============================================================ */
-
-.win-container {
-  max-width: 560px;          /* DESKTOP: wider than before */
-  margin: 0 auto;
-  padding: 3rem 1.5rem 4rem 1.5rem;
-  text-align: center;
-  position: relative;
-  z-index: 1;
+.win-container{
+  max-width:620px;            /* wider letter for PC */
+  margin:0 auto;
+  padding:3.5rem 1.5rem 4rem;
+  text-align:center;
+  position:relative;
+  z-index:1;
 }
 
 
 /* ======================
    HEADING + FLAVOUR
    ====================== */
-
-.win-heading {
-  font-family: var(--font-display, 'MedievalSharp', serif);
-  font-size: 2.7rem;
-  color: #e8b84a;            /* slightly brighter gold */
-  margin-bottom: 0.75rem;
-  letter-spacing: 1px;
-  /* dark base shadow gives the gold real contrast against the
-     bright celebratory background, then warm glow on top */
+.win-heading{
+  font-family:var(--font-display, 'Cinzel', serif);
+  font-weight:700;
+  font-size:3rem;
+  color:#c98a2e;
+  margin:0 0 .55rem;
+  letter-spacing:.02em;
+  /* light paper highlight + soft warm depth, no dark halo */
   text-shadow:
-    0 2px 6px rgba(60, 30, 0, 0.55),
-    0 0 24px rgba(255, 235, 160, 0.6),
-    0 0 48px rgba(255, 225, 140, 0.4);
+    0 1px 0  rgba(255,252,240,.7),
+    0 2px 12px rgba(120,80,30,.3);
 }
 
-.win-flavour {
-  font-family: var(--font-body, 'Crimson Pro', serif);
-  font-size: 0.95rem;
-  margin-bottom: 2rem;
-  color: #1a0e04;
-  font-style: italic;
-  text-shadow:
-    0 0 8px rgba(253, 240, 200, 0.9),
-    0 0 20px rgba(253, 240, 200, 0.7),
-    0 0 35px rgba(240, 220, 160, 0.5);
+.win-flavour{
+  font-family:var(--font-body, 'EB Garamond', serif);
+  font-size:1.05rem;
+  margin:0 0 2.4rem;
+  color:#5a3c18;
+  font-style:italic;
+  text-shadow:0 1px 2px rgba(255,250,235,.8);
 }
 
-.win-flavour span {
-  color: var(--color-accent, #d4a03c);
-  font-weight: bold;
-  font-style: normal;
+.win-flavour span{
+  color:#b5701c;
+  font-weight:bold;
+  font-style:normal;
 }
 
 
 /* ======================
    OFFER LETTER CARD
-   Blended into the scene: a warm, slightly translucent, faintly
-   tilted piece of parchment that looks like it landed among the
-   other flying letters — not a UI card pasted on top.
+   Opaque parchment that sits IN the scene: warm gradient, soft
+   ambient shadow, slight tilt, wax seal on the top edge.
    ====================== */
-
-.job-offer-letter {
-  /* layered: inner aging glow over translucent warm parchment, so the
-     background tones seep through faintly and it reads as old paper */
+.job-offer-letter{
+  position:relative;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(255, 250, 235, 0.5), transparent 60%),
-    rgba(250, 242, 222, 0.88);
-  color: #3a2408;
-  border: 1px solid rgba(184, 146, 90, 0.35);   /* faint, not crisp */
-  border-radius: 6px;                            /* less "app card" rounding */
-  padding: 1.8rem 2rem 1.4rem 2rem;
-  margin: 0 auto 2rem auto;
-  max-width: 100%;                               /* fills the container */
-  text-align: left;
-  backdrop-filter: blur(2px);                    /* settles it into the scene */
-  /* soft, warm ambient shadow instead of a hard dark drop */
+    radial-gradient(120% 60% at 50% 0%, rgba(255,250,236,.9), transparent 70%),
+    linear-gradient(180deg, #fdf7ea 0%, #f4e8cf 100%);
+  color:#3a2408;
+  border:1px solid rgba(150,110,55,.25);
+  border-radius:2px;                 /* barely-there, not "app card" */
+  padding:2.8rem 3rem 2.1rem;        /* roomy on PC */
+  margin:0 auto 2.6rem;
+  max-width:100%;
+  text-align:center;
+  transform:rotate(-1deg);           /* landed-letter tilt */
   box-shadow:
-    0 10px 50px rgba(80, 50, 20, 0.28),
-    0 2px 6px rgba(80, 50, 20, 0.15);
-  /* a hair of tilt — like a letter resting in the pile, not UI */
-  transform: rotate(-0.6deg);
+    inset 0 1px 0 rgba(255,255,255,.6),
+    0 18px 50px rgba(70,40,12,.35),
+    0 3px 10px rgba(70,40,12,.25);
 }
 
-.job-offer-letter::before {
-  content: "";
-  position: absolute;
-  top: -1.4rem;
-  left: 50%;
-  transform: translateX(-50%) rotate(-0.6deg); /* match the letter's tilt */
-  width: 70%;
-  height: 1.6rem;
-  background: linear-gradient(180deg, rgba(214, 178, 120, 0.95), rgba(196, 158, 100, 0.9));
-  /* triangular flap pointing down, like an open envelope lid */
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  box-shadow: 0 2px 6px rgba(80, 50, 20, 0.2);
-  z-index: -1;
+/* wax seal on the top edge — ties the card to the flying envelopes */
+.job-offer-letter::before{
+  content:"✦";
+  position:absolute;
+  top:-22px; left:50%;
+  transform:translateX(-50%);
+  width:46px; height:46px;
+  border-radius:50%;
+  background:radial-gradient(circle at 38% 32%, #c0432f, #9c2b1f 55%, #7a1d14 100%);
+  box-shadow:0 3px 8px rgba(60,15,10,.5);
+  color:rgba(255,225,210,.85);
+  font-size:1.1rem;
+  line-height:46px;                  /* vertically centers the rune */
+  text-align:center;
+  z-index:2;
 }
 
-.letter-label {
-  font-family: var(--font-body, 'Crimson Pro', serif);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #8b5e2e;
-  text-align: center;
-  margin: 0 0 0.5rem 0;
+.letter-label{
+  font-family:var(--font-display, 'Cinzel', serif);
+  font-size:.64rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:#b5701c;
+  margin:.3rem 0 .6rem;
 }
 
-.job-offer-letter h2 {
-  font-family: var(--font-display, 'MedievalSharp', serif);
-  font-size: 1.2rem;
-  margin: 0 0 1.1rem 0;
-  color: #2e1a04;
-  text-align: center;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(140, 95, 30, 0.28);   /* softer, inked-on feel */
+.job-offer-letter h2{
+  font-family:var(--font-display, 'Cinzel', serif);
+  font-weight:600;
+  font-size:1.85rem;
+  margin:0 0 1.5rem;
+  color:#2e1a04;
+  line-height:1.15;
+  /* no full-width border line — title just sits clean */
 }
 
-/* list replaced with definition rows in HTML,
-   but keeping li support in case JS populates it */
-.job-offer-letter ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 0.5rem 0;
+/* offer terms — labels are short small-caps so rows never wrap badly */
+.job-offer-letter ul{
+  list-style:none;
+  padding:0;
+  margin:0 auto 1.4rem;
+  max-width:380px;
+  text-align:left;
 }
 
-.job-offer-letter li {
-  padding: 0.55rem 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  border-bottom: 1px solid rgba(140, 95, 30, 0.14);   /* softer divider */
-  color: #3a2408;
+.job-offer-letter li{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  align-items:baseline;
+  gap:.8rem;
+  padding:.75rem 0;
+  font-size:1.05rem;
+  line-height:1.4;
+  color:#3a2408;
 }
 
-.job-offer-letter li:last-child {
-  border-bottom: none;
+.job-offer-letter li + li{
+  border-top:1px solid rgba(120,85,35,.35);
 }
 
-.job-offer-letter li strong {
-  font-family: var(--font-body, 'Crimson Pro', serif);
-  color: #7a4f1a;
-  display: block;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.15rem;
-  font-weight: 700;
+.job-offer-letter li strong{
+  font-family:var(--font-display, 'Cinzel', serif);
+  color:#b5701c;
+  font-size:.6rem;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  font-weight:600;
+  white-space:nowrap;
 }
 
-.letter-footer {
-  font-family: var(--font-body, 'Crimson Pro', serif);
-  font-size: 0.78rem;
-  color: #8b5e2e;
-  text-align: center;
-  margin: 0.8rem 0 0 0;
-  border-top: 1px dashed rgba(140, 95, 30, 0.35);
-  padding-top: 0.7rem;
-  font-style: italic;
+.letter-footer{
+  font-family:var(--font-body, 'EB Garamond', serif);
+  font-size:.82rem;
+  color:#b5701c;
+  font-style:italic;
+  margin:0;
+  padding-top:.9rem;
+  border-top:1px dashed rgba(120,85,35,.35);
+  width:fit-content;
+  margin-inline:auto;
 }
 
 
 /* ======================
    PLAY AGAIN BUTTON
-   (dark brown, matches resume screen Submit button)
    ====================== */
-
-.play-again-btn {
-  display: block;
-  margin: 0 auto;
-  padding: 0.75rem 2.5rem;
-  font-family: var(--font-display, 'MedievalSharp', serif);
-  font-size: 1rem;
-  background: linear-gradient(135deg, #8b4e12 0%, #6b3509 100%);
-  color: #fdf0d5;
-  border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  letter-spacing: 0.02em;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 3px 14px rgba(80, 35, 5, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+.play-again-btn{
+  display:block;
+  margin:0 auto;
+  padding:.8rem 2.6rem;
+  font-family:var(--font-display, 'Cinzel', serif);
+  font-weight:600;
+  font-size:1rem;
+  letter-spacing:.04em;
+  background:linear-gradient(135deg,#8b4e12 0%,#6b3509 100%);
+  color:#fdf0d5;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  transition:transform .15s, box-shadow .15s;
+  box-shadow:0 3px 14px rgba(80,35,5,.4), inset 0 1px 0 rgba(255,255,255,.15);
 }
-
-.play-again-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(80, 35, 5, 0.5);
+.play-again-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 22px rgba(80,35,5,.5);
 }
+.play-again-btn:active{ transform:translateY(0); }
 
-.play-again-btn:active {
-  transform: translateY(0);
+
+/* ============================================================
+   BIG DESKTOP — grander still (min-width: 992px)
+   ============================================================ */
+@media (min-width:992px){
+  .win-container{ max-width:680px; padding:4.5rem 2rem 5rem; }
+  .win-heading{ font-size:3.4rem; }
+  .win-flavour{ font-size:1.12rem; }
+  .job-offer-letter h2{ font-size:2rem; }
+  .job-offer-letter li{ font-size:1.1rem; }
 }
 
 
 /* ============================================================
-   DESKTOP BUMP — grander, wider panel (min-width: 768px)
+   MOBILE / PHONE — calmer: narrower letter, gentler tilt,
+   tuned for the vertical clear well of win_m.webp
    ============================================================ */
-
-@media (min-width: 768px) {
-  .win-container {
-    max-width: 720px;
-    padding: 4rem 2rem 5rem;
+@media (max-width:480px){
+  body{
+    background:url('../media/backgrounds/win_m.webp') center / cover no-repeat fixed;
   }
 
-  .win-heading {
-    font-size: 3.2rem;
+  /* On mobile the letter IS the whole story — hide the page heading
+     and the run stats so the card sits centered in the clean well.
+     (Kept in the DOM for desktop + win.js; just visually removed.) */
+  .win-heading,
+  .win-flavour{ display:none; }
+
+  /* center the letter vertically in the viewport */
+  .win-container{
+    max-width:100%;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:2rem 1.2rem;
   }
 
-  .win-flavour {
-    font-size: 1.05rem;
+  .job-offer-letter{
+    padding:2.2rem 1.5rem 1.7rem;
+    transform:rotate(-.5deg);     /* gentler tilt on small screens */
   }
-
-  .job-offer-letter {
-    max-width: 100%;          /* fills the wider 720px container */
-    padding: 2.2rem 2.6rem 1.8rem;
-  }
-
-  .job-offer-letter h2 {
-    font-size: 1.4rem;
-  }
-
-  .play-again-btn {
-    font-size: 1.1rem;
-    padding: 0.85rem 3rem;
-  }
-}
-
-
-/* ============================================================
-   MOBILE / PHONE LAYOUT (max-width: 480px)
-   ============================================================ */
-
-@media (max-width: 480px) {
-  body {
-    background: url('../media/backgrounds/win_m.webp') center / cover no-repeat fixed;
-  }
-
-  .win-container {
-    max-width: 100%;
-    padding: 2.5rem 1.2rem 3rem;
-  }
-
-  .win-heading {
-    font-size: 2.2rem;
-  }
-
-  .job-offer-letter {
-    max-width: 100%;
-    transform: rotate(-0.4deg);   /* gentler tilt on small screens */
-  }
+  .job-offer-letter h2{ font-size:1.55rem; }
+  .job-offer-letter ul{ max-width:100%; }
+  .job-offer-letter li{ font-size:1rem; }
 }
