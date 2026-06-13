@@ -75,7 +75,7 @@ body {
    shown again on mobile where it reads naturally. */
 .board h3 {
   position: relative;
-  display: none;             /* DESKTOP: no redundant "Board" label */
+  display: inline-block; 
   font-family: var(--font-display);
   color: #eaf3e4;
   font-size: 1.7rem;

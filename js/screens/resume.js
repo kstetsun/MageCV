@@ -141,29 +141,16 @@ function handleModalOverlayClick(event) {
 
 // Render the card into both mount points and open the modal.
 function _renderJobCard(card) {
-  console.log("[Resume] _renderJobCard() called with card:", card ? card.title : "null");
-  
   const modalSlot = document.getElementById("jobCardRenderModal");
   const stripSlot = document.getElementById("jobCardRenderStrip");
 
-  console.log("[Resume] modalSlot element:", modalSlot ? "✓ FOUND" : "✗ NOT FOUND");
-  console.log("[Resume] stripSlot element:", stripSlot ? "✓ FOUND" : "✗ NOT FOUND");
-
-  if (!modalSlot || !stripSlot) {
-    console.error("[Resume] DOM elements for card rendering not found. Check resume.html");
+  if (!modalSlot) {
+    console.error("[Resume] Modal render slot not found.");
     return;
   }
 
-  const fullHTML = buildJobCardHTML(card, "full");
-  const miniHTML = buildJobCardHTML(card, "mini");
-
-  console.log("[Resume] Built full HTML length:", fullHTML.length);
-  console.log("[Resume] Built mini HTML length:", miniHTML.length);
-
-  modalSlot.innerHTML = fullHTML;
-  stripSlot.innerHTML = miniHTML;
-
-  console.log("[Resume] Card rendered to both slots ✓");
+  modalSlot.innerHTML = buildJobCardHTML(card, "full");
+  if (stripSlot) stripSlot.innerHTML = buildJobCardHTML(card, "mini");  // optional now
 }
 
 // ======================
@@ -232,6 +219,7 @@ function selectDate(type, btn) {
  
 function updateSummaryChip(id, label) {
   const el = document.getElementById(id);
+  if (!el) return;   // summary bar removed — guard against null
   el.textContent = label;
   el.classList.remove("summary-chip--empty");
 }

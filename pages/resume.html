@@ -47,68 +47,58 @@
     <div class="resume-screen">
 
       <div class="resume-topbar">
-        <h1 class="resume-heading">Resume Builder</h1>
-        <span id="resumesTodayDisplay" class="resume-counter">0 / 5</span>
-      </div>
-
-      <!-- Job card strip — mini card + "View" button re-opens modal -->
-      <div class="job-card-strip">
-        <!-- Mini HTML card rendered here by buildJobCardHTML() -->
-        <div id="jobCardRenderStrip" class="strip-card-wrap"></div>
-        <button class="strip-view-btn" onclick="openJobCardModal()" aria-label="View full job card">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px; margin-right:3px;">
-            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>View card
-        </button>
-      </div>
+  <h1 class="resume-heading">Resume Builder</h1>
+  <div class="resume-topbar-right">
+    <button class="jobbar-view" onclick="openJobCardModal()" aria-label="View job card">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px; margin-right:3px;">
+        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>View card
+    </button>
+    <span id="resumesTodayDisplay" class="resume-counter">0 / 5</span>
+  </div>
+</div>
 
       <!-- Active modifier tags (populated by updateModifierDisplay) -->
       <div id="activeModifiersResume" class="modifier-display"></div>
 
-      <p class="resume-instruction">Choose your resume elements:</p>
+      <p class="resume-instruction">Three choices stand between you and the post</p>
 
       <!-- PLANT -->
       <div class="resume-block">
-        <h3>Plant</h3>
+        <h3>Working Plant</h3>
         <div class="btn-group btn-group--media">
           <button class="media-btn" data-group="plant" onclick="selectPlant('cactus', this)">
-            <img src="../media/plants/cactus.gif" alt="Cactus" draggable="false" />
-            <span>Cactus</span>
+            <img src="../media/plants/cactus.webp" alt="Cactus" draggable="false" />
           </button>
           <button class="media-btn" data-group="plant" onclick="selectPlant('flower', this)">
-            <img src="../media/plants/flower.gif" alt="Flower" draggable="false" />
-            <span>Flower</span>
+            <img src="../media/plants/flower.webp" alt="Flower" draggable="false" />
           </button>
           <button class="media-btn" data-group="plant" onclick="selectPlant('fern', this)">
-            <img src="../media/plants/fern.gif" alt="Fern" draggable="false" />
-            <span>Fern</span>
+            <img src="../media/plants/fern.webp" alt="Fern" draggable="false" />
           </button>
         </div>
       </div>
 
       <!-- PHOTO -->
       <div class="resume-block">
-        <h3>Photo</h3>
+        <h3>Resume Photo</h3>
         <div class="btn-group btn-group--media">
           <button class="media-btn" data-group="photo" onclick="selectPhoto('neutral', this)">
-            <img src="../media/photos/neutral.png" alt="Neutral" draggable="false" />
-            <span>Neutral</span>
+            <img src="../media/photos/neutral.webp" alt="Neutral" draggable="false" />
           </button>
           <button class="media-btn" data-group="photo" onclick="selectPhoto('smile', this)">
-            <img src="../media/photos/smile.png" alt="Smile" draggable="false" />
-            <span>Smile</span>
+            <img src="../media/photos/smile.webp" alt="Smile" draggable="false" />
           </button>
           <button class="media-btn" data-group="photo" onclick="selectPhoto('serious', this)">
             <img src="../media/photos/serious.png" alt="Serious" draggable="false" />
-            <span>Serious</span>
           </button>
         </div>
       </div>
 
       <!-- DATE -->
       <div class="resume-block">
-        <h3>Date</h3>
+        <h3>Start Date</h3>
         <div class="btn-group">
           <button data-group="date" onclick="selectDate('summer_solstice', this)">
             <span class="date-ico" aria-hidden="true">
@@ -140,14 +130,6 @@
             <span>Winter Solstice</span>
           </button>
         </div>
-      </div>
-
-      <!-- Selection summary — chips updated by JS on each pick -->
-      <div class="resume-summary" id="resumeSummary">
-        <span class="summary-label">Your scroll:</span>
-        <span id="summaryPlant" class="summary-chip summary-chip--empty">plant…</span>
-        <span id="summaryPhoto" class="summary-chip summary-chip--empty">photo…</span>
-        <span id="summaryDate" class="summary-chip summary-chip--empty">date…</span>
       </div>
 
       <!-- Feedback message (shown/hidden by showResumeMessage) -->
