@@ -416,7 +416,9 @@
 }
 
 .mw-icon {
-  font-size: 2.2rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  object-fit: contain;
   display: block;
   animation: mwBounce 2.5s ease-in-out infinite;
   filter: drop-shadow(0 0 8px rgba(212, 160, 60, 0.5));
@@ -429,8 +431,8 @@
 
 /* IMAGE 3 — first message line */
 .mw-msg {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
   color: #3d2817;
   text-align: center;
   line-height: 1.55;
@@ -462,8 +464,8 @@
 .mw-btn-erase {
   flex: 1;
   padding: 0.7rem 0.8rem;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 1rem;
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
