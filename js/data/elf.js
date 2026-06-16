@@ -5,13 +5,12 @@ const elfData = {
   maxEffect: 3,
   dialogues: [
 // here would be a part of double-checked dialog, which i already rewrote myself
-// part to continue re-checking
     {
       id: "royal_portrait",
       nodes: [
         {
           id: "e1_1",
-          line: "The palace gave the new royal portrait to an AI this year. It was finished, I was told, before the painter they dismissed had reached the palace gates.",
+          line: "The palace gave the new royal portrait to an AI this year - it was finished, I was told, before the painter they dismissed had reached the palace gates.",
           choices: [
             { label: "They told you that detail specifically.", score: 1, next: "e1_2" },
             { label: "Fast work is still work.", score: 0, next: "e1_2" },
@@ -20,7 +19,7 @@ const elfData = {
         },
         {
           id: "e1_2",
-          line: "I think they meant it as a positive fact. I have been turning it over for some weeks now and I am still not sure they were wrong to.",
+          line: "I think the king saw this as a blessing, since it will give the artist more free time. However, can you take away a shepherd's sheep and still consider him free?",
           choices: [
             { label: "That kind of uncertainty is hard to sit with.", score: 1, next: "e1_3" },
             { label: "If it's good work, it's good work.", score: 0, next: "e1_3" },
@@ -29,16 +28,16 @@ const elfData = {
         },
         {
           id: "e1_3",
-          line: "The king prefers it to the last portrait, which took the painter three years and a difficult winter. He said the new one has better light.",
+          line: "The king prefers it to the last portrait, which took the painter 3 years and one very difficult winter, and he said — quite simply, as if it were obvious — that the new one has better light. As if suffering isn't the main part of art!",
           choices: [
-            { label: "Better light after three years and a hard winter.", score: 1, next: "e1_4" },
+            { label: "Better light after 3 years and a hard winter.", score: 1, next: "e1_4" },
             { label: "Light does matter in a portrait.", score: 0, next: "e1_4" },
             { label: "The king knows what he likes.", score: 0, next: "e1_4" }
           ]
         },
         {
           id: "e1_4",
-          line: "Three painters I know have submitted work to the palace this year. All of them are still waiting. They are being very graceful about it, which I find, in its own way, quite difficult to watch.",
+          line: "I saw 3 painters waiting in the palace corridor yesterday, standing in the way people stand when they are being patient at some cost to themselves. I thought about their fates, about how quickly they would be destroyed by the end of this week.",
           choices: [
             { label: "Watching someone be graceful about a loss is its own kind of sadness.", score: 1, next: "e1_5" },
             { label: "Waiting is part of the process.", score: 0, next: "e1_5" },
@@ -47,7 +46,7 @@ const elfData = {
         },
         {
           id: "e1_5",
-          line: "The portrait hangs in the main hall now. The lighting in that room is, and I have always thought this, genuinely excellent. I wish I found that easier to set aside.",
+          line: "The portrait hangs in the main hall now, in a room whose light I have always considered genuinely excellent, and the portrait does look luminous there — because of the room, I think, more than itself. I keep noticing this. I am not sure what to do with it.",
           terminal: true
         }
       ]
@@ -58,7 +57,7 @@ const elfData = {
       nodes: [
         {
           id: "e2_1",
-          line: "The theater sent a letter in spring. The first page announced the new season, which looked, from what I could read of it, quite thoughtful. The second page cancelled it.",
+          line: "I recently received a letter about the spring schedule at my favorite theater. The front page announced a new season, which, from what I could read of it, seemed quite well thought out. On the second page, it was canceled.",
           choices: [
             { label: "Both things in the same envelope.", score: 1, next: "e2_2" },
             { label: "Budget cuts happen everywhere.", score: 0, next: "e2_2" },
@@ -67,7 +66,7 @@ const elfData = {
         },
         {
           id: "e2_2",
-          line: "I have kept the first page. The season that didn't happen was, at least on paper, something I would have attended many times.",
+          line: "I saved the front page for Maman. We discussed the grief of our loss sitting on the veranda that evening, and I was glad not to be there alone.",
           choices: [
             { label: "A program for something that never happened.", score: 1, next: "e2_3" },
             { label: "There's no point keeping it.", score: 0, next: "e2_3" },
@@ -76,7 +75,7 @@ const elfData = {
         },
         {
           id: "e2_3",
-          line: "The mime troupe was not included in the cuts. I asked about this quietly, and nobody seemed to have a clear answer, which I have come to understand is itself a kind of answer.",
+          line: "The mime troupe was not included in the cuts. Perhaps they were so quiet that everyone forgot about them.",
           choices: [
             { label: "Some things survive without explanation.", score: 1, next: "e2_4" },
             { label: "Mimes are probably just cheaper.", score: 0, next: "e2_4" },
@@ -85,7 +84,7 @@ const elfData = {
         },
         {
           id: "e2_4",
-          line: "They performed last weekend in the main square. A long piece, mostly about waiting. The audience was small but stayed until the end, which felt, under the circumstances, like quite a generous thing to do.",
+          line: "Last weekend, they performed an incredibly long and tedious play in the main square, mostly about waiting. As expected, half the seats were empty, but it was nice to be immersed in the atmosphere of art again.",
           choices: [
             { label: "Staying until the end meant something.", score: 1, next: "e2_5" },
             { label: "People have time for free performances.", score: 0, next: "e2_5" },
@@ -94,7 +93,7 @@ const elfData = {
         },
         {
           id: "e2_5",
-          line: "I stayed as well. I am not always sure I understand mime. But it seemed, that evening, beside the point.",
+          line: "Maman and I were there. I'm not always sure I understand mime, but that evening my heart opened.",
           terminal: true
         }
       ]
@@ -105,7 +104,7 @@ const elfData = {
       nodes: [
         {
           id: "e3_1",
-          line: "I have sent just over 200 applications since the spring. I wrote each one separately, which took more time than was perhaps practical, but felt like the right way to do it.",
+          line: "I have sent just over 200 applications since the spring — I wrote each one separately, which Maman said was impractical, and she was probably right. But a letter written only once has never felt, to me, like a letter at all.",
           choices: [
             { label: "That kind of care takes something out of you.", score: 1, next: "e3_2" },
             { label: "Separate letters for each one seems like a lot.", score: 0, next: "e3_2" },
@@ -114,7 +113,7 @@ const elfData = {
         },
         {
           id: "e3_2",
-          line: "One replied. I opened it carefully, which I think was the correct instinct, though I am not entirely sure it prepared me.",
+          line: "My strategy was quite successful, because I received my first reply yesterday. It was a registered letter, with an incredibly elegant seal, though I'd never seen one like it before.",
           choices: [
             { label: "What was inside?", score: 1, next: "e3_3" },
             { label: "One from 200 is a difficult ratio.", score: 0, next: "e3_3" },
@@ -123,7 +122,7 @@ const elfData = {
         },
         {
           id: "e3_3",
-          line: "A poem. Four stanzas, about autumn and open doors, which could mean several things or possibly nothing. There was no name at the bottom.",
+          line: "A poem. Four stanzas, about autumn and open doors—which could mean several things at once. Unfortunately, there was no name at the bottom. I showed it to Clarissa that evening, and she said it was either a job offer or a dismissal, and that the difference hardly mattered.",
           choices: [
             { label: "Did you think it was meant for you?", score: 1, next: "e3_4" },
             { label: "Someone sent the wrong email.", score: 0, next: "e3_4" },
@@ -132,7 +131,7 @@ const elfData = {
         },
         {
           id: "e3_4",
-          line: "I have read it a number of times now. The third stanza, in particular, has something in it that I find I return to, though I could not say precisely what or why.",
+          line: "I have read it a number of times since. The third stanza has something in it I keep returning to —I mentioned it to Clarissa, and she said I was being sentimental, which is hard to argue with.",
           choices: [
             { label: "Some things stay with you without explaining themselves.", score: 1, next: "e3_5" },
             { label: "You're looking for meaning that isn't there.", score: 0, next: "e3_5" },
@@ -141,7 +140,7 @@ const elfData = {
         },
         {
           id: "e3_5",
-          line: "I wrote back. I mentioned the third stanza, and thanked them for it, without asking what it meant. I thought that was the kinder approach. There has been no reply, but I find I am not in a hurry.",
+          line: "After some thought, I decided to reply. I mentioned the third stanza and thanked them for it. Oh, how I would have loved to know the author's meaning, but I had the presence of mind to restrain myself. I hope for a quick response, within the next two years.",
           terminal: true
         }
       ]
@@ -152,7 +151,7 @@ const elfData = {
       nodes: [
         {
           id: "e4_1",
-          line: "The Council voted last month to move all new legislation to an AI system. The proposal was presented as a matter of efficiency, which is a word that has been doing considerable work lately.",
+          line: "The Council voted last month to move all new legislation to an AI system — the proposal was presented as a matter of 'efficiency.' A word that's been used more often lately than 'tax bonds,' if you don't mind me saying.",
           choices: [
             { label: "Efficiency covers a lot of ground these days.", score: 1, next: "e4_2" },
             { label: "Efficient laws sound like a good thing.", score: 0, next: "e4_2" },
@@ -161,7 +160,7 @@ const elfData = {
         },
         {
           id: "e4_2",
-          line: "The first law came through last week. It was very short and entirely without ambiguity, which in another context I might have called an achievement.",
+          line: "The first law was passed last week. It was very short and entirely without ambiguity—I read it to Maman after dinner, and she said it sounded like furniture assembly instructions. She was not wrong.",
           choices: [
             { label: "But in law, ambiguity has a purpose.", score: 1, next: "e4_3" },
             { label: "Clear and short sounds like progress.", score: 0, next: "e4_3" },
@@ -170,7 +169,7 @@ const elfData = {
         },
         {
           id: "e4_3",
-          line: "Elven law has always kept a little space between what is written and what is meant. That space is where judgment lives, and where, I think, a great deal of quiet wisdom has accumulated over the centuries.",
+          line: "Elven law has always kept a little space between what is written and what is meant. That space is where judgment lives. Can you remove the silence from music and still call it a composition?",
           choices: [
             { label: "And now that space has been removed.", score: 1, next: "e4_4" },
             { label: "Laws should mean what they say.", score: 0, next: "e4_4" },
@@ -179,7 +178,7 @@ const elfData = {
         },
         {
           id: "e4_4",
-          line: "There are no commas either. The system finds them inefficient. I noticed their absence before I noticed anything else, which perhaps says something about me that I will think about another time.",
+          line: "And all the commas have disappeared somewhere. I wouldn't be surprised if the system deemed them inefficient, too. I never thought I'd miss the days when the old bankers ruled the world.",
           choices: [
             { label: "Sometimes small losses point to larger ones.", score: 1, next: "e4_5" },
             { label: "Commas are a small thing to focus on.", score: 0, next: "e4_5" },
@@ -188,12 +187,12 @@ const elfData = {
         },
         {
           id: "e4_5",
-          line: "A colleague told me the new laws are easier to read and I agreed with her, and I have been sitting with that agreement for several days now, turning it over, not entirely sure what to do with it.",
+          line: "However, it must be admitted that the new laws are easier to read, but does that mean they're better? Would you like to familiarize yourself with the new amendments at your leisure? I'd be interested in your opinion." ,
           terminal: true
         }
       ]
     },
-
+// part to continue re-checking
     {
       id: "ai_audience",
       nodes: [
