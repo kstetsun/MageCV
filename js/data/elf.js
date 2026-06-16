@@ -4,6 +4,8 @@ const elfData = {
   minEffect: 1,
   maxEffect: 3,
   dialogues: [
+// here would be a part of double-checked dialog, which i already rewrote myself
+// part to continue re-checking
     {
       id: "royal_portrait",
       nodes: [
