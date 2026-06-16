@@ -416,7 +416,9 @@
 }
 
 .mw-icon {
-  font-size: 2.2rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  object-fit: contain;
   display: block;
   animation: mwBounce 2.5s ease-in-out infinite;
   filter: drop-shadow(0 0 8px rgba(212, 160, 60, 0.5));
@@ -429,8 +431,8 @@
 
 /* IMAGE 3 — first message line */
 .mw-msg {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
   color: #3d2817;
   text-align: center;
   line-height: 1.55;
@@ -462,8 +464,8 @@
 .mw-btn-erase {
   flex: 1;
   padding: 0.7rem 0.8rem;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 1rem;
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.2s;
@@ -524,7 +526,6 @@
 
 .paper {
   position: absolute;
-  background-image: url('../media/backgrounds/paper_fly.jpg');
   background-size: cover;
   background-position: center;
   border-radius: 2px;
@@ -536,6 +537,7 @@
 
 /* Each paper: different position, size, tilt, speed */
 .paper--1 {
+  background-image: url('../media/icons/paper_2.webp');
   width: 58px; height: 74px;
   top: 12%; left: 18%;
   --rot: -8deg;
@@ -545,6 +547,7 @@
 }
 
 .paper--2 {
+  background-image: url('../media/icons/paper_1.webp');
   width: 48px; height: 62px;
   top: 8%; left: 62%;
   --rot: 5deg;
@@ -554,6 +557,7 @@
 }
 
 .paper--3 {
+  background-image: url('../media/icons/paper_3.webp');
   width: 52px; height: 68px;
   top: 18%; right: 14%;
   --rot: 12deg;
@@ -563,6 +567,7 @@
 }
 
 .paper--4 {
+  background-image: url('../media/icons/paper_3.webp');
   width: 44px; height: 56px;
   top: 6%; left: 38%;
   --rot: -4deg;
@@ -572,6 +577,7 @@
 }
 
 .paper--5 {
+  background-image: url('../media/icons/paper_3.webp');
   width: 60px; height: 78px;
   top: 15%; right: 30%;
   --rot: -14deg;

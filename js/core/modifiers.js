@@ -373,14 +373,5 @@ window.applyModifiersToScore    = applyModifiersToScore;
 window.getExtraResumeSlots      = getExtraResumeSlots;
 window.getActiveModifierLabels  = getActiveModifierLabels;
 window.clearModifiers           = clearModifiers;
-
-// Export commonly-used modifier helpers for other scripts
-if (typeof ModifierTemplates !== 'undefined') {
-  window.ModifierTemplates = ModifierTemplates;
-}
-if (typeof applyModifier === 'function') {
-  window.applyModifier = applyModifier;
-}
-if (typeof getRandomWizardModifier === 'function') {
-  window.getRandomWizardModifier = getRandomWizardModifier;
-}
+window.ModifierTemplates        = ModifierTemplates;
+window.getRandomWizardModifier  = getRandomWizardModifier;

@@ -87,7 +87,7 @@ function showMagicConfirm(onConfirm) {
     <div class="mw-box" role="dialog" aria-modal="true">
       <div class="mw-sparkle-zone"></div>
       <div class="mw-content">
-        <span class="mw-icon" aria-hidden="true">⚗️</span>
+        <img class="mw-icon" src="../media/icons/ball.webp" alt="" aria-hidden="true">
         <div class="mw-msg">
           Starting a new game will erase your current saved run.
         </div>

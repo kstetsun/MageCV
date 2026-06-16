@@ -248,9 +248,8 @@ body {
 
 
 /* -- Abandon button --
-   On desktop we pull it onto the same line as the other buttons
-   using flex order via absolute-free negative margin, so all three
-   sit in one row. -- */
+   Sits in .room via normal flex flow, on the same row as the
+   main buttons on desktop. -- */
 
 
 .ghost-btn {
@@ -340,13 +339,6 @@ body {
 
   .big-btn  { font-size: clamp(0.9rem, 4vw, 1.05rem); padding: 0.75rem 1.6rem; }
   .small-btn { font-size: clamp(0.78rem, 3.4vw, 0.9rem); padding: 0.65rem 1.2rem; }
-
-  /* MOBILE: abandon goes back below, centered, normal flow */
-  .room-secondary {
-    margin-top: 0.7rem;
-    margin-left: 0;
-    text-align: center;
-  }
 
   .ghost-btn {
     font-size: clamp(0.7rem, 3vw, 0.82rem);

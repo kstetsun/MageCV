@@ -4,12 +4,13 @@ const dwarfData = {
     minEffect: 0,
     maxEffect: 2,
     dialogues: [
+// here would be a part of double-checked dialog, which i already rewrote myself
       {
         id: "gnome_referee",
         nodes: [
           {
             id: "d1_1",
-            line: "We lost on Saturday. 3 to 1. The referee was a gnome. I'm not saying anything. I'm just saying.",
+            line: "We lost to the Land Dwarves again this Saturday. 3-1. The referee was a dwarf. I'm not saying anything, but...",
             choices: [
               { label: "That does sound suspicious.", score: 1, next: "d1_2" },
               { label: "Maybe your team just lost.", score: 0, next: "d1_2" },
@@ -18,7 +19,7 @@ const dwarfData = {
           },
           {
             id: "d1_2",
-            line: "He called three fouls on Borgrim. Three. Borgrim barely moves. That's the whole point of Borgrim.",
+            line: "He called three fouls on Borgrim. Three. Borgrim barely moved, that's the whole point of Borgrim.",
             choices: [
               { label: "What is Borgrim's role exactly?", score: 1, next: "d1_3" },
               { label: "Maybe Borgrim fouled three times.", score: 0, next: "d1_3" },
@@ -27,7 +28,7 @@ const dwarfData = {
           },
           {
             id: "d1_3",
-            line: "Borgrim stands in front of the goal. That's it. That's the position. Very effective. Was very effective.",
+            line: "Borgrim stands in front of the goal. That's his position. Very effective. It was very effective.",
             choices: [
               { label: "So now what?", score: 1, next: "d1_4" },
               { label: "That's not really a position.", score: 0, next: "d1_4" },
@@ -36,7 +37,7 @@ const dwarfData = {
           },
           {
             id: "d1_4",
-            line: "Now Borgrim is suspended for two games. We have nobody to stand there. I submitted a complaint.",
+            line: "Now Borgrim is suspended for two games, and we have no one to stand there. I've filed a complaint.",
             choices: [
               { label: "Did anyone respond?", score: 1, next: "d1_5" },
               { label: "You'll find someone else.", score: 0, next: "d1_5" },
@@ -45,7 +46,7 @@ const dwarfData = {
           },
           {
             id: "d1_5",
-            line: "The league office replied in three weeks. They said Borgrim was standing too aggressively. I don't know what that means. Nobody does.",
+            line: "The league responded three weeks later. They said Borgrim was 'standing too aggressively.' They declined further comment.",
             terminal: true
           }
         ]
@@ -56,7 +57,7 @@ const dwarfData = {
         nodes: [
           {
             id: "d2_1",
-            line: "Season opened Monday. Two weeks early. I found out on Monday. At noon.",
+            line: "Rabbit hunting season opened on Monday. Two weeks earlier than last year. And the year before! I think I was the only one who didn't know.",
             choices: [
               { label: "How did you find out?", score: 1, next: "d2_2" },
               { label: "You should check the calendar more.", score: 0, next: "d2_2" },
@@ -65,7 +66,7 @@ const dwarfData = {
           },
           {
             id: "d2_2",
-            line: "My neighbor came back with four rabbits. That's how I found out. He was smiling. I don't like that smile.",
+            line: "My neighbor came back with four rabbits. That's how I found out. He giggled sarcastically[not sure its the best world here] as he passed my fence.",
             choices: [
               { label: "That must have been frustrating.", score: 1, next: "d2_3" },
               { label: "Your neighbor was just faster.", score: 0, next: "d2_3" },
@@ -74,7 +75,7 @@ const dwarfData = {
           },
           {
             id: "d2_3",
-            line: "My boots were at the repair shop. My bag had a hole. My dog was at my mother's place.",
+            line: "My boots were at the repair shop. My bag had a hole in it. My dog was at my mother's place.",
             choices: [
               { label: "Everything at once.", score: 1, next: "d2_4" },
               { label: "You could have gone anyway.", score: 0, next: "d2_4" },
@@ -83,7 +84,7 @@ const dwarfData = {
           },
           {
             id: "d2_4",
-            line: "I went anyway. No boots, no bag, no dog. Got nothing. Saw three rabbits. They looked at me.",
+            line: "I went anyway. And came back empty-handed. I only saw three rabbits the whole time. They giggled almost as sarcastically as my neighbor.",
             choices: [
               { label: "That's actually painful.", score: 1, next: "d2_5" },
               { label: "At least you went.", score: 0, next: "d2_5" },
@@ -92,7 +93,7 @@ const dwarfData = {
           },
           {
             id: "d2_5",
-            line: "Next year I'm setting a reminder. Twelve reminders. One per month. Starting now.",
+            line: "I'll set reminders for next year. Twelve of them. One per month. Already bought the calendar.",
             terminal: true
           }
         ]
@@ -103,7 +104,7 @@ const dwarfData = {
         nodes: [
           {
             id: "d3_1",
-            line: "It was cold again this morning. Third week in a row. This is not normal cold. This is something else.",
+            line: "It was cold again this morning. Third week in a row. And last month too, now that I think about it. I assure you, this isn't a normal cold. Something has changed.",
             choices: [
               { label: "What do you think is causing it?", score: 1, next: "d3_2" },
               { label: "It's just winter.", score: 0, next: "d3_2" },
@@ -112,7 +113,7 @@ const dwarfData = {
           },
           {
             id: "d3_2",
-            line: "The Elves built a new theater up north. Big one. All glass and stone. Right where the warm wind used to come from.",
+            line: "The elves built a new theater in the north. Massive thing. I think someone is compensating for their insecurities... And of course, they decided to put it where a warm wind used to come from. That's when the cold started.",
             choices: [
               { label: "You think the theater is blocking the wind?", score: 1, next: "d3_3" },
               { label: "That's probably not related.", score: 0, next: "d3_3" },
@@ -121,7 +122,7 @@ const dwarfData = {
           },
           {
             id: "d3_3",
-            line: "Not blocking. Redirecting. There's a difference. I drew a map. The angles are very clear.",
+            line: "Not blocking the wind. Redirecting it. There's a difference. Spent three days on the map. The angles are very clear.",
             choices: [
               { label: "Can I see the map?", score: 1, next: "d3_4" },
               { label: "I don't think angles work like that.", score: 0, next: "d3_4" },
@@ -130,7 +131,7 @@ const dwarfData = {
           },
           {
             id: "d3_4",
-            line: "I sent the map to the Ministry of Climate. They said thank you. That's all they said. Just thank you.",
+            line: "I sent the map to the Ministry of Climate. They responded two days later with a simple 'thank you'.",
             choices: [
               { label: "That's not a real answer.", score: 1, next: "d3_5" },
               { label: "At least they replied.", score: 0, next: "d3_5" },
@@ -139,7 +140,7 @@ const dwarfData = {
           },
           {
             id: "d3_5",
-            line: "Exactly. So I sent it again. With a second map. More angles. Still just thank you. I'm sending a third one this week.",
+            line: "Exactly. So I sent another one. With the second map. More angles. Same 'thank you.' Sent the third one yesterday. I'll send the fourth one this week and continue to do so until I get a proper response.",
             terminal: true
           }
         ]
@@ -150,7 +151,7 @@ const dwarfData = {
         nodes: [
           {
             id: "d4_1",
-            line: "47 applications today. Personal record. I wrote it down.",
+            line: "I sent 47 applications today. A new personal record. I even timed myself.",
             choices: [
               { label: "That's a lot of work.", score: 1, next: "d4_2" },
               { label: "Quality matters more than quantity.", score: 0, next: "d4_2" },
@@ -159,7 +160,7 @@ const dwarfData = {
           },
           {
             id: "d4_2",
-            line: "Each one took four minutes. I timed it. Some took three. Those were probably worse.",
+            line: "Each one took four minutes. Some took three if I got the template right. But the fastest ones seem the worst to me. Rushing always shows.",
             choices: [
               { label: "Did anything come back?", score: 1, next: "d4_3" },
               { label: "Four minutes is quite fast.", score: 0, next: "d4_3" },
@@ -168,7 +169,7 @@ const dwarfData = {
           },
           {
             id: "d4_3",
-            line: "Nothing. Not one reply. I checked my inbox six times. Then seven. Then I stopped counting.",
+            line: "Nothing. Not a single one replied. I checked my email six times by noon. Then seven more. Then I stopped because counting was making it worse.",
             choices: [
               { label: "That's genuinely discouraging.", score: 1, next: "d4_4" },
               { label: "It takes time. Keep going.", score: 0, next: "d4_4" },
@@ -177,7 +178,7 @@ const dwarfData = {
           },
           {
             id: "d4_4",
-            line: "Tomorrow I'm doing 50. I already prepared the template. Changed the font. Slightly bigger. More confident.",
+            line: "I'll send 50 tomorrow. The template is ready. I changed the font to something bigger. Makes them look more confident.",
             choices: [
               { label: "Does the font help?", score: 1, next: "d4_5" },
               { label: "Font won't make a difference.", score: 0, next: "d4_5" },
@@ -186,7 +187,7 @@ const dwarfData = {
           },
           {
             id: "d4_5",
-            line: "I don't know. But it feels like it helps. That's enough for now.",
+            line: "I don't know if it even matters. But at some point, the odds have to shift. Statistically, after a thousand applications, I'll get hired.",
             terminal: true
           }
         ]
@@ -197,7 +198,7 @@ const dwarfData = {
         nodes: [
           {
             id: "d5_1",
-            line: "The orange doves went east this year. East. They always go south. Always. For 200 years, south.",
+            line: "The orange doves went east this year. East! I checked twice. They've always gone south. Always. For 2 000 years, nothing but south.",
             choices: [
               { label: "That is a big change.", score: 1, next: "d5_2" },
               { label: "Maybe you remembered wrong.", score: 0, next: "d5_2" },
@@ -206,7 +207,7 @@ const dwarfData = {
           },
           {
             id: "d5_2",
-            line: "I have a spot. South side of the hill. Perfect angle. I've been going there since I was twelve.",
+            line: "I have a spot on the south side of the hill. It has a really good observation point. I've been going there since I was 12. That's... 35 years. And the doves always come there. Every time.",
             choices: [
               { label: "And now the spot is useless?", score: 1, next: "d5_3" },
               { label: "Just find a new spot.", score: 0, next: "d5_3" },
@@ -215,7 +216,7 @@ const dwarfData = {
           },
           {
             id: "d5_3",
-            line: "I went east anyway. No spot. No angle. Just trees and a confused dog. We stood there for two hours.",
+            line: "Well, this time I had to go east. There wasn't a good spot there. My dog and I had to stand there for 2 hours because there was nowhere to sit.",
             choices: [
               { label: "Nothing at all?", score: 1, next: "d5_4" },
               { label: "At least you tried.", score: 0, next: "d5_4" },
@@ -224,7 +225,7 @@ const dwarfData = {
           },
           {
             id: "d5_4",
-            line: "Three doves. Very high up. Very fast. Not worth it. My dog agreed. He sat down and refused to move.",
+            line: "In all that time, I only saw 3 doves. And even then, they were very high and flying very fast. It wasn't worth it.",
             choices: [
               { label: "Smart dog.", score: 1, next: "d5_5" },
               { label: "Three is still something.", score: 0, next: "d5_5" },
@@ -233,12 +234,12 @@ const dwarfData = {
           },
           {
             id: "d5_5",
-            line: "Next year I'm going east. I already hate it. But I'm going.",
+            line: "Now I don't know where to go next year. I can't be in two places at once! Have you heard anything about magic balls that transmit images in real time?",
             terminal: true
           }
         ]
       },
-
+// part to continue re-checking
       {
         id: "stolen_lunch",
         nodes: [

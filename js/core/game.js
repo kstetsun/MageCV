@@ -146,33 +146,16 @@ function goRules()  { window.location.href = "rules.html";  }
 // ======================
 // 🚀 INIT
 // Loads saved state into global variables on every page load.
-// Called once at bottom of every page's script block.
+// storage.js always loads before game.js (see each page's script
+// order), so loadGame is guaranteed to be defined here.
 // ======================
 
-function ensureLoadGameCalled() {
-  // Try immediately
+function initGame() {
   if (typeof loadGame === "function") {
     loadGame();
-    return;
+  } else {
+    console.warn("[Game] loadGame() unavailable — check script load order.");
   }
-
-  // If storage.js hasn't loaded yet (script order), poll briefly until it appears
-  let attempts = 0;
-  const maxAttempts = 50; // ~5 seconds
-  const interval = setInterval(() => {
-    attempts++;
-    if (typeof loadGame === "function") {
-      loadGame();
-      clearInterval(interval);
-    } else if (attempts >= maxAttempts) {
-      clearInterval(interval);
-      console.warn("[Game] loadGame() unavailable after waiting.");
-    }
-  }, 100);
-}
-
-function initGame() {
-  ensureLoadGameCalled();
 
   console.log(`[Game] Init complete. Day: ${day} | Mode: ${mode} | Score: ${hiddenScore} (hidden).`);
 }
