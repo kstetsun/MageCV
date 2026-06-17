@@ -4,6 +4,8 @@ const wizardData = {
   minEffect: -5,
   maxEffect: 6,
   dialogues: [
+  // here would be a part of double-checked dialog, which i already rewrote myself
+  // part to continue re-checking
     {
       id: "onion_crisis",
       nodes: [
