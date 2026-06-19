@@ -5,8 +5,7 @@ const dwarfData = {
     maxEffect: 2,
     dialogues: [
 // here would be a part of double-checked dialog, which i already rewrote myself
-      {
-        id: "gnome_referee",
+      {id: "gnome_referee",
         nodes: [
           {
             id: "d1_1",
@@ -28,7 +27,7 @@ const dwarfData = {
           },
           {
             id: "d1_3",
-            line: "Borgrim stands in front of the goal. That's his position. Very effective. It was very effective.",
+            line: "Borgrim stands in front of the goal. That's his position. It is very effective. Well... it was very effective.",
             choices: [
               { label: "So now what?", score: 1, next: "d1_4" },
               { label: "That's not really a position.", score: 0, next: "d1_4" },
@@ -52,8 +51,7 @@ const dwarfData = {
         ]
       },
 
-      {
-        id: "season_opened_early",
+      {id: "season_opened_early",
         nodes: [
           {
             id: "d2_1",
@@ -66,7 +64,7 @@ const dwarfData = {
           },
           {
             id: "d2_2",
-            line: "My neighbor came back with four rabbits. That's how I found out. He giggled sarcastically[not sure its the best world here] as he passed my fence.",
+            line: "My neighbor came back with four rabbits. That's how I found out. He giggled sarcastically as he passed my fence.",
             choices: [
               { label: "That must have been frustrating.", score: 1, next: "d2_3" },
               { label: "Your neighbor was just faster.", score: 0, next: "d2_3" },
@@ -99,8 +97,7 @@ const dwarfData = {
         ]
       },
 
-      {
-        id: "elven_theater_cooling",
+      {id: "elven_theater_cooling",
         nodes: [
           {
             id: "d3_1",
@@ -122,7 +119,7 @@ const dwarfData = {
           },
           {
             id: "d3_3",
-            line: "Not blocking the wind. Redirecting it. There's a difference. Spent three days on the map. The angles are very clear.",
+            line: "Not blocking. Redirecting it. There's a difference. Spent three days on the map. The angles are very clear.",
             choices: [
               { label: "Can I see the map?", score: 1, next: "d3_4" },
               { label: "I don't think angles work like that.", score: 0, next: "d3_4" },
@@ -146,8 +143,7 @@ const dwarfData = {
         ]
       },
 
-      {
-        id: "record_applications",
+      {id: "record_applications",
         nodes: [
           {
             id: "d4_1",
@@ -160,9 +156,9 @@ const dwarfData = {
           },
           {
             id: "d4_2",
-            line: "Each one took four minutes. Some took three if I got the template right. But the fastest ones seem the worst to me. Rushing always shows.",
+            line: "Each one took 4 minutes. Some took 3 if I got the template right. But the fastest ones seem the worst to me. Rushing always shows.",
             choices: [
-              { label: "Did anything come back?", score: 1, next: "d4_3" },
+              { label: "Did anything come back ?", score: 1, next: "d4_3" },
               { label: "Four minutes is quite fast.", score: 0, next: "d4_3" },
               { label: "Maybe slow down a little.", score: 0, next: "d4_3" }
             ]
@@ -193,8 +189,7 @@ const dwarfData = {
         ]
       },
 
-      {
-        id: "doves_went_east",
+      {id: "doves_went_east",
         nodes: [
           {
             id: "d5_1",
