@@ -51,15 +51,14 @@ const elfData = {
       ]
     },
 
-    {
-      id: "theater_cancelled",
+    {id: "theater_cancelled",
       nodes: [
         {
           id: "e2_1",
           line: "I recently received a letter about the spring schedule at my favorite theater. The front page announced a new season, which, from what I could read of it, seemed quite well thought out. On the second page, it was canceled.",
           choices: [
-            { label: "Both things in the same envelope.", score: 1, next: "e2_2" },
-            { label: "Budget cuts happen everywhere.", score: 0, next: "e2_2" },
+            { label: "Both things was in the same envelope ?", score: 1, next: "e2_2" },
+            { label: "Budget cuts happen really everywhere.", score: 0, next: "e2_2" },
             { label: "At least they were transparent.", score: 0, next: "e2_2" }
           ]
         },
@@ -67,7 +66,7 @@ const elfData = {
           id: "e2_2",
           line: "I saved the front page for Maman. We discussed the grief of our loss sitting on the veranda that evening, and I was glad not to be there alone.",
           choices: [
-            { label: "A program for something that never happened.", score: 1, next: "e2_3" },
+            { label: "Oh, my condolences.", score: 1, next: "e2_3" },
             { label: "There's no point keeping it.", score: 0, next: "e2_3" },
             { label: "Maybe next year the season returns.", score: 0, next: "e2_3" }
           ]
@@ -78,7 +77,7 @@ const elfData = {
           choices: [
             { label: "Some things survive without explanation.", score: 1, next: "e2_4" },
             { label: "Mimes are probably just cheaper.", score: 0, next: "e2_4" },
-            { label: "You should ask someone more senior.", score: 0, next: "e2_4" }
+            { label: "Perhaps they have connections in the theatre ?", score: 0, next: "e2_4" }
           ]
         },
         {
@@ -86,20 +85,19 @@ const elfData = {
           line: "Last weekend, they performed an incredibly long and tedious play in the main square, mostly about waiting. As expected, half the seats were empty, but it was nice to be immersed in the atmosphere of art again.",
           choices: [
             { label: "Staying until the end meant something.", score: 1, next: "e2_5" },
-            { label: "People have time for free performances.", score: 0, next: "e2_5" },
+            { label: "Elves dont have time even for free performances ?", score: 0, next: "e2_5" },
             { label: "At least there was still something to watch.", score: 0, next: "e2_5" }
           ]
         },
         {
           id: "e2_5",
-          line: "Maman and I were there. I'm not always sure I understand mime, but that evening my heart opened.",
+          line: "I were there with Maman. I'm not always sure I understand mime, but that evening my heart opened.",
           terminal: true
         }
       ]
     },
 
-    {
-      id: "unsigned_poem",
+    {id: "unsigned_poem",
       nodes: [
         {
           id: "e3_1",
@@ -130,10 +128,10 @@ const elfData = {
         },
         {
           id: "e3_4",
-          line: "I have read it a number of times since. The third stanza has something in it I keep returning to —I mentioned it to Clarissa, and she said I was being sentimental, which is hard to argue with.",
+          line: "I have read it a number of times since. The third stanza has something in it I keep returning to — I mentioned it to Clarissa, and she said I was being sentimental, which is hard to argue with.",
           choices: [
             { label: "Some things stay with you without explaining themselves.", score: 1, next: "e3_5" },
-            { label: "You're looking for meaning that isn't there.", score: 0, next: "e3_5" },
+            { label: "I'm afraid you're looking for meaning that isn't there.", score: 0, next: "e3_5" },
             { label: "You should ask them what they meant.", score: 0, next: "e3_5" }
           ]
         },
@@ -145,24 +143,23 @@ const elfData = {
       ]
     },
 
-    {
-      id: "ai_writes_law",
+    {id: "ai_writes_law",
       nodes: [
         {
           id: "e4_1",
-          line: "The Council voted last month to move all new legislation to an AI system — the proposal was presented as a matter of 'efficiency.' A word that's been used more often lately than 'tax bonds,' if you don't mind me saying.",
+          line: "The Council voted last month to move all new legislation to an AI system — the proposal was presented as a matter of 'efficiency.' A word that's been used more often lately than 'tax bonds', if you don't mind me saying.",
           choices: [
-            { label: "Efficiency covers a lot of ground these days.", score: 1, next: "e4_2" },
+            { label: "'Efficiency' covers a lot of ground these days.", score: 1, next: "e4_2" },
             { label: "Efficient laws sound like a good thing.", score: 0, next: "e4_2" },
             { label: "The Council has to make difficult choices.", score: 0, next: "e4_2" }
           ]
         },
         {
           id: "e4_2",
-          line: "The first law was passed last week. It was very short and entirely without ambiguity—I read it to Maman after dinner, and she said it sounded like furniture assembly instructions. She was not wrong.",
+          line: "The first law was passed last week. It was very short and entirely without ambiguity — I read it to Maman after dinner, and she said it sounded like furniture assembly instructions. She was not wrong.",
           choices: [
             { label: "But in law, ambiguity has a purpose.", score: 1, next: "e4_3" },
-            { label: "Clear and short sounds like progress.", score: 0, next: "e4_3" },
+            { label: "Clear and short sounds like not the worste-case scenario.", score: 0, next: "e4_3" },
             { label: "Ambiguity in law causes problems.", score: 0, next: "e4_3" }
           ]
         },
@@ -170,7 +167,7 @@ const elfData = {
           id: "e4_3",
           line: "Elven law has always kept a little space between what is written and what is meant. That space is where judgment lives. Can you remove the silence from music and still call it a composition?",
           choices: [
-            { label: "And now that space has been removed.", score: 1, next: "e4_4" },
+            { label: "Okey, so now that space has been removed.", score: 1, next: "e4_4" },
             { label: "Laws should mean what they say.", score: 0, next: "e4_4" },
             { label: "Wisdom should be written down clearly.", score: 0, next: "e4_4" }
           ]
