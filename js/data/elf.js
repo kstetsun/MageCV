@@ -5,14 +5,13 @@ const elfData = {
   maxEffect: 3,
   dialogues: [
 // here would be a part of double-checked dialog, which i already rewrote myself
-    {
-      id: "royal_portrait",
+    {id: "royal_portrait",
       nodes: [
         {
           id: "e1_1",
           line: "The palace gave the new royal portrait to an AI this year - it was finished, I was told, before the painter they dismissed had reached the palace gates.",
           choices: [
-            { label: "They told you that detail specifically.", score: 1, next: "e1_2" },
+            { label: "They told you that detail specifically ?", score: 1, next: "e1_2" },
             { label: "Fast work is still work.", score: 0, next: "e1_2" },
             { label: "The king must be satisfied.", score: 0, next: "e1_2" }
           ]
@@ -21,17 +20,17 @@ const elfData = {
           id: "e1_2",
           line: "I think the king saw this as a blessing, since it will give the artist more free time. However, can you take away a shepherd's sheep and still consider him free?",
           choices: [
-            { label: "That kind of uncertainty is hard to sit with.", score: 1, next: "e1_3" },
+            { label: "We wanted the best, but it turned out as always.", score: 1, next: "e1_3" },
             { label: "If it's good work, it's good work.", score: 0, next: "e1_3" },
-            { label: "Maybe just accept it.", score: 0, next: "e1_3" }
+            { label: "Maybe we need just accept it.", score: 0, next: "e1_3" }
           ]
         },
         {
           id: "e1_3",
           line: "The king prefers it to the last portrait, which took the painter 3 years and one very difficult winter, and he said — quite simply, as if it were obvious — that the new one has better light. As if suffering isn't the main part of art!",
           choices: [
-            { label: "Better light after 3 years and a hard winter.", score: 1, next: "e1_4" },
-            { label: "Light does matter in a portrait.", score: 0, next: "e1_4" },
+            { label: "Better light after 3 years it's a good result.", score: 1, next: "e1_4" },
+            { label: "Does light really matter that much in a portrait ?", score: 0, next: "e1_4" },
             { label: "The king knows what he likes.", score: 0, next: "e1_4" }
           ]
         },
