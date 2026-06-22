@@ -309,7 +309,7 @@ function typewriterBubble(el, text, speed, onDone) {
 
 function resolveMultiTurn() {
   const outcome = scoreToOutcome(accumulatedScore);
-  finishInteraction(outcome);
+  finishInteraction(outcome, accumulatedScore);
 }
 
 // ── LEGACY DIALOGUE (DWARF / WIZARD) ───────────────────────────────────────────
@@ -338,14 +338,14 @@ function startLegacyDialogue() {
 
 // ── SHARED RESOLUTION ──────────────────────────────────────────────────────────
 
-function finishInteraction(outcome) {
+function finishInteraction(outcome, dialogueScore = 0) {
   npcInteractionsToday += 1;
 
   if (typeof saveField === "function") {
     saveField("npcInteractionsToday", npcInteractionsToday);
   }
 
-  applyNPCModifier(currentNPC, outcome);
+  applyNPCModifier(currentNPC, outcome, dialogueScore);
 
   // Record resumesSentTotal at moment of this NPC interaction (for spawn spacing)
   resumesSentAtLastNPC = resumesSentTotal;
@@ -455,11 +455,13 @@ function skipNPC() {
 
 // ======================
 // APPLY NPC MODIFIER
-// Maps { npcId, outcome } → correct ModifierTemplates entry.
-// Wizard always ignores player choice — purely random.
+// Wizard: always random, dialogue score irrelevant.
+// Elf / Dwarf: modifier driven by raw dialogueScore from the conversation.
 // ======================
 
-function applyNPCModifier(npc, outcome) {
+const RANDOM_NPCS = ["wizard"];
+
+function applyNPCModifier(npc, outcome, dialogueScore = 0) {
   if (typeof applyModifier !== "function" || typeof ModifierTemplates === "undefined") {
     console.warn("[NPC] modifiers.js not loaded — cannot apply modifier.");
     return;
@@ -467,23 +469,28 @@ function applyNPCModifier(npc, outcome) {
 
   let modifier = null;
 
-  if (npc.id === "elf") {
-    if      (outcome === "positive") modifier = ModifierTemplates.elfBonusResume(2);
-    else if (outcome === "neutral")  modifier = ModifierTemplates.elfBonusDay();
-    // negative → no effect
-  } else if (npc.id === "dwarf") {
-    if      (outcome === "positive") modifier = ModifierTemplates.dwarfPenaltyReduction();
-    else if (outcome === "neutral")  modifier = ModifierTemplates.dwarfSmallBonus();
-    else                             modifier = ModifierTemplates.dwarfDebuff();
-  } else if (npc.id === "wizard") {
+  if (RANDOM_NPCS.includes(npc.id)) {
+    // Wizard: purely random, player choices have no effect
     modifier = (typeof getRandomWizardModifier === "function") ? getRandomWizardModifier() : null;
+
+  } else if (npc.id === "elf") {
+    // 0 correct → no modifier, 1 → day buff, 2+ → resume buff (×2 resumes)
+    if      (dialogueScore >= 2) modifier = ModifierTemplates.elfBonusResume(2);
+    else if (dialogueScore === 1) modifier = ModifierTemplates.elfBonusDay();
+    // 0 → no effect
+
+  } else if (npc.id === "dwarf") {
+    // 0 correct → debuff, 1 → small bonus, 2+ → penalty reduction
+    if      (dialogueScore >= 2) modifier = ModifierTemplates.dwarfPenaltyReduction();
+    else if (dialogueScore === 1) modifier = ModifierTemplates.dwarfSmallBonus();
+    else                          modifier = ModifierTemplates.dwarfDebuff();
   }
 
   if (modifier) {
     applyModifier(modifier);
-    console.log("[NPC] Modifier applied:", modifier.label);
+    console.log(`[NPC] Modifier applied: "${modifier.label}" (score: ${dialogueScore})`);
   } else {
-    console.log("[NPC] No modifier for outcome:", outcome);
+    console.log(`[NPC] No modifier for ${npc.id} at score ${dialogueScore}`);
   }
 }
 
