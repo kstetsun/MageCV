@@ -1,8 +1,6 @@
 const dwarfData = {
     id: "dwarf",
     name: "Dwarf",
-    minEffect: 0,
-    maxEffect: 2,
     dialogues: [
 // here would be a part of double-checked dialog, which i already rewrote myself
       {id: "gnome_referee",

@@ -1,8 +1,6 @@
 const elfData = {
   id: "elf",
   name: "Elf",
-  minEffect: 1,
-  maxEffect: 3,
   dialogues: [
 // here would be a part of double-checked dialog, which i already rewrote myself
     {id: "royal_portrait",

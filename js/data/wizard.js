@@ -1,8 +1,6 @@
 const wizardData = {
   id: "wizard",
   name: "Wizard",
-  minEffect: -5,
-  maxEffect: 6,
   dialogues: [
   // here would be a part of double-checked dialog, which i already rewrote myself
   // part to continue re-checking
@@ -13,9 +11,9 @@ const wizardData = {
           id: "oc1",
           line: "The French elves have forty thousand onions in a vault under the Seine. I've seen the maps.",
           choices: [
-            { label: "How did you get the maps?", score: 1, next: "oc2" },
-            { label: "That seems like a lot of onions.", score: 0, next: "oc2" },
-            { label: "The Seine is not under their jurisdiction.", score: 0, next: "oc2" }
+            { label: "How did you get the maps?", next: "oc2" },
+            { label: "That seems like a lot of onions.", next: "oc2" },
+            { label: "The Seine is not under their jurisdiction.", next: "oc2" }
           ]
         },
         {
